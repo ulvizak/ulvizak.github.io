@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WeBox 3.0 - Authentication</title>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-hover: #1d4ed8;
+            --bg-main: #f8fafc;
+            --card-bg: #ffffff;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .auth-box {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            padding: 30px;
+            border-radius: 12px;
+            width: 100%;
+            max-width: 380px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+        .auth-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #f97316;
+            text-align: center;
+            margin-bottom: 5px;
+        }
+        label {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+        input[type="text"], input[type="password"] {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 0.9rem;
+            outline: none;
+            background: #fff;
+            color: var(--text-main);
+        }
+        input:focus { border-color: var(--primary); }
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 5px;
+        }
+        .action-btn {
+            flex: 1;
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 10px 12px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .action-btn:hover { background: var(--primary-hover); }
+        .secondary-btn {
+            background: #e2e8f0;
+            color: var(--text-main);
+        }
+        .secondary-btn:hover { background: #cbd5e1; }
+        .error-msg {
+            color: #ef4444;
+            font-size: 0.8rem;
+            text-align: center;
+            display: none;
+        }
+        .success-msg {
+            color: #10b981;
+            font-size: 0.8rem;
+            text-align: center;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="auth-box">
+        <div class="auth-title">WeBox 3.0</div>
+        <div style="font-size: 0.85rem; color: var(--text-muted); text-align: center; margin-bottom: 5px;">Access your workspace</div>
+        
+        <label>Username</label>
+        <input type="text" id="loginUsernameInput" placeholder="Enter your username...">
+        
+        <label>Password</label>
+        <input type="password" id="loginPasswordInput" placeholder="Enter your password...">
+
+        <div id="errorMsg" class="error-msg"></div>
+        <div id="successMsg" class="success-msg"></div>
+
+        <div class="btn-group">
+            <button class="action-btn secondary-btn" onclick="handleCreateAccount()">Create Account</button>
+            <button class="action-btn" onclick="handleLogin()">Log In</button>
+        </div>
+    </div>
+
+    <script>
+        // Redirect directly to dashboard if already authenticated in this browser session
+        if (localStorage.getItem('webox_user')) {
+            window.location.href = 'index.html';
+        }
+
+        function showMessage(type, text) {
+            const errorDiv = document.getElementById('errorMsg');
+            const successDiv = document.getElementById('successMsg');
+            
+            errorDiv.style.display = 'none';
+            successDiv.style.display = 'none';
+
+            if (type === 'error') {
+                errorDiv.textContent = text;
+                errorDiv.style.display = 'block';
+            } else {
+                successDiv.textContent = text;
+                successDiv.style.display = 'block';
+            }
+        }
+
+        function handleLogin() {
+            const username = document.getElementById('loginUsernameInput').value.trim();
+            const password = document.getElementById('loginPasswordInput').value;
+
+            if (!username || !password) {
+                showMessage('error', "Please enter both your username and password!");
+                return;
+            }
+
+            let registeredUsers = JSON.parse(localStorage.getItem('webox_accounts')) || {};
+
+            // Check if account exists
+            if (!registeredUsers[username]) {
+                showMessage('error', "Account does not exist! Please create an account first.");
+                return;
+            }
+
+            // Verify exact password match
+            if (registeredUsers[username].password !== password) {
+                showMessage('error', "Incorrect password! Please check your credentials.");
+                return;
+            }
+
+            // Save active session and enter dashboard
+            const sessionData = {
+                username: username,
+                avatarUrl: registeredUsers[username].avatarUrl || ""
+            };
+            localStorage.setItem('webox_user', JSON.stringify(sessionData));
+            window.location.href = 'index.html';
+        }
+
+        function handleCreateAccount() {
+            const username = document.getElementById('loginUsernameInput').value.trim();
+            const password = document.getElementById('loginPasswordInput').value;
+
+            if (!username || !password) {
+                showMessage('error', "Please fill in a username and password to register!");
+                return;
+            }
+
+            // Enforce minimum password length of 8 digits/characters
+            if (password.length < 8) {
+                showMessage('error', "Password must be at least 8 characters long!");
+                return;
+            }
+
+            let registeredUsers = JSON.parse(localStorage.getItem('webox_accounts')) || {};
+
+            // Check if username is already taken
+            if (registeredUsers[username]) {
+                showMessage('error', "Username is already in use! Please choose a different one.");
+                return;
+            }
+
+            // Register new account
+            registeredUsers[username] = {
+                username: username,
+                password: password,
+                avatarUrl: ""
+            };
+            localStorage.setItem('webox_accounts', JSON.stringify(registeredUsers));
+
+            showMessage('success', "Account created successfully! Logging you in...");
+            
+            // Auto login after successful creation
+            setTimeout(() => {
+                const sessionData = {
+                    username: username,
+                    avatarUrl: ""
+                };
+                localStorage.setItem('webox_user', JSON.stringify(sessionData));
+                window.location.href = 'index.html';
+            }, 1000);
+        }
+    </script>
+</body>
+</html>

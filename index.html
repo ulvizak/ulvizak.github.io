@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WeBox 3.0 - Cloud Sync Edition</title>
+
+  <!-- Supabase CDN Client Library -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+    body { background-color: #f4f6f9; color: #1f2937; display: flex; flex-direction: column; min-height: 100vh; }
+    header { background: #ffffff; border-bottom: 1px solid #e5e7eb; padding: 16px 24px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+    .logo-area { display: flex; align-items: center; gap: 15px; }
+    h1 { font-size: 22px; font-weight: 800; color: #2563eb; }
+    .user-profile-badge { display: flex; align-items: center; gap: 10px; background: #f9fafb; border: 1px solid #e5e7eb; padding: 6px 12px; border-radius: 30px; }
+    .user-avatar-small { width: 28px; height: 28px; border-radius: 50%; object-fit: cover; background: #e5e7eb; }
+    .username { font-size: 14px; font-weight: 600; color: #374151; }
+    .verified-badge { color: #2563eb; font-size: 14px; font-weight: bold; margin-left: 2px; }
+    .logout-btn { background: #ef4444; color: white; border: none; padding: 6px 14px; border-radius: 6px; font-weight: 600; font-size: 13px; cursor: pointer; }
+    .nav-tabs-container { background: #ffffff; border-bottom: 1px solid #e5e7eb; padding: 12px 24px; display: flex; gap: 8px; overflow-x: auto; }
+    .tab-btn { background: #f3f4f6; color: #4b5563; border: none; padding: 8px 16px; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 14px; white-space: nowrap; }
+    .tab-btn.active { background: #2563eb; color: white; }
+    .content-container { flex: 1; max-width: 950px; width: 100%; margin: 20px auto; padding: 0 20px; }
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+    .card { background: #ffffff; border: 1px solid #e5e7eb; border-radius: 12px; padding: 20px; margin-bottom: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+    h2 { font-size: 18px; margin-bottom: 15px; color: #111827; }
+    .search-bar { width: 100%; padding: 10px 14px; border: 1px solid #e5e7eb; border-radius: 8px; font-size: 14px; margin-bottom: 20px; outline: none; background: #fff; }
+    .upload-form { display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px; }
+    .upload-form input[type="text"], .upload-form textarea { padding: 10px; border: 1px solid #e5e7eb; border-radius: 6px; font-size: 14px; }
+    .upload-form textarea { resize: vertical; height: 80px; }
+    .upload-group { display: flex; flex-direction: column; gap: 4px; }
+    .upload-group label { font-size: 12px; font-weight: 600; color: #4b5563; }
+    .publish-btn { background: #2563eb; color: white; border: none; padding: 10px; border-radius: 6px; font-weight: 600; cursor: pointer; }
+    .grid-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; }
+    .grid-card { background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 8px; overflow: hidden; display: flex; flex-direction: column; }
+    .grid-card-body { padding: 12px; flex: 1; display: flex; flex-direction: column; justify-content: space-between; }
+    .grid-card-author-area { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+    .grid-author-avatar { width: 20px; height: 20px; border-radius: 50%; object-fit: cover; background: #e5e7eb; }
+    .grid-card-title { font-weight: 600; font-size: 14px; color: #111827; margin-bottom: 6px; word-break: break-word; }
+    .grid-card-author { font-size: 12px; color: #6b7280; display: flex; align-items: center; }
+    .grid-card-actions { display: flex; gap: 6px; margin-top: 8px; flex-wrap: wrap; }
+    .action-btn { flex: 1; background: #f3f4f6; border: 1px solid #e5e7eb; padding: 6px; border-radius: 4px; font-size: 12px; font-weight: 600; cursor: pointer; text-align: center; color: #374151; min-width: 70px; }
+    .delete-btn { background: #fee2e2; color: #dc2626; border: 1px solid #fecaca; }
+    iframe, video, audio, .game-thumbnail { width: 100%; background: #000; }
+    iframe { height: 220px; border: none; }
+    video { height: 180px; }
+    .game-thumbnail { height: 150px; object-fit: cover; }
+    audio { margin-top: 8px; }
+
+    /* MODAL STYLES */
+    #gameModal, #commentsModal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 100; justify-content: center; align-items: center; padding: 20px; }
+    .modal-content { background: #111827; width: 100%; max-width: 850px; max-height: 90vh; border-radius: 12px; overflow-y: auto; display: flex; flex-direction: column; color: white; }
+    .modal-header { padding: 12px 16px; background: #1f2937; display: flex; justify-content: space-between; align-items: center; color: white; font-weight: 600; position: sticky; top: 0; z-index: 10; }
+    .modal-header-actions { display: flex; gap: 8px; align-items: center; }
+    .fullscreen-modal-btn { background: #2563eb; border: none; color: white; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: 600; }
+    .close-modal-btn { background: #ef4444; border: none; color: white; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: 600; }
+    .modal-iframe-container { width: 100%; height: 420px; background: #000; }
+    .modal-iframe-container iframe { width: 100%; height: 100%; }
+
+    #modalContentBox:fullscreen {
+      max-width: 100% !important; max-height: 100% !important; width: 100% !important; height: 100% !important; border-radius: 0 !important; display: flex !important; flex-direction: column !important;
+    }
+    #modalContentBox:fullscreen .modal-iframe-container { flex: 1 !important; height: auto !important; }
+    #modalContentBox:fullscreen .game-reviews-container { display: none !important; }
+
+    .game-reviews-container, .comments-container { padding: 20px; background: #111827; color: #f3f4f6; border-top: 1px solid #1f2937; }
+    .game-reviews-container h3, .comments-container h3 { font-size: 16px; margin-bottom: 12px; }
+    .review-form, .comment-form { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
+    .review-form textarea, .comment-form textarea { background: #1f2937; border: 1px solid #374151; border-radius: 6px; padding: 10px; color: white; font-size: 13px; height: 70px; }
+    .submit-review-btn, .submit-comment-btn { align-self: flex-start; background: #10b981; color: white; border: none; padding: 6px 14px; border-radius: 6px; font-weight: 600; cursor: pointer; font-size: 13px; }
+    .reviews-list, .comments-list { display: flex; flex-direction: column; gap: 8px; max-height: 200px; overflow-y: auto; }
+    .review-bubble, .comment-bubble { background: #1f2937; padding: 10px; border-radius: 6px; font-size: 13px; }
+    .review-bubble-header, .comment-bubble-header { display: flex; align-items: center; gap: 8px; margin-bottom: 4px; }
+    .review-avatar, .comment-avatar { width: 16px; height: 16px; border-radius: 50%; object-fit: cover; background: #374151; }
+    .review-bubble span, .comment-bubble span { font-weight: bold; color: #60a5fa; }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="logo-area"><h1>WeBox 3.0 (Cloud Sync)</h1></div>
+    <div class="user-profile-badge">
+      <img id="headerUserAvatar" class="user-avatar-small" src="https://via.placeholder.com/150" alt="Avatar">
+      <span class="username" id="headerUsername">@ulvizakirov406</span>
+      <span class="verified-badge">✓</span>
+      <button class="logout-btn" onclick="alert('Logged out!')">Log Out</button>
+    </div>
+  </header>
+
+  <div class="nav-tabs-container">
+    <button class="tab-btn active" onclick="switchTab('videos', event)">Videos</button>
+    <button class="tab-btn" onclick="switchTab('svids', event)">Svids</button>
+    <button class="tab-btn" onclick="switchTab('music', event)">Music</button>
+    <button class="tab-btn" onclick="switchTab('posts', event)">Posts</button>
+    <button class="tab-btn" onclick="switchTab('arcade', event)">Arcade Games</button>
+    <button class="tab-btn" onclick="switchTab('settings', event)">Settings</button>
+  </div>
+
+  <div class="content-container">
+    <!-- VIDEOS TAB -->
+    <div id="videos-tab" class="tab-content active">
+      <input type="text" class="search-bar" id="searchVideos" placeholder="Search videos..." oninput="filterGrid('videos')">
+      <div class="card">
+        <h2>Publish Video</h2>
+        <div class="upload-form">
+          <input type="text" id="videoTitle" placeholder="Video Title">
+          <input type="file" id="videoFile" accept="video/*">
+          <button class="publish-btn" onclick="publishContent('videos')">Publish Video</button>
+        </div>
+      </div>
+      <h2>Video Feed</h2>
+      <div class="grid-container" id="videos-grid"></div>
+    </div>
+
+    <!-- SVIDS TAB -->
+    <div id="svids-tab" class="tab-content">
+      <input type="text" class="search-bar" id="searchSvids" placeholder="Search svids..." oninput="filterGrid('svids')">
+      <div class="card">
+        <h2>Publish Svid (Short)</h2>
+        <div class="upload-form">
+          <input type="text" id="svidTitle" placeholder="Svid Title">
+          <input type="file" id="svidFile" accept="video/*">
+          <button class="publish-btn" onclick="publishContent('svids')">Publish Svid</button>
+        </div>
+      </div>
+      <h2>Svids Feed</h2>
+      <div class="grid-container" id="svids-grid"></div>
+    </div>
+
+    <!-- MUSIC TAB -->
+    <div id="music-tab" class="tab-content">
+      <input type="text" class="search-bar" id="searchMusic" placeholder="Search music tracks..." oninput="filterGrid('music')">
+      <div class="card">
+        <h2>Publish Music Track</h2>
+        <div class="upload-form">
+          <input type="text" id="musicTitle" placeholder="Song/Track Title">
+          <input type="file" id="musicFile" accept="audio/*">
+          <button class="publish-btn" onclick="publishContent('music')">Publish Track</button>
+        </div>
+      </div>
+      <h2>Music Library</h2>
+      <div class="grid-container" id="music-grid"></div>
+    </div>
+
+    <!-- POSTS TAB -->
+    <div id="posts-tab" class="tab-content">
+      <input type="text" class="search-bar" id="searchPosts" placeholder="Search posts..." oninput="filterGrid('posts')">
+      <div class="card">
+        <h2>Create Post</h2>
+        <div class="upload-form">
+          <textarea id="postText" placeholder="What's on your mind? Write your post here..."></textarea>
+          <button class="publish-btn" onclick="publishContent('posts')">Publish Post</button>
+        </div>
+      </div>
+      <h2>Community Posts Feed</h2>
+      <div class="grid-container" id="posts-grid"></div>
+    </div>
+
+    <!-- ARCADE GAMES TAB -->
+    <div id="arcade-tab" class="tab-content">
+      <input type="text" class="search-bar" id="searchArcade" placeholder="Search arcade games..." oninput="filterGrid('arcade')">
+      <div class="card">
+        <h2>Publish Arcade Game</h2>
+        <div class="upload-form">
+          <input type="text" id="gameTitle" placeholder="Game Title">
+          <div class="upload-group"><label>Thumbnail Image:</label><input type="file" id="gameThumbFile" accept="image/*"></div>
+          <div class="upload-group"><label>HTML Game File:</label><input type="file" id="gameHtmlFile" accept=".html"></div>
+          <button class="publish-btn" onclick="publishArcadeHtmlOnly()">Publish HTML Game</button>
+        </div>
+      </div>
+      <h2>Arcade Games Grid</h2>
+      <div class="grid-container" id="arcade-grid"></div>
+    </div>
+
+    <!-- SETTINGS TAB -->
+    <div id="settings-tab" class="tab-content">
+      <div class="card">
+        <h2>Account Profile Settings</h2>
+        <div class="upload-form">
+          <div class="upload-group"><label>Change Username:</label><input type="text" id="settingsUsernameInput" placeholder="@username"></div>
+          <button class="publish-btn" onclick="saveAccountSettings()">Save Changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- GAME PLAYER MODAL -->
+  <div id="gameModal">
+    <div class="modal-content" id="modalContentBox">
+      <div class="modal-header">
+        <span id="modalGameTitle">Playing Game</span>
+        <div class="modal-header-actions">
+          <button class="fullscreen-modal-btn" onclick="toggleGameFullscreen()">Fullscreen ⛶</button>
+          <button class="close-modal-btn" onclick="closeGameModal()">Close ✕</button>
+        </div>
+      </div>
+      <div class="modal-iframe-container" id="modalIframeContainer"></div>
+      <div class="game-reviews-container">
+        <h3>Player Reviews & Feedback</h3>
+        <div class="review-form">
+          <textarea id="newReviewText" placeholder="Write your review or rating for this game..."></textarea>
+          <button class="submit-review-btn" onclick="submitCurrentGameReview()">Post Review</button>
+        </div>
+        <div class="reviews-list" id="modalReviewsList"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- COMMENTS MODAL FOR GENERAL ITEMS -->
+  <div id="commentsModal">
+    <div class="modal-content" style="max-width: 550px;">
+      <div class="modal-header">
+        <span id="modalCommentTitle">Comments</span>
+        <button class="close-modal-btn" onclick="closeCommentsModal()">Close ✕</button>
+      </div>
+      <div class="comments-container">
+        <div class="comment-form">
+          <textarea id="newCommentText" placeholder="Write a public comment..."></textarea>
+          <button class="submit-comment-btn" onclick="submitGeneralComment()">Post Comment</button>
+        </div>
+        <div class="comments-list" id="modalCommentsList"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Initialize Supabase Client (REPLACE with your actual credentials)
+    var SUPABASE_URL = 'https://fedgpyuebiwovxohfleg.supabase.co';
+    var SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZlZGdweXVlYml3b3Z4b2hmbGVnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg4NTk4OTEsImV4cCI6MjEwNDQzNTg5MX0.KFLsTGtQD49MqXl6hxTV9Bz-5cuJMfzg-l0kwhX8bZk';
+    var supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    var currentUser = JSON.parse(localStorage.getItem('webox_user')) || {
+      username: "@ulvizakirov406",
+      avatarUrl: "https://via.placeholder.com/150"
+    };
+
+    var appData = { videos: [], svids: [], music: [], posts: [], arcade: [] };
+    var activeGameId = null;
+    var activeCommentTarget = { type: null, id: null };
+
+    function isVerifiedUser(username) {
+      return username === '@Cat catov' || username === '@ulvizakirov406' || username.startsWith('@ulvi');
+    }
+
+    function updateHeaderProfile() {
+      document.getElementById('headerUsername').innerText = currentUser.username;
+      document.getElementById('headerUserAvatar').src = currentUser.avatarUrl;
+    }
+
+    function saveAccountSettings() {
+      var newName = document.getElementById('settingsUsernameInput').value.trim();
+      if (newName) {
+        if (newName.charAt(0) !== '@') { newName = '@' + newName; }
+        currentUser.username = newName;
+      }
+      localStorage.setItem('webox_user', JSON.stringify(currentUser));
+      updateHeaderProfile();
+      alert("Account settings saved successfully!");
+    }
+
+    function switchTab(tabName, event) {
+      var tabs = document.querySelectorAll('.tab-content');
+      for (var i = 0; i < tabs.length; i++) { tabs[i].classList.remove('active'); }
+      var btns = document.querySelectorAll('.tab-btn');
+      for (var j = 0; j < btns.length; j++) { btns[j].classList.remove('active'); }
+      var target = document.getElementById(tabName + '-tab');
+      if (target) target.classList.add('active');
+      if (event && event.currentTarget) { event.currentTarget.classList.add('active'); }
+      if (tabName === 'settings') {
+        document.getElementById('settingsUsernameInput').value = currentUser.username;
+      }
+    }
+
+    // Load all items from Supabase cloud database
+    async function fetchCloudData() {
+      try {
+        var { data, error } = await supabaseClient.from('webox_items').select('*');
+        if (error) { console.error('Error fetching data:', error); return; }
+        
+        appData = { videos: [], svids: [], music: [], posts: [], arcade: [] };
+        if (data) {
+          for (var i = 0; i < data.length; i++) {
+            var row = data[i];
+            var item = {
+              id: row.id,
+              title: row.title,
+              fileUrl: row.file_url,
+              thumbUrl: row.thumb_url,
+              author: row.author,
+              authorAvatar: row.author_avatar,
+              date: row.date,
+              reviews: row.reviews || [],
+              comments: row.comments || []
+            };
+            if (appData[row.type]) {
+              appData[row.type].push(item);
+            }
+          }
+        }
+        renderAllGrids();
+      } catch (err) {
+        console.error('Cloud fetch error:', err);
+      }
+    }
+
+    async function publishContent(type) {
+      var author = currentUser.username;
+      var authorAvatar = currentUser.avatarUrl;
+      var date = new Date().toLocaleDateString();
+      var uniqueId = 'item_' + Date.now();
+
+      if (type === 'posts') {
+        var text = document.getElementById('postText').value.trim();
+        if (!text) { alert("Please write something for your post."); return; }
+        var newItemRow = {
+          id: uniqueId, type: 'posts', title: text, file_url: '', thumb_url: '',
+          author: author, author_avatar: authorAvatar, date: date, reviews: [], comments: []
+        };
+        var { error } = await supabaseClient.from('webox_items').insert([newItemRow]);
+        if (error) { alert("Error publishing post: " + error.message); return; }
+        document.getElementById('postText').value = '';
+        await fetchCloudData();
+        alert("Post published successfully to cloud!");
+        return;
+      }
+
+      var titleInputId = type === 'videos' ? 'videoTitle' : type === 'svids' ? 'svidTitle' : 'musicTitle';
+      var fileInputId = type === 'videos' ? 'videoFile' : type === 'svids' ? 'svidFile' : 'musicFile';
+      var title = document.getElementById(titleInputId).value.trim();
+      var fileInput = document.getElementById(fileInputId);
+      var file = fileInput.files[0];
+      
+      if (!title || !file) { alert("Please provide a title and select a file to publish."); return; }
+
+      var reader = new FileReader();
+      reader.onload = async function(e) {
+        var fileUrl = e.target.result;
+        var newItemRow = {
+          id: uniqueId, type: type, title: title, file_url: fileUrl, thumb_url: '',
+          author: author, author_avatar: authorAvatar, date: date, reviews: [], comments: []
+        };
+        var { error } = await supabaseClient.from('webox_items').insert([newItemRow]);
+        if (error) { alert("Error publishing: " + error.message); return; }
+        document.getElementById(titleInputId).value = '';
+        fileInput.value = '';
+        await fetchCloudData();
+        alert("Published successfully to cloud!");
+      };
+      reader.readAsDataURL(file);
+    }
+
+    async function publishArcadeHtmlOnly() {
+      var title = document.getElementById('gameTitle').value.trim();
+      var thumbFile = document.getElementById('gameThumbFile').files[0];
+      var htmlFile = document.getElementById('gameHtmlFile').files[0];
+
+      if (!title || !thumbFile || !htmlFile) {
+        alert("Please provide a game title, thumbnail, and .html file.");
+        return;
+      }
+
+      var author = currentUser.username;
+      var authorAvatar = currentUser.avatarUrl;
+      var date = new Date().toLocaleDateString();
+      var gameId = 'game_' + Date.now();
+
+      var readerThumb = new FileReader();
+      readerThumb.onload = function(eThumb) {
+        var thumbUrl = eThumb.target.result;
+        var readerHtml = new FileReader();
+        readerHtml.onload = async function(eHtml) {
+          var fileUrl = eHtml.target.result;
+          var newItemRow = {
+            id: gameId, type: 'arcade', title: title, file_url: fileUrl, thumb_url: thumbUrl,
+            author: author, author_avatar: authorAvatar, date: date, reviews: [], comments: []
+          };
+          var { error } = await supabaseClient.from('webox_items').insert([newItemRow]);
+          if (error) { alert("Error publishing game: " + error.message); return; }
+          document.getElementById('gameTitle').value = '';
+          document.getElementById('gameThumbFile').value = '';
+          document.getElementById('gameHtmlFile').value = '';
+          await fetchCloudData();
+          alert("HTML game published successfully to cloud!");
+        };
+        readerHtml.readAsDataURL(htmlFile);
+      };
+      readerThumb.readAsDataURL(thumbFile);
+    }
+
+    async function deleteItem(type, id) {
+      if (!confirm("Are you sure you want to delete this item?")) return;
+      var { error } = await supabaseClient.from('webox_items').delete().eq('id', id);
+      if (error) { alert("Error deleting: " + error.message); return; }
+      await fetchCloudData();
+    }
+
+    function renderGrid(type, filterQuery) {
+      if (!filterQuery) filterQuery = '';
+      var gridContainer = document.getElementById(type + '-grid');
+      if (!gridContainer) return;
+      var items = appData[type] || [];
+      var filteredItems = [];
+      for (var i = 0; i < items.length; i++) {
+        if (items[i].title.toLowerCase().indexOf(filterQuery.toLowerCase()) !== -1) { filteredItems.push(items[i]); }
+      }
+      if (filteredItems.length === 0) {
+        gridContainer.innerHTML = '<p style="color: #6b7280; font-size: 13px; grid-column: 1/-1;">No published ' + type + ' found in cloud.</p>';
+        return;
+      }
+      var htmlOutput = '';
+      for (var j = 0; j < filteredItems.length; j++) {
+        var item = filteredItems[j];
+        if (!item.comments) item.comments = [];
+        var mediaHtml = '';
+        if (type === 'videos' || type === 'svids') { mediaHtml = '<video controls src="' + item.fileUrl + '"></video>'; }
+        else if (type === 'music') { mediaHtml = '<audio controls src="' + item.fileUrl + '"></audio>'; }
+        else if (type === 'arcade') { mediaHtml = '<img src="' + item.thumbUrl + '" class="game-thumbnail">'; }
+        
+        var verifiedCheck = isVerifiedUser(item.author) ? '<span class="verified-badge">✓</span>' : '';
+        var authorInfoHtml = '<div class="grid-card-author-area"><img src="' + (item.authorAvatar || 'https://via.placeholder.com/150') + '" class="grid-author-avatar"><div class="grid-card-author"><span>' + item.author + '</span>' + verifiedCheck + '<span style="margin-left: 4px;">• ' + item.date + '</span></div></div>';
+        
+        var actionsHtml = '';
+        if (type === 'arcade') {
+          var reviewCount = item.reviews ? item.reviews.length : 0;
+          actionsHtml = '<div class="grid-card-actions">' +
+            '<button class="action-btn" style="background:#2563eb; color:white;" onclick="launchGameModal(\'' + item.id + '\')">Play</button>' +
+            '<button class="action-btn" onclick="launchGameModal(\'' + item.id + '\')">Reviews (' + reviewCount + ')</button>' +
+            '<button class="action-btn" onclick="openCommentsModal(\'' + type + '\', \'' + item.id + '\')">Comments (' + item.comments.length + ')</button>' +
+            '<button class="action-btn delete-btn" onclick="deleteItem(\'' + type + '\', \'' + item.id + '\')">Delete</button>' +
+          '</div>';
+        } else {
+          actionsHtml = '<div class="grid-card-actions">' +
+            '<button class="action-btn" onclick="openCommentsModal(\'' + type + '\', \'' + item.id + '\')">Comments (' + item.comments.length + ')</button>' +
+            '<button class="action-btn delete-btn" onclick="deleteItem(\'' + type + '\', \'' + item.id + '\')">Delete</button>' +
+          '</div>';
+        }
+
+        htmlOutput += '<div class="grid-card">' + mediaHtml + '<div class="grid-card-body"><div><div class="grid-card-title">' + escapeHtml(item.title) + '</div>' + authorInfoHtml + '</div>' + actionsHtml + '</div></div>';
+      }
+      gridContainer.innerHTML = htmlOutput;
+    }
+
+    function renderAllGrids() {
+      renderGrid('videos');
+      renderGrid('svids');
+      renderGrid('music');
+      renderGrid('posts');
+      renderGrid('arcade');
+    }
+
+    function filterGrid(type) {
+      var queryId = type === 'videos' ? 'searchVideos' : type === 'svids' ? 'searchSvids' : type === 'music' ? 'searchMusic' : type === 'posts' ? 'searchPosts' : 'searchArcade';
+      var inputElem = document.getElementById(queryId);
+      if (inputElem) { renderGrid(type, inputElem.value); }
+    }
+
+    /* GAME MODAL & REVIEWS */
+    function launchGameModal(gameId) {
+      var game = null;
+      for (var i = 0; i < appData.arcade.length; i++) { if (appData.arcade[i].id === gameId) { game = appData.arcade[i]; break; } }
+      if (!game) return;
+      activeGameId = gameId;
+      document.getElementById('modalGameTitle').innerText = game.title;
+      document.getElementById('modalIframeContainer').innerHTML = '<iframe src="' + game.fileUrl + '" allowfullscreen></iframe>';
+      renderModalReviews();
+      document.getElementById('gameModal').style.display = 'flex';
+    }
+
+    function closeGameModal() {
+      if (document.fullscreenElement) { document.exitFullscreen().catch(function() {}); }
+      document.getElementById('gameModal').style.display = 'none';
+      document.getElementById('modalIframeContainer').innerHTML = '';
+      activeGameId = null;
+      fetchCloudData();
+    }
+
+    function toggleGameFullscreen() {
+      var container = document.getElementById('modalContentBox');
+      if (!document.fullscreenElement) {
+        if (container.requestFullscreen) { container.requestFullscreen(); }
+      } else {
+        if (document.exitFullscreen) { document.exitFullscreen(); }
+      }
+    }
+
+    async function submitCurrentGameReview() {
+      var textInput = document.getElementById('newReviewText');
+      var text = textInput.value.trim();
+      if (!text || !activeGameId) return;
+      var game = null;
+      for (var i = 0; i < appData.arcade.length; i++) { if (appData.arcade[i].id === activeGameId) { game = appData.arcade[i]; break; } }
+      if (game) {
+        if (!game.reviews) game.reviews = [];
+        game.reviews.unshift({ author: currentUser.username, avatar: currentUser.avatarUrl, text: text, date: new Date().toLocaleDateString() });
+        var { error } = await supabaseClient.from('webox_items').update({ reviews: game.reviews }).eq('id', activeGameId);
+        if (error) { alert("Error posting review: " + error.message); return; }
+        textInput.value = '';
+        await fetchCloudData();
+        renderModalReviews();
+      }
+    }
+
+    function renderModalReviews() {
+      var game = null;
+      for (var i = 0; i < appData.arcade.length; i++) { if (appData.arcade[i].id === activeGameId) { game = appData.arcade[i]; break; } }
+      var listContainer = document.getElementById('modalReviewsList');
+      if (!game || !listContainer) return;
+      if (!game.reviews || game.reviews.length === 0) {
+        listContainer.innerHTML = '<p style="color: #6b7280; font-size: 13px;">No reviews yet. Be the first player to review this game!</p>';
+        return;
+      }
+      var reviewsHtml = '';
+      for (var j = 0; j < game.reviews.length; j++) {
+        var r = game.reviews[j];
+        reviewsHtml += '<div class="review-bubble"><div class="review-bubble-header"><img src="' + (r.avatar || currentUser.avatarUrl) + '" class="review-avatar"><span>' + r.author + '</span><span style="font-size: 11px; color: #9ca3af; margin-left: auto;">' + r.date + '</span></div><p style="margin-top: 4px; color: #e5e7eb;">' + escapeHtml(r.text) + '</p></div>';
+      }
+      listContainer.innerHTML = reviewsHtml;
+    }
+
+    /* GENERAL COMMENTS */
+    function openCommentsModal(type, id) {
+      activeCommentTarget = { type: type, id: id };
+      var item = null;
+      var arr = appData[type];
+      for (var i = 0; i < arr.length; i++) {
+        if (arr[i].id === id) { item = arr[i]; break; }
+      }
+      if (!item) return;
+      document.getElementById('modalCommentTitle').innerText = 'Comments for: ' + item.title;
+      renderModalComments();
+      document.getElementById('commentsModal').style.display = 'flex';
+    }
+
+    function closeCommentsModal() {
+      document.getElementById('commentsModal').style.display = 'none';
+      activeCommentTarget = { type: null, id: null };
+      fetchCloudData();
+    }
+
+    async function submitGeneralComment() {
+      var textInput = document.getElementById('newCommentText');
+      var text = textInput.value.trim();
+      if (!text || !activeCommentTarget.id) return;
+      var arr = appData[activeCommentTarget.type];
+      var item = null;
+      for (var i = 0; i < arr.length; i++) {
+        if (arr[i].id === activeCommentTarget.id) { item = arr[i]; break; }
+      }
+      if (item) {
+        if (!item.comments) item.comments = [];
+        item.comments.unshift({ author: currentUser.username, avatar: currentUser.avatarUrl, text: text, date: new Date().toLocaleDateString() });
+        var { error } = await supabaseClient.from('webox_items').update({ comments: item.comments }).eq('id', activeCommentTarget.id);
+        if (error) { alert("Error posting comment: " + error.message); return; }
+        textInput.value = '';
+        await fetchCloudData();
+        renderModalComments();
+      }
+    }
+
+    function renderModalComments() {
+      var arr = appData[activeCommentTarget.type];
+      var item = null;
+      for (var i = 0; i < arr.length; i++) {
+        if (arr[i].id === activeCommentTarget.id) { item = arr[i]; break; }
+      }
+      var listContainer = document.getElementById('modalCommentsList');
+      if (!item || !listContainer) return;
+      if (!item.comments || item.comments.length === 0) {
+        listContainer.innerHTML = '<p style="color: #6b7280; font-size: 13px;">No comments yet. Start the conversation!</p>';
+        return;
+      }
+      var commentsHtml = '';
+      for (var j = 0; j < item.comments.length; j++) {
+        var c = item.comments[j];
+        commentsHtml += '<div class="comment-bubble"><div class="comment-bubble-header"><img src="' + (c.avatar || currentUser.avatarUrl) + '" class="comment-avatar"><span>' + c.author + '</span><span style="font-size: 11px; color: #9ca3af; margin-left: auto;">' + c.date + '</span></div><p style="margin-top: 4px; color: #e5e7eb;">' + escapeHtml(c.text) + '</p></div>';
+      }
+      listContainer.innerHTML = commentsHtml;
+    }
+
+    function escapeHtml(str) {
+      if (!str) return '';
+      return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+    }
+
+    // Initialize UI and load from Supabase Cloud on load
+    updateHeaderProfile();
+    fetchCloudData();
+  </script>
+</body>
+</html>

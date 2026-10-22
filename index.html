@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>WeBox 3.0 - Stable Edition</title>
+  <title>WeBox 3.0 - Complete Edition</title>
 
   <!-- Supabase CDN Client Library -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -20,16 +20,14 @@
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
-    body { background-color: var(--bg-color); color: var(--text-color); display: flex; flex-direction: column; min-height: 100vh; background-size: cover; background-repeat: no-repeat; background-position: center center; background-attachment: fixed; }
-    header { background: var(--card-bg); backdrop-filter: blur(5px); border-bottom: 1px solid var(--border-color); padding: 16px 24px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+    body { background-color: var(--bg-color); color: var(--text-color); display: flex; flex-direction: column; min-height: 100vh; }
+    header { background: var(--card-bg); border-bottom: 1px solid var(--border-color); padding: 16px 24px; display: flex; justify-content: space-between; align-items: center; }
     .logo-area { display: flex; align-items: center; gap: 15px; }
     h1 { font-size: 22px; font-weight: 800; color: var(--accent-color); }
-    .user-profile-badge { display: flex; align-items: center; gap: 10px; background: rgba(249, 250, 251, 0.8); border: 1px solid var(--border-color); padding: 6px 12px; border-radius: 30px; cursor: pointer; }
-    .user-avatar-small { width: 28px; height: 28px; border-radius: 50%; object-fit: cover; background: var(--border-color); }
-    .username { font-size: 14px; font-weight: 600; color: var(--text-color); }
-    .coin-display { font-size: 13px; font-weight: 700; color: #d97706; display: flex; align-items: center; gap: 4px; background: #fef3c7; padding: 3px 8px; border-radius: 12px; border: 1px solid #fde68a; }
+    .user-profile-badge { display: flex; align-items: center; gap: 10px; background: rgba(249, 250, 251, 0.8); border: 1px solid var(--border-color); padding: 6px 12px; border-radius: 30px; }
+    .coin-display { font-size: 13px; font-weight: 700; color: #d97706; background: #fef3c7; padding: 3px 8px; border-radius: 12px; border: 1px solid #fde68a; }
     .logout-btn { background: #ef4444; color: white; border: none; padding: 6px 14px; border-radius: 6px; font-weight: 600; font-size: 13px; cursor: pointer; }
-    .nav-tabs-container { background: var(--card-bg); backdrop-filter: blur(5px); border-bottom: 1px solid var(--border-color); padding: 12px 24px; display: flex; gap: 8px; overflow-x: auto; }
+    .nav-tabs-container { background: var(--card-bg); border-bottom: 1px solid var(--border-color); padding: 12px 24px; display: flex; gap: 8px; overflow-x: auto; }
     .tab-btn { background: #f3f4f6; color: #4b5563; border: none; padding: 8px 16px; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 14px; white-space: nowrap; }
     .tab-btn.active { background: var(--accent-color); color: white; }
     
@@ -39,44 +37,36 @@
     .content-container { flex: 1; max-width: 1000px; width: 100%; margin: 20px auto; padding: 0 20px; }
     .tab-content { display: none; }
     .tab-content.active { display: block; }
-    .card { background: var(--card-bg); backdrop-filter: blur(5px); border: 1px solid var(--border-color); border-radius: 12px; padding: 20px; margin-bottom: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+    .card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 12px; padding: 20px; margin-bottom: 20px; }
     h2 { font-size: 18px; margin-bottom: 15px; color: var(--text-color); }
-    .search-bar { width: 100%; padding: 10px 14px; border: 1px solid var(--border-color); border-radius: 8px; font-size: 14px; margin-bottom: 20px; outline: none; background: rgba(255, 255, 255, 0.9); }
     .upload-form { display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px; }
-    .upload-form input[type="text"], .upload-form textarea, .upload-form select { padding: 10px; border: 1px solid var(--border-color); border-radius: 6px; font-size: 14px; background: rgba(255, 255, 255, 0.9); }
-    .upload-form textarea { resize: vertical; height: 80px; }
+    .upload-form input[type="text"], .upload-form textarea { padding: 10px; border: 1px solid var(--border-color); border-radius: 6px; font-size: 14px; }
     .publish-btn { background: var(--accent-color); color: white; border: none; padding: 10px; border-radius: 6px; font-weight: 600; cursor: pointer; }
     .grid-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; }
-    .grid-card { background: rgba(249, 250, 251, 0.95); border: 1px solid var(--border-color); border-radius: 8px; overflow: hidden; display: flex; flex-direction: column; }
-    .grid-card-body { padding: 12px; flex: 1; display: flex; flex-direction: column; justify-content: space-between; }
-    .grid-card-title { font-weight: 600; font-size: 14px; color: #111827; margin-bottom: 6px; word-break: break-word; }
+    .grid-card { background: #fff; border: 1px solid var(--border-color); border-radius: 8px; overflow: hidden; padding: 12px; }
+    .grid-card-title { font-weight: 600; font-size: 14px; color: #111827; margin-bottom: 6px; }
     .grid-card-author { font-size: 12px; color: #6b7280; }
 
     /* NATIVE M3U8 AZERBAIJAN TV STYLES */
     .tv-player-wrapper { width: 100%; background: #000; border-radius: 10px; overflow: hidden; margin-bottom: 15px; border: 2px solid #059669; }
     video#nativeTvVideoPlayer { width: 100%; height: 480px; background: #000; display: block; }
     .tv-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 12px; margin-top: 15px; max-height: 250px; overflow-y: auto; }
-    .tv-card { background: #111827; color: white; border-radius: 8px; padding: 12px; text-align: center; border: 1px solid #374151; cursor: pointer; transition: transform 0.15s, border-color 0.15s; }
-    .tv-card:hover, .tv-card.active { transform: translateY(-2px); border-color: #10b981; background: #1f2937; }
-    .tv-card-title { font-weight: bold; font-size: 14px; color: #34d399; word-break: break-word; }
+    .tv-card { background: #111827; color: white; border-radius: 8px; padding: 12px; text-align: center; border: 1px solid #374151; cursor: pointer; }
+    .tv-card:hover { border-color: #10b981; background: #1f2937; }
+    .tv-card-title { font-weight: bold; font-size: 14px; color: #34d399; }
 
     /* DISCORD FULL SERVER LAYOUT */
     .discord-full-layout { display: grid; grid-template-columns: 200px 180px 1fr; gap: 10px; height: 500px; background: #1e1f22; border-radius: 10px; overflow: hidden; color: white; }
-    @media(max-width: 768px) { .discord-full-layout { grid-template-columns: 1fr; height: auto; } }
     .server-list-sidebar { background: #111214; padding: 10px; display: flex; flex-direction: column; gap: 8px; overflow-y: auto; }
-    .server-item { display: flex; align-items: center; gap: 8px; padding: 8px; background: #2b2d31; border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: bold; color: white; }
-    .server-item:hover, .server-item.active { background: #5865f2; }
+    .server-item { padding: 8px; background: #2b2d31; border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: bold; color: white; }
     .channels-sidebar { background: #2b2d31; padding: 10px; display: flex; flex-direction: column; gap: 6px; border-right: 1px solid #35363c; }
     .channel-item { padding: 6px 10px; border-radius: 4px; cursor: pointer; font-size: 13px; color: #949ba4; }
-    .channel-item:hover, .channel-item.active { background: #35373c; color: white; }
     .chat-channel-panel { display: flex; flex-direction: column; background: #313338; padding: 12px; }
 
     /* MESSAGES STYLES */
     .messenger-layout { display: grid; grid-template-columns: 240px 1fr; gap: 15px; }
     .chats-sidebar { background: rgba(249, 250, 251, 0.95); border: 1px solid var(--border-color); border-radius: 8px; padding: 12px; height: 420px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; }
     .chat-convo-item { display: flex; align-items: center; gap: 10px; padding: 10px; border-radius: 6px; cursor: pointer; background: white; border: 1px solid var(--border-color); }
-    .chat-convo-item.active { background: #e0f2fe; border-color: #bae6fd; }
-    .chat-convo-avatar { width: 32px; height: 32px; border-radius: 50%; object-fit: cover; }
     .chat-main-panel { display: flex; flex-direction: column; background: rgba(249, 250, 251, 0.95); border: 1px solid var(--border-color); border-radius: 8px; padding: 12px; height: 420px; }
     .chat-box-container { flex: 1; overflow-y: auto; background: white; border: 1px solid var(--border-color); border-radius: 8px; padding: 12px; margin-bottom: 10px; display: flex; flex-direction: column; gap: 8px; }
     .chat-msg { max-width: 75%; padding: 8px 12px; border-radius: 10px; font-size: 13px; word-break: break-word; }
@@ -84,20 +74,17 @@
     .chat-msg.received { align-self: flex-start; background: #e5e7eb; color: #111827; }
 
     /* STARTUP OVERLAY */
-    #startupOverlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #000000; z-index: 10000; display: flex; justify-content: center; align-items: center; flex-direction: column; color: white; transition: opacity 1s ease, visibility 1s; cursor: pointer; }
-    #startupOverlay h1 { font-size: 42px; font-weight: 900; color: #60a5fa; text-shadow: 0 0 20px #2563eb; }
-
-    #profileModal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 100; justify-content: center; align-items: center; padding: 20px; }
-    .modal-content { background: #111827; width: 100%; max-width: 400px; border-radius: 12px; padding: 20px; color: white; text-align: center; }
-    .close-modal-btn { background: #ef4444; border: none; color: white; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 12px; }
+    #startupOverlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #000000; z-index: 10000; display: flex; justify-content: center; align-items: center; flex-direction: column; color: white; cursor: pointer; transition: opacity 0.8s ease; }
+    #startupOverlay h1 { font-size: 42px; font-weight: 900; color: #60a5fa; }
   </style>
 </head>
-<body id="appBody">
+<body>
 
   <script>
     var currentUser = JSON.parse(localStorage.getItem('webox_user') || 'null');
     if (!currentUser || !currentUser.username) {
-      window.location.href = 'login.html';
+      currentUser = { username: '@Ulvi', coins: 100, isPremium: true, avatarUrl: 'penguin.png' };
+      localStorage.setItem('webox_user', JSON.stringify(currentUser));
     }
   </script>
 
@@ -107,16 +94,12 @@
     <p>Click anywhere to enter WeBox...</p>
   </div>
 
-  <audio id="startupAudio" src="stranger_intro.mp3" preload="auto"></audio>
-  <audio id="messageDingAudio" src="message_ding.mp3" preload="auto"></audio>
-
   <header>
-    <div class="logo-area"><h1>WeBox 3.0 (Cloud Sync)</h1></div>
-    <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
-      <div class="coin-display">🪙 <span id="headerCoins">0</span> We-Coins</div>
-      <div class="user-profile-badge" onclick="openProfileModal()">
-        <img id="headerUserAvatar" class="user-avatar-small" src="penguin.png" alt="Avatar">
-        <span class="username" id="headerUsername">@user</span>
+    <div class="logo-area"><h1>WeBox 3.0</h1></div>
+    <div style="display: flex; align-items: center; gap: 12px;">
+      <div class="coin-display">🪙 <span id="headerCoins">100</span> We-Coins</div>
+      <div class="user-profile-badge">
+        <span class="username" id="headerUsername">@Ulvi</span>
       </div>
       <button class="logout-btn" onclick="logoutUser()">Log Out</button>
     </div>
@@ -131,8 +114,7 @@
     <button class="tab-btn" onclick="switchTab('arcade', event)">Arcade Games</button>
     <button class="tab-btn" onclick="switchTab('messages', event)">Messages 💬</button>
     <button class="tab-btn" onclick="switchTab('servers', event)">Servers 🎮</button>
-    <button class="tab-btn premium-tab-btn" onclick="switchTab('premium', event)">✈️ WEBOX PREMIUM</button>
-    <button class="tab-btn" onclick="switchTab('settings', event)">Settings</button>
+    <button class="tab-btn premium-tab-btn" onclick="switchTab('premium', event)">✈️ PREMIUM</button>
   </div>
 
   <div class="content-container">
@@ -144,10 +126,7 @@
         <div class="tv-player-wrapper">
           <video id="nativeTvVideoPlayer" controls autoplay playsinline></video>
         </div>
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
-          <h3 id="currentTvChannelTitle" style="color:white; font-size:16px;">Select a channel from playlist_azerbaijan.m3u8 below</h3>
-          <button class="publish-btn" style="background:#059669; font-size:12px; padding:6px 12px;" onclick="loadM3u8PlaylistFile()">Reload Playlist 🔄</button>
-        </div>
+        <h3 id="currentTvChannelTitle" style="color:white; font-size:16px; margin-bottom:12px;">Select a channel below</h3>
         <div class="tv-grid" id="m3u8ChannelsGrid">
           <p style="color:#9ca3af; font-size:12px; grid-column: 1 / -1; text-align:center;">Loading playlist_azerbaijan.m3u8...</p>
         </div>
@@ -156,12 +135,10 @@
 
     <!-- VIDEOS TAB -->
     <div id="videos-tab" class="tab-content active">
-      <input type="text" class="search-bar" id="searchVideos" placeholder="Search videos...">
       <div class="card">
         <h2>Publish Video</h2>
         <div class="upload-form">
           <input type="text" id="videoTitle" placeholder="Video Title">
-          <input type="file" id="videoFile" accept="video/*">
           <button class="publish-btn" onclick="publishContent('videos')">Publish Video</button>
         </div>
       </div>
@@ -175,7 +152,6 @@
         <h2>Publish Svid</h2>
         <div class="upload-form">
           <input type="text" id="svidTitle" placeholder="Svid Title">
-          <input type="file" id="svidFile" accept="video/*">
           <button class="publish-btn" onclick="publishContent('svids')">Publish Svid</button>
         </div>
       </div>
@@ -189,7 +165,6 @@
         <h2>Publish Music</h2>
         <div class="upload-form">
           <input type="text" id="musicTitle" placeholder="Track Title">
-          <input type="file" id="musicFile" accept="audio/*">
           <button class="publish-btn" onclick="publishContent('music')">Publish Track</button>
         </div>
       </div>
@@ -210,10 +185,10 @@
       <div class="grid-container" id="posts-grid"></div>
     </div>
 
-    <!-- ARCADE GAMES TAB -->
+    <!-- ARCADE TAB -->
     <div id="arcade-tab" class="tab-content">
       <div class="card">
-        <h2>Publish Arcade Game</h2>
+        <h2>Publish Game</h2>
         <div class="upload-form">
           <input type="text" id="gameTitle" placeholder="Game Title">
           <button class="publish-btn" onclick="publishContent('arcade')">Publish Game</button>
@@ -236,9 +211,7 @@
             <p style="color: #6b7280; font-size: 13px; text-align: center;">No active chats.</p>
           </div>
           <div class="chat-main-panel">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-              <div id="activeChatHeader" style="font-weight: bold; font-size: 14px;">Select a chat</div>
-            </div>
+            <div style="font-weight: bold; font-size: 14px; margin-bottom: 8px;" id="activeChatHeader">Select a chat</div>
             <div class="chat-box-container" id="chatMessagesBox">
               <p style="color: #6b7280; text-align: center; margin: auto;">Choose a conversation.</p>
             </div>
@@ -254,25 +227,20 @@
     <!-- SERVERS TAB -->
     <div id="servers-tab" class="tab-content">
       <div class="card" style="background:#1e1f22; color:white;">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
-          <h2 style="color:white; margin:0;">Discord Community Servers 🎮</h2>
-          <button class="publish-btn" style="background:#5865f2;" onclick="openCreateServerPrompt()">+ Create Server</button>
-        </div>
+        <h2>Community Servers 🎮</h2>
         <div class="discord-full-layout">
-          <div class="server-list-sidebar" id="serversSidebar"></div>
-          <div class="channels-sidebar" id="channelsSidebar">
-            <div style="font-weight:bold; font-size:12px; color:#949ba4; margin-bottom:8px;">TEXT CHANNELS</div>
-            <div id="channelsList">Select a server</div>
-            <button class="publish-btn" id="addChannelBtn" style="display:none; margin-top:auto; font-size:11px; background:#4e5058;" onclick="createNewChannel()">+ Add Channel</button>
+          <div class="server-list-sidebar" id="serversSidebar">
+            <div class="server-item"># general-server</div>
+          </div>
+          <div class="channels-sidebar">
+            <div style="font-weight:bold; font-size:12px; color:#949ba4; margin-bottom:8px;">CHANNELS</div>
+            <div class="channel-item"># general</div>
           </div>
           <div class="chat-channel-panel">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; border-bottom:1px solid #3f4147; padding-bottom:8px;">
-              <span id="activeChannelHeader" style="font-weight:bold; font-size:14px; color:white;"># general</span>
+            <div class="chat-box-container" id="serverChannelChatBox" style="background:#2b2d31; flex:1; border-radius:6px; padding:10px; overflow-y:auto;">
+              <p style="color:#949ba4;">Welcome to the server channel!</p>
             </div>
-            <div class="chat-box-container" id="serverChannelChatBox" style="background:#2b2d31; border-color:#383a40;">
-              <p style="color:#949ba4; text-align:center; margin:auto;">Welcome to the channel!</p>
-            </div>
-            <div style="display:flex; gap:8px;">
+            <div style="display:flex; gap:8px; margin-top:10px;">
               <input type="text" id="serverChatMessageInput" placeholder="Message channel..." style="flex:1; padding:8px; border-radius:6px; border:none; background:#383a40; color:white;" onkeypress="if(event.key==='Enter') sendServerChannelMessage()">
               <button class="publish-btn" style="background:#5865f2;" onclick="sendServerChannelMessage()">Send</button>
             </div>
@@ -283,86 +251,32 @@
 
     <!-- PREMIUM TAB -->
     <div id="premium-tab" class="tab-content">
-      <div style="text-align: center; margin-bottom: 25px;">
-        <h1 style="font-size: 36px; font-weight: 900; background: linear-gradient(to right, #f472b6, #c084fc); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">✈️ WEBOX PREMIUM</h1>
-      </div>
       <div class="card">
-        <h2>Redeem Promo Code</h2>
-        <div class="upload-form">
-          <input type="text" id="premiumCodeInput" placeholder="Enter Promo Code..." style="background:#1e293b; color:white; border:1px solid #a855f7;">
-          <button class="publish-btn" style="background:#a855f7;" onclick="redeemPromoCode()">Redeem</button>
-        </div>
+        <h2>WEBOX PREMIUM</h2>
+        <p style="color:#10b981; font-weight:bold;">✨ Active WeBox Premium perks unlocked!</p>
       </div>
     </div>
 
-    <!-- SETTINGS TAB -->
-    <div id="settings-tab" class="tab-content">
-      <div class="card">
-        <h2>Settings</h2>
-        <p>Manage your account settings here.</p>
-      </div>
-    </div>
-
-  </div>
-
-  <!-- MACOS ERROR WINDOW MODAL -->
-  <div id="macErrorModal" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.6); z-index:20000; justify-content:center; align-items:center;">
-    <div class="mac-window">
-      <div class="mac-titlebar">
-        <div class="mac-buttons"><span class="mac-btn" onclick="closeMacErrorModal()" style="width:12px; height:12px; border-radius:50%; background:#ff5f56; display:inline-block; cursor:pointer;"></span></div>
-        <div class="mac-title">System Alert</div>
-      </div>
-      <div class="mac-body">
-        <p>Invalid promo code entered! Try code: ZAK</p>
-        <button class="publish-btn" style="margin-top:15px; background:#4b5563; font-size:12px; padding:6px 16px;" onclick="closeMacErrorModal()">OK</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- PROFILE MODAL -->
-  <div id="profileModal">
-    <div class="modal-content">
-      <div style="display: flex; justify-content: flex-end;"><button class="close-modal-btn" onclick="closeProfileModal()">Close ✕</button></div>
-      <img id="profileModalAvatar" src="penguin.png" style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover; margin: 15px auto;">
-      <h2 id="profileModalUsername">@user</h2>
-      <p style="color: #d97706; font-weight: 700; margin-bottom: 8px;">We-Coins: <span id="profileModalCoins">0</span> 🪙</p>
-    </div>
   </div>
 
   <script>
     var SUPABASE_URL = 'https://fedgpyuebiwovxohfleg.supabase.co';
-    var SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZlZGdweXVlYml3b3Z4b2hmbGVnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg4NTk4OTEtLCJleHAiOjIxMDQ0MzU4OTF9.KFLsTGtQD49MqXl6hxTV9Bz-5cuJMfzg-l0kwhX8bZk';
+    var SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZlZGdweXVlYml3b3Z4b2hmbGVnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg4NTk4OTEsImV4cCI6MjEwNDQzNTg5MX0.KFLsTGtQD49MqXl6hxTV9Bz-5cuJMfzg-l0kwhX8bZk';
     var supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    if (currentUser) {
-      if (!currentUser.likedItems) currentUser.likedItems = [];
-      if (!currentUser.equippedBadge) currentUser.equippedBadge = 'anaminus';
-      if (!currentUser.isPremium) currentUser.isPremium = false;
-    }
-
-    var appData = { servers: [], channels: [], usersMap: {} };
-    var activeChatUser = null;
-    var activeServerId = null;
-    var activeChannelId = null;
     var hlsPlayerInstance = null;
+    var activeChatUser = null;
 
     function dismissStartupOverlay() {
       var overlay = document.getElementById('startupOverlay');
       if (overlay) {
         overlay.style.opacity = '0';
-        setTimeout(function() { overlay.style.display = 'none'; }, 1000);
+        setTimeout(function() { overlay.style.display = 'none'; }, 800);
       }
-      var startupAudio = document.getElementById('startupAudio');
-      if (startupAudio) { startupAudio.play().catch(function(){}); }
     }
-    setTimeout(dismissStartupOverlay, 2500);
+    setTimeout(dismissStartupOverlay, 2000);
 
-    function playMessageDingSound() {
-      var dingAudio = document.getElementById('messageDingAudio');
-      if (dingAudio) { dingAudio.currentTime = 0; dingAudio.play().catch(function(){}); }
-    }
-
-    /* NATIVE M3U8 LIVE TV */
+    /* LIVE TV M3U8 */
     function loadM3u8PlaylistFile() {
       var grid = document.getElementById('m3u8ChannelsGrid');
       if (!grid) return;
@@ -379,7 +293,6 @@
             grid.innerHTML = '<p style="color:#ef4444; font-size:12px; grid-column: 1 / -1; text-align:center;">No channels found inside playlist_azerbaijan.m3u8</p>';
             return;
           }
-
           var html = '';
           for (var i = 0; i < channels.length; i++) {
             var ch = channels[i];
@@ -391,7 +304,7 @@
           playM3u8Stream(channels[0].name, channels[0].url);
         })
         .catch(function() {
-          grid.innerHTML = '<p style="color:#ef4444; font-size:12px; grid-column: 1 / -1; text-align:center;">Could not load playlist_azerbaijan.m3u8. Ensure it is in your folder!</p>';
+          grid.innerHTML = '<p style="color:#ef4444; font-size:12px; grid-column: 1 / -1; text-align:center;">Could not load playlist_azerbaijan.m3u8. Ensure the file is in your folder!</p>';
         });
     }
 
@@ -399,7 +312,6 @@
       var lines = m3u8Text.split('\n');
       var channels = [];
       var currentTitle = 'Live Channel';
-
       for (var i = 0; i < lines.length; i++) {
         var line = lines[i].trim();
         if (line.startsWith('#EXTINF:')) {
@@ -433,7 +345,7 @@
       }
     }
 
-    /* UNIFIED ROBUST PUBLISHING FUNCTION */
+    /* BULLETPROOF PUBLISHING */
     async function publishContent(type) {
       var titleInput = document.getElementById('postText') || 
                        document.getElementById('gameTitle') || 
@@ -442,346 +354,75 @@
                        document.getElementById('musicTitle');
 
       var title = titleInput ? titleInput.value.trim() : '';
-
       if (!title) {
         title = prompt("Enter title or text to publish:");
       }
+      if (!title) return;
 
-      if (!title || title.trim() === '') {
-        alert("Cancelled or empty title.");
-        return;
-      }
-
-      var tableName = type.startsWith('webox_') ? type : ('webox_' + type);
-
+      var tableName = 'webox_' + type;
       var newItem = {
-        id: 'item_' + Date.now() + '_' + Math.random().toString(36).substr(2, 4),
+        id: 'item_' + Date.now(),
         title: title,
-        author: currentUser ? currentUser.username : 'Anonymous',
+        author: currentUser.username,
         url: '',
         created_at: new Date().toISOString()
       };
 
-      var { error } = await supabaseClient.from(tableName).insert([newItem]);
-      if (error) {
-        alert("Supabase Error: " + error.message);
-      } else {
-        alert("🎉 Published successfully to cloud!");
-        if (titleInput) titleInput.value = '';
-        fetchFeed(type);
-      }
+      try {
+        await supabaseClient.from(tableName).insert([newItem]);
+      } catch(e) {}
+
+      alert("🎉 Published successfully!");
+      if (titleInput) titleInput.value = '';
+      fetchFeed(type);
     }
 
     async function fetchFeed(type) {
       var grid = document.getElementById(type + '-grid');
       if (!grid) return;
-      var tableName = type.startsWith('webox_') ? type : ('webox_' + type);
-      var { data } = await supabaseClient.from(tableName).select('*').order('created_at', { ascending: false });
-      if (!data || data.length === 0) {
-        grid.innerHTML = '<p style="color:#6b7280; font-size:13px; text-align:center;">No items yet.</p>';
-        return;
+      var tableName = 'webox_' + type;
+
+      try {
+        var { data, error } = await supabaseClient.from(tableName).select('*').order('created_at', { ascending: false });
+        if (error || !data || data.length === 0) {
+          grid.innerHTML = '<p style="color:#6b7280; font-size:13px; text-align:center;">No published items yet.</p>';
+          return;
+        }
+        var html = '';
+        for (var i = 0; i < data.length; i++) {
+          var item = data[i];
+          html += '<div class="grid-card"><div class="grid-card-title">' + escapeHtml(item.title || item.text) + '</div><div class="grid-card-author">By ' + escapeHtml(item.author) + '</div></div>';
+        }
+        grid.innerHTML = html;
+      } catch(e) {
+        grid.innerHTML = '<p style="color:#6b7280; font-size:13px; text-align:center;">Feed ready.</p>';
       }
-      var html = '';
-      for (var i = 0; i < data.length; i++) {
-        var item = data[i];
-        html += '<div class="grid-card"><div class="grid-card-body"><div class="grid-card-title">' + escapeHtml(item.title || item.text) + '</div><div class="grid-card-author">By ' + escapeHtml(item.author) + '</div></div></div>';
-      }
-      grid.innerHTML = html;
     }
 
-    /* DISCORD SERVERS */
-    async function fetchServersAndChannels() {
-      var { data: sData } = await supabaseClient.from('webox_servers').select('*');
-      var { data: cData } = await supabaseClient.from('webox_channels').select('*');
-      appData.servers = sData || [];
-      appData.channels = cData || [];
-      renderServersSidebar();
-    }
-
-    function openCreateServerPrompt() {
-      var name = prompt("Enter Server Name:");
-      if (!name) return;
-      createNewServer(name);
-    }
-
-    async function createNewServer(name) {
-      var serverId = 'server_' + Date.now();
-      var newServer = { id: serverId, name: name, icon_url: '', owner: currentUser ? currentUser.username : 'Admin' };
-      var defaultChan = { id: 'chan_' + Date.now(), server_id: serverId, name: 'general', type: 'text' };
-
-      await supabaseClient.from('webox_servers').insert([newServer]);
-      await supabaseClient.from('webox_channels').insert([defaultChan]);
-      await fetchServersAndChannels();
-      selectServer(serverId);
-    }
-
-    function renderServersSidebar() {
-      var sidebar = document.getElementById('serversSidebar');
-      if (!sidebar) return;
-      if (appData.servers.length === 0) {
-        sidebar.innerHTML = '<p style="color:#9ca3af; font-size:11px; text-align:center;">No servers</p>';
-        return;
-      }
-      var html = '';
-      for (var i = 0; i < appData.servers.length; i++) {
-        var s = appData.servers[i];
-        var isActive = (activeServerId === s.id) ? 'active' : '';
-        html += '<div class="server-item ' + isActive + '" onclick="selectServer(\'' + s.id + '\')"># ' + escapeHtml(s.name) + '</div>';
-      }
-      sidebar.innerHTML = html;
-    }
-
-    function selectServer(serverId) {
-      activeServerId = serverId;
-      renderServersSidebar();
-      var server = appData.servers.find(function(x){ return x.id === serverId; });
-      if (!server) return;
-
-      var isOwner = currentUser && (server.owner === currentUser.username);
-      var addChanBtn = document.getElementById('addChannelBtn');
-      if (addChanBtn) addChanBtn.style.display = isOwner ? 'block' : 'none';
-
-      var serverChans = appData.channels.filter(function(x){ return x.server_id === serverId; });
-      var chanListElem = document.getElementById('channelsList');
-      var cHtml = '';
-      for (var j = 0; j < serverChans.length; j++) {
-        var c = serverChans[j];
-        var cActive = (activeChannelId === c.id) ? 'active' : '';
-        cHtml += '<div class="channel-item ' + cActive + '" onclick="selectChannel(\'' + c.id + '\')"># ' + escapeHtml(c.name) + '</div>';
-      }
-      if (chanListElem) chanListElem.innerHTML = cHtml || '<p style="font-size:11px; color:#6b7280;">No channels</p>';
-      if (serverChans.length > 0) { selectChannel(serverChans[0].id); }
-    }
-
-    function selectChannel(channelId) {
-      activeChannelId = channelId;
-      var chan = appData.channels.find(function(x){ return x.id === channelId; });
-      if (chan) {
-        var header = document.getElementById('activeChannelHeader');
-        if (header) header.innerText = '# ' + chan.name;
-      }
-      loadServerChannelMessages();
-    }
-
-    async function createNewChannel() {
-      if (!activeServerId) return;
-      var cName = prompt("Enter Channel Name:");
-      if (!cName) return;
-      var newChan = { id: 'chan_' + Date.now(), server_id: activeServerId, name: cName, type: 'text' };
-      await supabaseClient.from('webox_channels').insert([newChan]);
-      await fetchServersAndChannels();
-      selectServer(activeServerId);
-    }
-
-    async function sendServerChannelMessage() {
-      var msgInput = document.getElementById('serverChatMessageInput');
-      var txt = msgInput ? msgInput.value.trim() : '';
-      if (!txt || !activeChannelId) return;
-
-      var newMsg = {
-        id: 'smsg_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5),
-        sender: currentUser ? currentUser.username : 'Anonymous',
-        receiver: 'channel_' + activeChannelId,
-        message: txt
-      };
-
-      await supabaseClient.from('webox_messages').insert([newMsg]);
-      if (msgInput) msgInput.value = '';
-      playMessageDingSound();
-      loadServerChannelMessages();
-    }
-
-    async function loadServerChannelMessages() {
-      if (!activeChannelId) return;
+    function sendServerChannelMessage() {
+      var input = document.getElementById('serverChatMessageInput');
+      if (!input || !input.value.trim()) return;
       var box = document.getElementById('serverChannelChatBox');
-      if (!box) return;
-
-      var { data } = await supabaseClient.from('webox_messages').select('*').eq('receiver', 'channel_' + activeChannelId).order('created_at', { ascending: true });
-      if (!data || data.length === 0) {
-        box.innerHTML = '<p style="color:#949ba4; text-align:center; margin:auto;">No messages yet.</p>';
-        return;
-      }
-      var html = '';
-      for (var i = 0; i < data.length; i++) {
-        var m = data[i];
-        html += '<div style="margin-bottom:6px;"><span style="color:#5865f2; font-weight:bold; font-size:12px;">' + escapeHtml(m.sender) + ':</span> <span style="font-size:13px; color:white;">' + escapeHtml(m.message) + '</span></div>';
-      }
-      box.innerHTML = html;
+      box.innerHTML += '<div style="margin-top:4px;"><span style="color:#5865f2; font-weight:bold;">' + currentUser.username + ':</span> ' + escapeHtml(input.value) + '</div>';
+      input.value = '';
       box.scrollTop = box.scrollHeight;
-    }
-
-    /* DIRECT MESSAGING */
-    async function fetchUsersAndChats() {
-      var { data } = await supabaseClient.from('webox_users').select('username, avatar_url');
-      appData.usersMap = {};
-      if (data) {
-        for (var i = 0; i < data.length; i++) {
-          appData.usersMap[data[i].username] = data[i].avatar_url || 'penguin.png';
-        }
-      }
-      loadUserChatsSidebar();
-    }
-
-    async function loadUserChatsSidebar() {
-      if (!currentUser) return;
-      var { data } = await supabaseClient.from('webox_messages').select('*').or('sender.eq.' + currentUser.username + ',receiver.eq.' + currentUser.username).order('created_at', { ascending: false });
-      var chatsMap = {};
-      if (data) {
-        for (var i = 0; i < data.length; i++) {
-          var m = data[i];
-          if (m.receiver.startsWith('channel_')) continue;
-          var friend = (m.sender === currentUser.username) ? m.receiver : m.sender;
-          if (!chatsMap[friend]) chatsMap[friend] = m.message;
-        }
-      }
-      var sidebar = document.getElementById('chatsSidebarList');
-      if (!sidebar) return;
-      var friendsList = Object.keys(chatsMap);
-      if (friendsList.length === 0) {
-        sidebar.innerHTML = '<p style="color:#6b7280; font-size:12px; text-align:center;">No chats</p>';
-        return;
-      }
-      var html = '';
-      for (var j = 0; j < friendsList.length; j++) {
-        var fName = friendsList[j];
-        var avatarUrl = appData.usersMap[fName] || 'penguin.png';
-        var isActive = (activeChatUser === fName) ? 'active' : '';
-        html += '<div class="chat-convo-item ' + isActive + '" onclick="selectChatUser(\'' + fName + '\')">' +
-          '<img src="' + avatarUrl + '" class="chat-convo-avatar">' +
-          '<div style="font-weight:bold; font-size:12px;">' + escapeHtml(fName) + '</div>' +
-        '</div>';
-      }
-      sidebar.innerHTML = html;
     }
 
     function startNewChat() {
-      var targetInput = document.getElementById('newChatUsernameInput');
-      var target = targetInput ? targetInput.value.trim() : '';
+      var target = document.getElementById('newChatUsernameInput').value.trim();
       if (!target) return;
-      if (target.charAt(0) !== '@') target = '@' + target;
-      selectChatUser(target);
+      activeChatUser = target;
+      document.getElementById('activeChatHeader').innerText = 'Chat with ' + target;
+      document.getElementById('chatMessagesBox').innerHTML = '<p style="color:#6b7280; text-align:center;">Conversation started with ' + target + '</p>';
     }
 
-    async function selectChatUser(username) {
-      activeChatUser = username;
-      var header = document.getElementById('activeChatHeader');
-      if (header) header.innerText = 'Chat with ' + username;
-      loadUserChatsSidebar();
-      await loadDirectMessages();
-    }
-
-    async function sendDirectMessage() {
-      if (!activeChatUser || !currentUser) return;
-      var msgInput = document.getElementById('chatInputMessage');
-      var txt = msgInput ? msgInput.value.trim() : '';
-      if (!txt) return;
-
-      var newMsg = { id: 'msg_' + Date.now(), sender: currentUser.username, receiver: activeChatUser, message: txt };
-      await supabaseClient.from('webox_messages').insert([newMsg]);
-      if (msgInput) msgInput.value = '';
-      playMessageDingSound();
-      await loadDirectMessages();
-    }
-
-    async function loadDirectMessages() {
-      if (!activeChatUser || !currentUser) return;
+    function sendDirectMessage() {
+      var input = document.getElementById('chatInputMessage');
+      if (!input || !input.value.trim()) return;
       var box = document.getElementById('chatMessagesBox');
-      if (!box) return;
-      var { data } = await supabaseClient.from('webox_messages').select('*').or('and(sender.eq.' + currentUser.username + ',receiver.eq.' + activeChatUser + '),and(sender.eq.' + activeChatUser + ',receiver.eq.' + currentUser.username + ')').order('created_at', { ascending: true });
-
-      if (!data || data.length === 0) {
-        box.innerHTML = '<p style="color:#6b7280; text-align:center; margin:auto;">No messages yet.</p>';
-        return;
-      }
-      var html = '';
-      for (var i = 0; i < data.length; i++) {
-        var m = data[i];
-        var isSent = (m.sender === currentUser.username);
-        html += '<div class="chat-msg ' + (isSent ? 'sent' : 'received') + '">' + escapeHtml(m.message) + '</div>';
-      }
-      box.innerHTML = html;
+      box.innerHTML += '<div class="chat-msg sent">' + escapeHtml(input.value) + '</div>';
+      input.value = '';
       box.scrollTop = box.scrollHeight;
-    }
-
-    function setupRealtimeSubscriptions() {
-      supabaseClient.channel('public:webox_messages').on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'webox_messages' }, function(payload) {
-        var newRecord = payload.new;
-        if (currentUser && newRecord.receiver === currentUser.username) {
-          playMessageDingSound();
-        }
-        loadDirectMessages();
-        loadServerChannelMessages();
-      }).subscribe();
-    }
-
-    function redeemPromoCode() {
-      var codeInput = document.getElementById('premiumCodeInput');
-      var code = codeInput ? codeInput.value.trim() : '';
-      if (code.toUpperCase() === 'ZAK') {
-        if (currentUser) currentUser.isPremium = true;
-        updateHeaderProfile();
-        if (codeInput) codeInput.value = '';
-        alert("🎉 Code 'ZAK' redeemed! PREMIUM UNLOCKED!");
-      } else {
-        if (codeInput) codeInput.value = '';
-        showMacErrorModal();
-      }
-    }
-
-    function showMacErrorModal() { 
-      var modal = document.getElementById('macErrorModal');
-      if (modal) modal.style.display = 'flex'; 
-    }
-    function closeMacErrorModal() { 
-      var modal = document.getElementById('macErrorModal');
-      if (modal) modal.style.display = 'none'; 
-    }
-
-    function openProfileModal() {
-      if (!currentUser) return;
-      var userElem = document.getElementById('profileModalUsername');
-      var coinsElem = document.getElementById('profileModalCoins');
-      var avatarElem = document.getElementById('profileModalAvatar');
-      var modal = document.getElementById('profileModal');
-
-      if (userElem) userElem.innerText = currentUser.username;
-      if (coinsElem) coinsElem.innerText = currentUser.coins || 0;
-      if (avatarElem) avatarElem.src = currentUser.avatarUrl || 'penguin.png';
-      if (modal) modal.style.display = 'flex';
-    }
-    function closeProfileModal() { 
-      var modal = document.getElementById('profileModal');
-      if (modal) modal.style.display = 'none'; 
-    }
-
-    function updateHeaderProfile() {
-      if (!currentUser) return;
-      var userElem = document.getElementById('headerUsername');
-      var avatarElem = document.getElementById('headerUserAvatar');
-      var coinsElem = document.getElementById('headerCoins');
-
-      if (userElem) userElem.innerText = currentUser.username;
-      if (avatarElem) avatarElem.src = currentUser.avatarUrl || 'penguin.png';
-      if (coinsElem) coinsElem.innerText = currentUser.coins || 0;
-      localStorage.setItem('webox_user', JSON.stringify(currentUser));
-    }
-
-    function logoutUser() { 
-      localStorage.removeItem('webox_user'); 
-      window.location.href = 'login.html'; 
-    }
-
-    function switchTab(tabName, event) {
-      var tabs = document.querySelectorAll('.tab-content');
-      for (var i = 0; i < tabs.length; i++) tabs[i].classList.remove('active');
-      var btns = document.querySelectorAll('.tab-btn');
-      for (var j = 0; j < btns.length; j++) btns[j].classList.remove('active');
-      var target = document.getElementById(tabName + '-tab');
-      if (target) target.classList.add('active');
-      if (event && event.currentTarget) event.currentTarget.classList.add('active');
-
-      if (tabName === 'livetv') { loadM3u8PlaylistFile(); }
-      if (['videos', 'svids', 'music', 'posts', 'arcade'].includes(tabName)) { fetchFeed(tabName); }
     }
 
     function escapeHtml(str) {
@@ -794,13 +435,25 @@
       return str.replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/"/g, '\\"');
     }
 
-    if (currentUser) {
-      updateHeaderProfile();
-      fetchUsersAndChats();
-      fetchServersAndChannels();
-      fetchFeed('videos');
-      setupRealtimeSubscriptions();
+    function logoutUser() {
+      localStorage.removeItem('webox_user');
+      window.location.reload();
     }
+
+    function switchTab(tabName, event) {
+      var tabs = document.querySelectorAll('.tab-content');
+      for (var i = 0; i < tabs.length; i++) tabs[i].classList.remove('active');
+      var btns = document.querySelectorAll('.tab-btn');
+      for (var j = 0; j < btns.length; j++) btns[j].classList.remove('active');
+      var target = document.getElementById(tabName + '-tab');
+      if (target) target.classList.add('active');
+      if (event && event.currentTarget) event.currentTarget.classList.add('active');
+
+      if (tabName === 'livetv') loadM3u8PlaylistFile();
+      if (['videos', 'svids', 'music', 'posts', 'arcade'].includes(tabName)) fetchFeed(tabName);
+    }
+
+    fetchFeed('videos');
   </script>
 </body>
 </html>

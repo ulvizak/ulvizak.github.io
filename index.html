@@ -3,12 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>WeBox 3.0 - Full Edition</title>
+  <title>WeBox 3.0 - Stable Edition</title>
 
   <!-- Supabase CDN Client Library -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <!-- HTML5 QR Code Scanner Library -->
-  <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
   <!-- HLS.js Library for Native M3U8 Stream Playback -->
   <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
@@ -21,16 +19,8 @@
       --border-color: #e5e7eb;
     }
 
-    body.matrix-theme {
-      --bg-color: #0d0208;
-      --card-bg: rgba(18, 18, 18, 0.95);
-      --text-color: #00ff66;
-      --accent-color: #00ff66;
-      --border-color: #00ff66;
-    }
-
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
-    body { background-color: var(--bg-color); color: var(--text-color); display: flex; flex-direction: column; min-height: 100vh; transition: background 0.3s, color 0.3s; background-size: cover; background-repeat: no-repeat; background-position: center center; background-attachment: fixed; }
+    body { background-color: var(--bg-color); color: var(--text-color); display: flex; flex-direction: column; min-height: 100vh; background-size: cover; background-repeat: no-repeat; background-position: center center; background-attachment: fixed; }
     header { background: var(--card-bg); backdrop-filter: blur(5px); border-bottom: 1px solid var(--border-color); padding: 16px 24px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
     .logo-area { display: flex; align-items: center; gap: 15px; }
     h1 { font-size: 22px; font-weight: 800; color: var(--accent-color); }
@@ -38,28 +28,13 @@
     .user-avatar-small { width: 28px; height: 28px; border-radius: 50%; object-fit: cover; background: var(--border-color); }
     .username { font-size: 14px; font-weight: 600; color: var(--text-color); }
     .coin-display { font-size: 13px; font-weight: 700; color: #d97706; display: flex; align-items: center; gap: 4px; background: #fef3c7; padding: 3px 8px; border-radius: 12px; border: 1px solid #fde68a; }
-    .badge-tag { display: inline-flex; align-items: center; gap: 4px; padding: 2px 6px; font-size: 11px; border-radius: 4px; background: #e0e0e0; color: #333; margin-left: 4px; font-weight: bold; }
-    .badge-tag img { width: 14px; height: 14px; object-fit: contain; border-radius: 2px; }
-    body.matrix-theme .badge-tag { background: #003b15; color: #00ff66; border: 1px solid #00ff66; }
     .logout-btn { background: #ef4444; color: white; border: none; padding: 6px 14px; border-radius: 6px; font-weight: 600; font-size: 13px; cursor: pointer; }
-    .mute-btn { background: #4b5563; color: white; border: none; padding: 6px 14px; border-radius: 6px; font-weight: 600; font-size: 13px; cursor: pointer; }
     .nav-tabs-container { background: var(--card-bg); backdrop-filter: blur(5px); border-bottom: 1px solid var(--border-color); padding: 12px 24px; display: flex; gap: 8px; overflow-x: auto; }
     .tab-btn { background: #f3f4f6; color: #4b5563; border: none; padding: 8px 16px; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 14px; white-space: nowrap; }
     .tab-btn.active { background: var(--accent-color); color: white; }
     
     .tv-tab-btn { background: linear-gradient(135deg, #059669, #10b981) !important; color: white !important; font-weight: 800 !important; }
-
-    .premium-tab-btn {
-      background: linear-gradient(135deg, #a855f7, #ec4899) !important;
-      color: white !important;
-      font-weight: 800 !important;
-      box-shadow: 0 0 12px rgba(236, 72, 153, 0.8), 0 0 20px rgba(168, 85, 247, 0.6);
-      animation: nitroGlow 1.8s infinite alternate;
-    }
-    @keyframes nitroGlow {
-      0% { box-shadow: 0 0 8px rgba(236, 72, 153, 0.6); transform: scale(1); }
-      100% { box-shadow: 0 0 18px rgba(236, 72, 153, 1), 0 0 28px rgba(168, 85, 247, 0.9); transform: scale(1.03); }
-    }
+    .premium-tab-btn { background: linear-gradient(135deg, #a855f7, #ec4899) !important; color: white !important; font-weight: 800 !important; }
 
     .content-container { flex: 1; max-width: 1000px; width: 100%; margin: 20px auto; padding: 0 20px; }
     .tab-content { display: none; }
@@ -70,8 +45,6 @@
     .upload-form { display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px; }
     .upload-form input[type="text"], .upload-form textarea, .upload-form select { padding: 10px; border: 1px solid var(--border-color); border-radius: 6px; font-size: 14px; background: rgba(255, 255, 255, 0.9); }
     .upload-form textarea { resize: vertical; height: 80px; }
-    .upload-group { display: flex; flex-direction: column; gap: 4px; }
-    .upload-group label { font-size: 12px; font-weight: 600; color: #4b5563; }
     .publish-btn { background: var(--accent-color); color: white; border: none; padding: 10px; border-radius: 6px; font-weight: 600; cursor: pointer; }
     .grid-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; }
     .grid-card { background: rgba(249, 250, 251, 0.95); border: 1px solid var(--border-color); border-radius: 8px; overflow: hidden; display: flex; flex-direction: column; }
@@ -91,27 +64,12 @@
     .discord-full-layout { display: grid; grid-template-columns: 200px 180px 1fr; gap: 10px; height: 500px; background: #1e1f22; border-radius: 10px; overflow: hidden; color: white; }
     @media(max-width: 768px) { .discord-full-layout { grid-template-columns: 1fr; height: auto; } }
     .server-list-sidebar { background: #111214; padding: 10px; display: flex; flex-direction: column; gap: 8px; overflow-y: auto; }
-    .server-item { display: flex; align-items: center; gap: 8px; padding: 8px; background: #2b2d31; border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: bold; }
+    .server-item { display: flex; align-items: center; gap: 8px; padding: 8px; background: #2b2d31; border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: bold; color: white; }
     .server-item:hover, .server-item.active { background: #5865f2; }
     .channels-sidebar { background: #2b2d31; padding: 10px; display: flex; flex-direction: column; gap: 6px; border-right: 1px solid #35363c; }
     .channel-item { padding: 6px 10px; border-radius: 4px; cursor: pointer; font-size: 13px; color: #949ba4; }
     .channel-item:hover, .channel-item.active { background: #35373c; color: white; }
     .chat-channel-panel { display: flex; flex-direction: column; background: #313338; padding: 12px; }
-
-    /* MYINSTANTS INTEGRATED SOUNDBOARD */
-    .myinstants-box { background: #2b2d31; border-radius: 8px; padding: 12px; margin-top: 10px; border: 1px solid #5865f2; }
-    .open-myinstants-site-btn { width: 100%; background: linear-gradient(135deg, #f00056, #ff007f); color: white; border: none; padding: 10px; border-radius: 6px; font-weight: 800; font-size: 13px; cursor: pointer; margin-top: 8px; text-transform: uppercase; }
-    .soundboard-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 8px; max-height: 160px; overflow-y: auto; margin-top: 10px; }
-    .soundboard-btn { background: #f00056; border: none; color: white; padding: 8px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 11px; text-align: center; }
-
-    /* MACOS ERROR WINDOW MODAL */
-    #macErrorModal { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.6); z-index: 20000; justify-content: center; align-items: center; }
-    .mac-window { width: 380px; background: #e5e5e5; border-radius: 10px; box-shadow: 0 20px 50px rgba(0,0,0,0.5); border: 1px solid #999; font-family: -apple-system, BlinkMacSystemFont, sans-serif; overflow: hidden; color: #000; }
-    .mac-titlebar { background: linear-gradient(180deg, #e6e6e6, #ccc); padding: 8px 12px; display: flex; align-items: center; border-bottom: 1px solid #b3b3b3; }
-    .mac-buttons { display: flex; gap: 6px; }
-    .mac-btn { width: 12px; height: 12px; border-radius: 50%; display: inline-block; background: #ff5f56; border: 1px solid #e0443e; }
-    .mac-title { flex: 1; text-align: center; font-size: 13px; font-weight: bold; color: #4d4d4d; margin-right: 30px; }
-    .mac-body { padding: 20px; font-size: 13px; line-height: 1.5; color: #222; text-align: center; }
 
     /* MESSAGES STYLES */
     .messenger-layout { display: grid; grid-template-columns: 240px 1fr; gap: 15px; }
@@ -137,7 +95,7 @@
 <body id="appBody">
 
   <script>
-    var currentUser = JSON.parse(localStorage.getItem('webox_user'));
+    var currentUser = JSON.parse(localStorage.getItem('webox_user') || 'null');
     if (!currentUser || !currentUser.username) {
       window.location.href = 'login.html';
     }
@@ -159,7 +117,6 @@
       <div class="user-profile-badge" onclick="openProfileModal()">
         <img id="headerUserAvatar" class="user-avatar-small" src="penguin.png" alt="Avatar">
         <span class="username" id="headerUsername">@user</span>
-        <span id="headerBadgeTag"></span>
       </div>
       <button class="logout-btn" onclick="logoutUser()">Log Out</button>
     </div>
@@ -281,22 +238,7 @@
           <div class="chat-main-panel">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
               <div id="activeChatHeader" style="font-weight: bold; font-size: 14px;">Select a chat</div>
-              <button class="publish-btn" style="background:#5865f2; padding: 4px 10px; font-size: 12px;" onclick="startVoiceCallWithUser()">📞 Call</button>
             </div>
-            
-            <div id="voiceCallOverlay" style="display:none; background:#111214; color:white; padding:15px; border-radius:8px; margin-bottom:10px; text-align:center;">
-              <h3>📞 Call with <span id="callPartnerName">@user</span></h3>
-              <div class="myinstants-box">
-                <h4 style="color:#f00056; font-size:12px;">🔊 Soundboard</h4>
-                <button class="open-myinstants-site-btn" onclick="openMyInstantsWebsite()">🌐 MyInstants Website</button>
-                <div class="soundboard-grid">
-                  <button class="soundboard-btn" onclick="playInCallSound('https://www.myinstants.com/media/sounds/vine-boom.mp3')">💥 Boom</button>
-                  <button class="soundboard-btn" onclick="playInCallSound('https://www.myinstants.com/media/sounds/bruh.mp3')">🗿 Bruh</button>
-                </div>
-              </div>
-              <button class="logout-btn" style="margin-top:10px;" onclick="endVoiceCall()">End Call 📵</button>
-            </div>
-
             <div class="chat-box-container" id="chatMessagesBox">
               <p style="color: #6b7280; text-align: center; margin: auto;">Choose a conversation.</p>
             </div>
@@ -326,7 +268,6 @@
           <div class="chat-channel-panel">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; border-bottom:1px solid #3f4147; padding-bottom:8px;">
               <span id="activeChannelHeader" style="font-weight:bold; font-size:14px; color:white;"># general</span>
-              <div id="serverAdminControls" style="display:flex; gap:6px;"></div>
             </div>
             <div class="chat-box-container" id="serverChannelChatBox" style="background:#2b2d31; border-color:#383a40;">
               <p style="color:#949ba4; text-align:center; margin:auto;">Welcome to the channel!</p>
@@ -365,10 +306,10 @@
   </div>
 
   <!-- MACOS ERROR WINDOW MODAL -->
-  <div id="macErrorModal">
+  <div id="macErrorModal" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.6); z-index:20000; justify-content:center; align-items:center;">
     <div class="mac-window">
       <div class="mac-titlebar">
-        <div class="mac-buttons"><span class="mac-btn" onclick="closeMacErrorModal()"></span></div>
+        <div class="mac-buttons"><span class="mac-btn" onclick="closeMacErrorModal()" style="width:12px; height:12px; border-radius:50%; background:#ff5f56; display:inline-block; cursor:pointer;"></span></div>
         <div class="mac-title">System Alert</div>
       </div>
       <div class="mac-body">
@@ -390,12 +331,14 @@
 
   <script>
     var SUPABASE_URL = 'https://fedgpyuebiwovxohfleg.supabase.co';
-    var SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZlZGdweXVlYml3b3Z4b2hmbGVnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg4NTk4OTEsImV4cCI6MjEwNDQzNTg5MX0.KFLsTGtQD49MqXl6hxTV9Bz-5cuJMfzg-l0kwhX8bZk';
+    var SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZlZGdweXVlYml3b3Z4b2hmbGVnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg4NTk4OTEtLCJleHAiOjIxMDQ0MzU4OTF9.KFLsTGtQD49MqXl6hxTV9Bz-5cuJMfzg-l0kwhX8bZk';
     var supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    if (!currentUser.likedItems) currentUser.likedItems = [];
-    if (!currentUser.equippedBadge) currentUser.equippedBadge = 'anaminus';
-    if (!currentUser.isPremium) currentUser.isPremium = false;
+    if (currentUser) {
+      if (!currentUser.likedItems) currentUser.likedItems = [];
+      if (!currentUser.equippedBadge) currentUser.equippedBadge = 'anaminus';
+      if (!currentUser.isPremium) currentUser.isPremium = false;
+    }
 
     var appData = { servers: [], channels: [], usersMap: {} };
     var activeChatUser = null;
@@ -414,29 +357,15 @@
     }
     setTimeout(dismissStartupOverlay, 2500);
 
-    /* BACKGROUND NOTIFICATIONS */
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('sw.js').catch(function(){});
-    }
-    if ('Notification' in window && Notification.permission !== 'granted') {
-      Notification.requestPermission();
-    }
-    function showSystemNotification(title, body) {
-      if ('Notification' in window && Notification.permission === 'granted') {
-        new Notification(title, { body: body, icon: 'penguin.png' });
-      }
-    }
-
     function playMessageDingSound() {
       var dingAudio = document.getElementById('messageDingAudio');
       if (dingAudio) { dingAudio.currentTime = 0; dingAudio.play().catch(function(){}); }
     }
 
-    function openMyInstantsWebsite() { window.open('https://www.myinstants.com', '_blank'); }
-
     /* NATIVE M3U8 LIVE TV */
     function loadM3u8PlaylistFile() {
       var grid = document.getElementById('m3u8ChannelsGrid');
+      if (!grid) return;
       grid.innerHTML = '<p style="color:#9ca3af; font-size:12px; grid-column: 1 / -1; text-align:center;">Reading playlist_azerbaijan.m3u8...</p>';
 
       fetch('playlist_azerbaijan.m3u8')
@@ -486,7 +415,9 @@
 
     function playM3u8Stream(channelTitle, streamUrl) {
       var video = document.getElementById('nativeTvVideoPlayer');
-      document.getElementById('currentTvChannelTitle').innerText = 'Now Playing: ' + channelTitle;
+      if (!video) return;
+      var titleElem = document.getElementById('currentTvChannelTitle');
+      if (titleElem) titleElem.innerText = 'Now Playing: ' + channelTitle;
 
       if (Hls.isSupported()) {
         if (hlsPlayerInstance) hlsPlayerInstance.destroy();
@@ -502,39 +433,50 @@
       }
     }
 
-    /* FIXED PUBLISHING */
+    /* UNIFIED ROBUST PUBLISHING FUNCTION */
     async function publishContent(type) {
-  var titleInput = document.getElementById(type === 'posts' ? 'postText' : (type === 'arcade' ? 'gameTitle' : type.slice(0, -1) + 'Title'));
-  
-  // Fallback: if the specific input isn't found, grab the first text input on the page
-  var title = titleInput ? titleInput.value.trim() : prompt("Enter title or text to publish:");
-  
-  if (!title) {
-    alert("Please enter text or a title!");
-    return;
-  }
+      var titleInput = document.getElementById('postText') || 
+                       document.getElementById('gameTitle') || 
+                       document.getElementById('videoTitle') || 
+                       document.getElementById('svidTitle') || 
+                       document.getElementById('musicTitle');
 
-  var newItem = {
-    id: type.slice(0, -1) + '_' + Date.now(),
-    title: title,
-    author: currentUser.username,
-    url: '',
-    created_at: new Date().toISOString()
-  };
+      var title = titleInput ? titleInput.value.trim() : '';
 
-  var { error } = await supabaseClient.from('webox_' + type).insert([newItem]);
-  if (error) {
-    alert("Error publishing: " + error.message);
-  } else {
-    alert("🎉 Published successfully!");
-    if (titleInput) titleInput.value = '';
-    fetchFeed(type);
-  }
-}
+      if (!title) {
+        title = prompt("Enter title or text to publish:");
+      }
+
+      if (!title || title.trim() === '') {
+        alert("Cancelled or empty title.");
+        return;
+      }
+
+      var tableName = type.startsWith('webox_') ? type : ('webox_' + type);
+
+      var newItem = {
+        id: 'item_' + Date.now() + '_' + Math.random().toString(36).substr(2, 4),
+        title: title,
+        author: currentUser ? currentUser.username : 'Anonymous',
+        url: '',
+        created_at: new Date().toISOString()
+      };
+
+      var { error } = await supabaseClient.from(tableName).insert([newItem]);
+      if (error) {
+        alert("Supabase Error: " + error.message);
+      } else {
+        alert("🎉 Published successfully to cloud!");
+        if (titleInput) titleInput.value = '';
+        fetchFeed(type);
+      }
+    }
+
     async function fetchFeed(type) {
       var grid = document.getElementById(type + '-grid');
       if (!grid) return;
-      var { data } = await supabaseClient.from('webox_' + type).select('*').order('created_at', { ascending: false });
+      var tableName = type.startsWith('webox_') ? type : ('webox_' + type);
+      var { data } = await supabaseClient.from(tableName).select('*').order('created_at', { ascending: false });
       if (!data || data.length === 0) {
         grid.innerHTML = '<p style="color:#6b7280; font-size:13px; text-align:center;">No items yet.</p>';
         return;
@@ -564,7 +506,7 @@
 
     async function createNewServer(name) {
       var serverId = 'server_' + Date.now();
-      var newServer = { id: serverId, name: name, icon_url: '', owner: currentUser.username };
+      var newServer = { id: serverId, name: name, icon_url: '', owner: currentUser ? currentUser.username : 'Admin' };
       var defaultChan = { id: 'chan_' + Date.now(), server_id: serverId, name: 'general', type: 'text' };
 
       await supabaseClient.from('webox_servers').insert([newServer]);
@@ -595,8 +537,9 @@
       var server = appData.servers.find(function(x){ return x.id === serverId; });
       if (!server) return;
 
-      var isOwner = (server.owner === currentUser.username);
-      document.getElementById('addChannelBtn').style.display = isOwner ? 'block' : 'none';
+      var isOwner = currentUser && (server.owner === currentUser.username);
+      var addChanBtn = document.getElementById('addChannelBtn');
+      if (addChanBtn) addChanBtn.style.display = isOwner ? 'block' : 'none';
 
       var serverChans = appData.channels.filter(function(x){ return x.server_id === serverId; });
       var chanListElem = document.getElementById('channelsList');
@@ -606,14 +549,17 @@
         var cActive = (activeChannelId === c.id) ? 'active' : '';
         cHtml += '<div class="channel-item ' + cActive + '" onclick="selectChannel(\'' + c.id + '\')"># ' + escapeHtml(c.name) + '</div>';
       }
-      chanListElem.innerHTML = cHtml || '<p style="font-size:11px; color:#6b7280;">No channels</p>';
+      if (chanListElem) chanListElem.innerHTML = cHtml || '<p style="font-size:11px; color:#6b7280;">No channels</p>';
       if (serverChans.length > 0) { selectChannel(serverChans[0].id); }
     }
 
     function selectChannel(channelId) {
       activeChannelId = channelId;
       var chan = appData.channels.find(function(x){ return x.id === channelId; });
-      if (chan) { document.getElementById('activeChannelHeader').innerText = '# ' + chan.name; }
+      if (chan) {
+        var header = document.getElementById('activeChannelHeader');
+        if (header) header.innerText = '# ' + chan.name;
+      }
       loadServerChannelMessages();
     }
 
@@ -634,7 +580,7 @@
 
       var newMsg = {
         id: 'smsg_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5),
-        sender: currentUser.username,
+        sender: currentUser ? currentUser.username : 'Anonymous',
         receiver: 'channel_' + activeChannelId,
         message: txt
       };
@@ -677,6 +623,7 @@
     }
 
     async function loadUserChatsSidebar() {
+      if (!currentUser) return;
       var { data } = await supabaseClient.from('webox_messages').select('*').or('sender.eq.' + currentUser.username + ',receiver.eq.' + currentUser.username).order('created_at', { ascending: false });
       var chatsMap = {};
       if (data) {
@@ -717,13 +664,14 @@
 
     async function selectChatUser(username) {
       activeChatUser = username;
-      document.getElementById('activeChatHeader').innerText = 'Chat with ' + username;
+      var header = document.getElementById('activeChatHeader');
+      if (header) header.innerText = 'Chat with ' + username;
       loadUserChatsSidebar();
       await loadDirectMessages();
     }
 
     async function sendDirectMessage() {
-      if (!activeChatUser) return;
+      if (!activeChatUser || !currentUser) return;
       var msgInput = document.getElementById('chatInputMessage');
       var txt = msgInput ? msgInput.value.trim() : '';
       if (!txt) return;
@@ -736,7 +684,7 @@
     }
 
     async function loadDirectMessages() {
-      if (!activeChatUser) return;
+      if (!activeChatUser || !currentUser) return;
       var box = document.getElementById('chatMessagesBox');
       if (!box) return;
       var { data } = await supabaseClient.from('webox_messages').select('*').or('and(sender.eq.' + currentUser.username + ',receiver.eq.' + activeChatUser + '),and(sender.eq.' + activeChatUser + ',receiver.eq.' + currentUser.username + ')').order('created_at', { ascending: true });
@@ -758,9 +706,8 @@
     function setupRealtimeSubscriptions() {
       supabaseClient.channel('public:webox_messages').on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'webox_messages' }, function(payload) {
         var newRecord = payload.new;
-        if (newRecord.receiver === currentUser.username) {
+        if (currentUser && newRecord.receiver === currentUser.username) {
           playMessageDingSound();
-          showSystemNotification('💬 New Message from ' + newRecord.sender, newRecord.message);
         }
         loadDirectMessages();
         loadServerChannelMessages();
@@ -771,7 +718,7 @@
       var codeInput = document.getElementById('premiumCodeInput');
       var code = codeInput ? codeInput.value.trim() : '';
       if (code.toUpperCase() === 'ZAK') {
-        currentUser.isPremium = true;
+        if (currentUser) currentUser.isPremium = true;
         updateHeaderProfile();
         if (codeInput) codeInput.value = '';
         alert("🎉 Code 'ZAK' redeemed! PREMIUM UNLOCKED!");
@@ -781,25 +728,48 @@
       }
     }
 
-    function showMacErrorModal() { document.getElementById('macErrorModal').style.display = 'flex'; }
-    function closeMacErrorModal() { document.getElementById('macErrorModal').style.display = 'none'; }
+    function showMacErrorModal() { 
+      var modal = document.getElementById('macErrorModal');
+      if (modal) modal.style.display = 'flex'; 
+    }
+    function closeMacErrorModal() { 
+      var modal = document.getElementById('macErrorModal');
+      if (modal) modal.style.display = 'none'; 
+    }
 
     function openProfileModal() {
-      document.getElementById('profileModalUsername').innerText = currentUser.username;
-      document.getElementById('profileModalCoins').innerText = currentUser.coins || 0;
-      document.getElementById('profileModalAvatar').src = currentUser.avatarUrl || 'penguin.png';
-      document.getElementById('profileModal').style.display = 'flex';
+      if (!currentUser) return;
+      var userElem = document.getElementById('profileModalUsername');
+      var coinsElem = document.getElementById('profileModalCoins');
+      var avatarElem = document.getElementById('profileModalAvatar');
+      var modal = document.getElementById('profileModal');
+
+      if (userElem) userElem.innerText = currentUser.username;
+      if (coinsElem) coinsElem.innerText = currentUser.coins || 0;
+      if (avatarElem) avatarElem.src = currentUser.avatarUrl || 'penguin.png';
+      if (modal) modal.style.display = 'flex';
     }
-    function closeProfileModal() { document.getElementById('profileModal').style.display = 'none'; }
+    function closeProfileModal() { 
+      var modal = document.getElementById('profileModal');
+      if (modal) modal.style.display = 'none'; 
+    }
 
     function updateHeaderProfile() {
-      document.getElementById('headerUsername').innerText = currentUser.username;
-      document.getElementById('headerUserAvatar').src = currentUser.avatarUrl || 'penguin.png';
-      document.getElementById('headerCoins').innerText = currentUser.coins || 0;
+      if (!currentUser) return;
+      var userElem = document.getElementById('headerUsername');
+      var avatarElem = document.getElementById('headerUserAvatar');
+      var coinsElem = document.getElementById('headerCoins');
+
+      if (userElem) userElem.innerText = currentUser.username;
+      if (avatarElem) avatarElem.src = currentUser.avatarUrl || 'penguin.png';
+      if (coinsElem) coinsElem.innerText = currentUser.coins || 0;
       localStorage.setItem('webox_user', JSON.stringify(currentUser));
     }
 
-    function logoutUser() { localStorage.removeItem('webox_user'); window.location.href = 'login.html'; }
+    function logoutUser() { 
+      localStorage.removeItem('webox_user'); 
+      window.location.href = 'login.html'; 
+    }
 
     function switchTab(tabName, event) {
       var tabs = document.querySelectorAll('.tab-content');
@@ -824,11 +794,13 @@
       return str.replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/"/g, '\\"');
     }
 
-    updateHeaderProfile();
-    fetchUsersAndChats();
-    fetchServersAndChannels();
-    fetchFeed('videos');
-    setupRealtimeSubscriptions();
+    if (currentUser) {
+      updateHeaderProfile();
+      fetchUsersAndChats();
+      fetchServersAndChannels();
+      fetchFeed('videos');
+      setupRealtimeSubscriptions();
+    }
   </script>
 </body>
 </html>

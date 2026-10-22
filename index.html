@@ -504,31 +504,33 @@
 
     /* FIXED PUBLISHING */
     async function publishContent(type) {
-      var titleInput = document.getElementById(type === 'posts' ? 'postText' : (type === 'arcade' ? 'gameTitle' : type.slice(0, -1) + 'Title'));
-      var title = titleInput ? titleInput.value.trim() : '';
-      if (!title) { alert("Please enter text or a title!"); return; }
+  var titleInput = document.getElementById(type === 'posts' ? 'postText' : (type === 'arcade' ? 'gameTitle' : type.slice(0, -1) + 'Title'));
+  
+  // Fallback: if the specific input isn't found, grab the first text input on the page
+  var title = titleInput ? titleInput.value.trim() : prompt("Enter title or text to publish:");
+  
+  if (!title) {
+    alert("Please enter text or a title!");
+    return;
+  }
 
-      var fileInput = document.getElementById(type === 'arcade' ? 'gameHtmlFile' : type.slice(0, -1) + 'File');
-      var fileUrl = '';
+  var newItem = {
+    id: type.slice(0, -1) + '_' + Date.now(),
+    title: title,
+    author: currentUser.username,
+    url: '',
+    created_at: new Date().toISOString()
+  };
 
-      var newItem = {
-        id: type.slice(0, -1) + '_' + Date.now(),
-        title: title,
-        author: currentUser.username,
-        url: fileUrl,
-        created_at: new Date().toISOString()
-      };
-
-      var { error } = await supabaseClient.from('webox_' + type).insert([newItem]);
-      if (error) {
-        alert("Error publishing: " + error.message);
-      } else {
-        alert("🎉 Published successfully!");
-        if (titleInput) titleInput.value = '';
-        fetchFeed(type);
-      }
-    }
-
+  var { error } = await supabaseClient.from('webox_' + type).insert([newItem]);
+  if (error) {
+    alert("Error publishing: " + error.message);
+  } else {
+    alert("🎉 Published successfully!");
+    if (titleInput) titleInput.value = '';
+    fetchFeed(type);
+  }
+}
     async function fetchFeed(type) {
       var grid = document.getElementById(type + '-grid');
       if (!grid) return;

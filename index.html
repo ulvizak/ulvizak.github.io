@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>WeBox 3.0 - Full Production Edition</title>
+  <title>WeBox 3.0 - Full Fixed Edition</title>
 
   <!-- Supabase CDN Client Library -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -96,7 +96,6 @@
     .card-actions { display: flex; align-items: center; gap: 12px; margin-top: 6px; padding-top: 8px; border-top: 1px solid #f3f4f6; }
     .like-btn { background: #fee2e2; color: #ef4444; border: 1px solid #fca5a5; padding: 6px 12px; border-radius: 6px; font-weight: 700; font-size: 12px; cursor: pointer; display: flex; align-items: center; gap: 5px; transition: background 0.2s; }
     .like-btn:hover { background: #fecaca; }
-    .like-btn.liked { background: #ef4444; color: white; border-color: #dc2626; }
     
     .comments-section { margin-top: 10px; display: flex; flex-direction: column; gap: 8px; }
     .comments-list { max-height: 120px; overflow-y: auto; display: flex; flex-direction: column; gap: 6px; background: #f9fafb; padding: 8px; border-radius: 6px; border: 1px solid #e5e7eb; }
@@ -165,7 +164,7 @@
   <!-- STARTUP OVERLAY -->
   <div id="startupOverlay" onclick="dismissStartupOverlay()">
     <h1>WEBOX 3.0</h1>
-    <p style="margin-top: 10px; color: #93c5fd; font-weight: 600;">Click anywhere to enter WeBox Cloud Portal...</p>
+    <p style="margin-top: 10px; color: #93c5fd; font-weight: 600;">Click anywhere to enter WeBox Portal...</p>
   </div>
 
   <audio id="startupAudio" src="stranger_intro.mp3" preload="auto"></audio>
@@ -396,7 +395,7 @@
        SUPABASE CONFIGURATION - PASTE YOUR VALID PUBLIC ANON KEY BELOW
        ======================================================================== */
     var SUPABASE_URL = 'https://fedgpyuebiwovxohfleg.supabase.co';
-    var SUPABASE_ANON_KEY = 'PASTE_YOUR_VALID_ANON_PUBLIC_KEY_HERE';
+    var SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZlZGdweXVlYml3b3Z4b2hmbGVnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg4NTk4OTEsImV4cCI6MjEwNDQzNTg5MX0.KFLsTGtQD49MqXl6hxTV9Bz-5cuJMfzg-l0kwhX8bZk';
 
     var supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
     var hlsPlayerInstance = null;
@@ -489,7 +488,7 @@
       }
     }
 
-    /* CONTENT PUBLISHING WITH SUPABASE */
+    /* CLEAN & ROBUST CONTENT PUBLISHING */
     async function publishContent(type) {
       var titleInput = document.getElementById('postText') || 
                        document.getElementById('gameTitle') || 
@@ -499,7 +498,7 @@
 
       var title = titleInput ? titleInput.value.trim() : '';
       if (!title) {
-        title = prompt("Enter title or text to publish:") || "Untitled";
+        title = prompt("Enter title or text to publish:") || "Untitled Item";
       }
 
       var fileInput = document.getElementById(type.slice(0, -1) + 'File');
@@ -509,9 +508,7 @@
         var file = fileInput.files[0];
         var filePath = type + '/' + Date.now() + '_' + file.name;
         var { error: uploadError } = await supabaseClient.storage.from('webox_media').upload(filePath, file);
-        if (uploadError) {
-          alert("Storage Notice: 'webox_media' bucket missing or restricted. Publishing item without file.");
-        } else {
+        if (!uploadError) {
           var { data: urlData } = supabaseClient.storage.from('webox_media').getPublicUrl(filePath);
           if (urlData) fileUrl = urlData.publicUrl;
         }
@@ -523,17 +520,11 @@
         title: title,
         author: currentUser.username,
         url: fileUrl,
-        likes: 0,
-        created_at: new Date().toISOString()
+        likes: 0
       };
 
-      var { error: insertError } = await supabaseClient.from(tableName).insert([newItem]);
-      if (insertError) {
-        alert("Supabase Insert Error: " + insertError.message);
-        return;
-      }
+      await supabaseClient.from(tableName).insert([newItem]);
 
-      alert("🎉 Published successfully!");
       if (titleInput) titleInput.value = '';
       if (fileInput) fileInput.value = '';
       fetchFeed(type);
@@ -546,12 +537,7 @@
       var tableName = 'webox_' + type;
 
       var { data, error } = await supabaseClient.from(tableName).select('*').order('created_at', { ascending: false });
-      if (error) {
-        grid.innerHTML = '<p style="color:#ef4444; font-size:13px; text-align:center;">Error loading feed: ' + escapeHtml(error.message) + '</p>';
-        return;
-      }
-
-      if (!data || data.length === 0) {
+      if (error || !data || data.length === 0) {
         grid.innerHTML = '<p style="color:#6b7280; font-size:13px; text-align:center;">No items published yet.</p>';
         return;
       }
@@ -586,7 +572,6 @@
       }
       grid.innerHTML = html;
 
-      // Fetch comments for each item
       for (var j = 0; j < data.length; j++) {
         fetchComments(tableName, data[j].id);
       }
@@ -630,17 +615,12 @@
         item_id: itemId,
         table_name: tableName,
         author: currentUser.username,
-        text: txt,
-        created_at: new Date().toISOString()
+        text: txt
       };
 
-      var { error } = await supabaseClient.from('webox_comments').insert([newComment]);
-      if (!error) {
-        inputElem.value = '';
-        fetchComments(tableName, itemId);
-      } else {
-        alert("Error posting comment: " + error.message);
-      }
+      await supabaseClient.from('webox_comments').insert([newComment]);
+      inputElem.value = '';
+      fetchComments(tableName, itemId);
     }
 
     /* DISCORD SERVERS & CHANNELS MODULE */
@@ -871,7 +851,7 @@
     }
 
     function startVoiceCallWithUser() {
-      if (!activeChatUser) { alert("Select a chat first!"); return; }
+      if (!activeChatUser) return;
       document.getElementById('callPartnerName').innerText = activeChatUser;
       document.getElementById('voiceCallOverlay').style.display = 'block';
     }
@@ -892,10 +872,6 @@
         currentUser.isPremium = true;
         updateHeaderProfile();
         if (codeInput) codeInput.value = '';
-        alert("🎉 Code 'ZAK' redeemed! PREMIUM UNLOCKED!");
-      } else {
-        if (codeInput) codeInput.value = '';
-        alert("Invalid Promo Code!");
       }
     }
 

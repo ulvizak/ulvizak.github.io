@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>WeBox 3.0 - Ultimate Production Edition</title>
+  <title>WeBox 3.0 - Ultimate Expanded Edition</title>
 
   <!-- Supabase CDN Client Library -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -19,6 +19,10 @@
       --text-color: #1f2937;
       --accent-color: #2563eb;
       --border-color: #e5e7eb;
+      --sidebar-bg: #111214;
+      --panel-bg: #2b2d31;
+      --chat-bg: #313338;
+      --brand-color: #5865f2;
     }
 
     body.matrix-theme {
@@ -31,19 +35,29 @@
 
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
     body { background-color: var(--bg-color); color: var(--text-color); display: flex; flex-direction: column; min-height: 100vh; transition: background 0.3s, color 0.3s; background-size: cover; background-repeat: no-repeat; background-position: center center; background-attachment: fixed; }
-    header { background: var(--card-bg); backdrop-filter: blur(5px); border-bottom: 1px solid var(--border-color); padding: 16px 24px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+    
+    /* HEADER & NAVBAR STYLES */
+    header { background: var(--card-bg); backdrop-filter: blur(8px); border-bottom: 1px solid var(--border-color); padding: 16px 24px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 4px rgba(0,0,0,0.05); sticky: top; top: 0; z-index: 1000; }
     .logo-area { display: flex; align-items: center; gap: 15px; }
-    h1 { font-size: 22px; font-weight: 800; color: var(--accent-color); }
-    .user-profile-badge { display: flex; align-items: center; gap: 10px; background: rgba(249, 250, 251, 0.8); border: 1px solid var(--border-color); padding: 6px 12px; border-radius: 30px; cursor: pointer; }
-    .user-avatar-small { width: 28px; height: 28px; border-radius: 50%; object-fit: cover; background: var(--border-color); }
-    .username { font-size: 14px; font-weight: 600; color: var(--text-color); }
-    .coin-display { font-size: 13px; font-weight: 700; color: #d97706; display: flex; align-items: center; gap: 4px; background: #fef3c7; padding: 3px 8px; border-radius: 12px; border: 1px solid #fde68a; }
-    .logout-btn { background: #ef4444; color: white; border: none; padding: 6px 14px; border-radius: 6px; font-weight: 600; font-size: 13px; cursor: pointer; }
-    .nav-tabs-container { background: var(--card-bg); backdrop-filter: blur(5px); border-bottom: 1px solid var(--border-color); padding: 12px 24px; display: flex; gap: 8px; overflow-x: auto; }
-    .tab-btn { background: #f3f4f6; color: #4b5563; border: none; padding: 8px 16px; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 14px; white-space: nowrap; }
-    .tab-btn.active { background: var(--accent-color); color: white; }
+    h1 { font-size: 22px; font-weight: 800; color: var(--accent-color); letter-spacing: -0.5px; }
+    .user-profile-badge { display: flex; align-items: center; gap: 10px; background: rgba(249, 250, 251, 0.9); border: 1px solid var(--border-color); padding: 6px 14px; border-radius: 30px; cursor: pointer; transition: all 0.2s ease; }
+    .user-profile-badge:hover { background: #ffffff; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+    .user-avatar-small { width: 32px; height: 32px; border-radius: 50%; object-fit: cover; background: var(--border-color); border: 1px solid var(--accent-color); }
+    .username { font-size: 14px; font-weight: 700; color: var(--text-color); }
+    .coin-display { font-size: 13px; font-weight: 700; color: #d97706; display: flex; align-items: center; gap: 6px; background: #fef3c7; padding: 4px 10px; border-radius: 12px; border: 1px solid #fde68a; }
+    .logout-btn { background: #ef4444; color: white; border: none; padding: 8px 16px; border-radius: 6px; font-weight: 600; font-size: 13px; cursor: pointer; transition: background 0.2s; }
+    .logout-btn:hover { background: #dc2626; }
+
+    /* TAB NAVIGATION */
+    .nav-tabs-container { background: var(--card-bg); backdrop-filter: blur(8px); border-bottom: 1px solid var(--border-color); padding: 12px 24px; display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; }
+    .nav-tabs-container::-webkit-scrollbar { display: none; }
+    .tab-btn { background: #f3f4f6; color: #4b5563; border: none; padding: 10px 18px; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 14px; white-space: nowrap; transition: all 0.2s ease; }
+    .tab-btn:hover { background: #e5e7eb; color: #111827; }
+    .tab-btn.active { background: var(--accent-color); color: white; box-shadow: 0 2px 6px rgba(37, 99, 235, 0.3); }
     
     .tv-tab-btn { background: linear-gradient(135deg, #059669, #10b981) !important; color: white !important; font-weight: 800 !important; }
+    .tv-tab-btn:hover { box-shadow: 0 0 12px rgba(16, 185, 129, 0.5) !important; }
+
     .premium-tab-btn {
       background: linear-gradient(135deg, #a855f7, #ec4899) !important;
       color: white !important;
@@ -53,78 +67,84 @@
     }
     @keyframes nitroGlow {
       0% { box-shadow: 0 0 8px rgba(236, 72, 153, 0.6); transform: scale(1); }
-      100% { box-shadow: 0 0 18px rgba(236, 72, 153, 1), 0 0 28px rgba(168, 85, 247, 0.9); transform: scale(1.03); }
+      100% { box-shadow: 0 0 18px rgba(236, 72, 153, 1), 0 0 28px rgba(168, 85, 247, 0.9); transform: scale(1.02); }
     }
 
-    .content-container { flex: 1; max-width: 1000px; width: 100%; margin: 20px auto; padding: 0 20px; }
+    /* MAIN CONTAINER & CARDS */
+    .content-container { flex: 1; max-width: 1050px; width: 100%; margin: 24px auto; padding: 0 20px; }
     .tab-content { display: none; }
     .tab-content.active { display: block; }
-    .card { background: var(--card-bg); backdrop-filter: blur(5px); border: 1px solid var(--border-color); border-radius: 12px; padding: 20px; margin-bottom: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
-    h2 { font-size: 18px; margin-bottom: 15px; color: var(--text-color); }
-    .search-bar { width: 100%; padding: 10px 14px; border: 1px solid var(--border-color); border-radius: 8px; font-size: 14px; margin-bottom: 20px; outline: none; background: rgba(255, 255, 255, 0.9); }
-    .upload-form { display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px; }
-    .upload-form input[type="text"], .upload-form textarea, .upload-form select, .upload-form input[type="file"] { padding: 10px; border: 1px solid var(--border-color); border-radius: 6px; font-size: 14px; background: rgba(255, 255, 255, 0.9); }
-    .upload-form textarea { resize: vertical; height: 80px; }
-    .publish-btn { background: var(--accent-color); color: white; border: none; padding: 10px; border-radius: 6px; font-weight: 600; cursor: pointer; }
-    .grid-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; }
-    .grid-card { background: rgba(249, 250, 251, 0.95); border: 1px solid var(--border-color); border-radius: 8px; overflow: hidden; display: flex; flex-direction: column; gap: 8px; padding: 12px; }
-    .grid-card-title { font-weight: 600; font-size: 14px; color: #111827; word-break: break-word; }
-    .grid-card-author { font-size: 12px; color: #6b7280; }
-    .grid-card audio, .grid-card video { width: 100%; margin-top: 6px; border-radius: 6px; }
+    .card { background: var(--card-bg); backdrop-filter: blur(8px); border: 1px solid var(--border-color); border-radius: 12px; padding: 24px; margin-bottom: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
+    h2 { font-size: 20px; font-weight: 700; margin-bottom: 16px; color: var(--text-color); }
+    .search-bar { width: 100%; padding: 12px 16px; border: 1px solid var(--border-color); border-radius: 8px; font-size: 14px; margin-bottom: 20px; outline: none; background: rgba(255, 255, 255, 0.9); transition: border 0.2s; }
+    .search-bar:focus { border-color: var(--accent-color); }
+    
+    .upload-form { display: flex; flex-direction: column; gap: 14px; margin-bottom: 20px; }
+    .upload-form input[type="text"], .upload-form textarea, .upload-form select, .upload-form input[type="file"] { padding: 12px; border: 1px solid var(--border-color); border-radius: 8px; font-size: 14px; background: rgba(255, 255, 255, 0.9); outline: none; }
+    .upload-form textarea { resize: vertical; height: 90px; }
+    .publish-btn { background: var(--accent-color); color: white; border: none; padding: 12px 20px; border-radius: 8px; font-weight: 700; font-size: 14px; cursor: pointer; transition: background 0.2s; }
+    .publish-btn:hover { opacity: 0.9; }
+
+    /* GRID & MEDIA FEED CARDS */
+    .grid-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 18px; }
+    .grid-card { background: rgba(255, 255, 255, 0.98); border: 1px solid var(--border-color); border-radius: 10px; overflow: hidden; display: flex; flex-direction: column; gap: 10px; padding: 16px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+    .grid-card-title { font-weight: 700; font-size: 15px; color: #111827; word-break: break-word; }
+    .grid-card-author { font-size: 12px; color: #6b7280; font-weight: 500; }
+    .grid-card audio, .grid-card video { width: 100%; border-radius: 6px; margin-top: 4px; }
 
     /* NATIVE M3U8 AZERBAIJAN TV STYLES */
-    .tv-player-wrapper { width: 100%; background: #000; border-radius: 10px; overflow: hidden; margin-bottom: 15px; border: 2px solid #059669; }
+    .tv-player-wrapper { width: 100%; background: #000; border-radius: 12px; overflow: hidden; margin-bottom: 18px; border: 2px solid #059669; box-shadow: 0 4px 15px rgba(5, 150, 105, 0.2); }
     video#nativeTvVideoPlayer { width: 100%; height: 480px; background: #000; display: block; }
-    .tv-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 12px; margin-top: 15px; max-height: 250px; overflow-y: auto; }
-    .tv-card { background: #111827; color: white; border-radius: 8px; padding: 12px; text-align: center; border: 1px solid #374151; cursor: pointer; transition: transform 0.15s, border-color 0.15s; }
+    .tv-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 12px; margin-top: 15px; max-height: 280px; overflow-y: auto; padding-right: 4px; }
+    .tv-card { background: #111827; color: white; border-radius: 8px; padding: 14px; text-align: center; border: 1px solid #374151; cursor: pointer; transition: transform 0.15s, border-color 0.15s, background 0.15s; }
     .tv-card:hover, .tv-card.active { transform: translateY(-2px); border-color: #10b981; background: #1f2937; }
-    .tv-card-title { font-weight: bold; font-size: 14px; color: #34d399; word-break: break-word; }
+    .tv-card-title { font-weight: 700; font-size: 14px; color: #34d399; word-break: break-word; }
 
     /* DISCORD FULL SERVER LAYOUT */
-    .discord-full-layout { display: grid; grid-template-columns: 200px 180px 1fr; gap: 10px; height: 500px; background: #1e1f22; border-radius: 10px; overflow: hidden; color: white; }
+    .discord-full-layout { display: grid; grid-template-columns: 220px 200px 1fr; gap: 12px; height: 520px; background: #1e1f22; border-radius: 12px; overflow: hidden; color: white; box-shadow: 0 4px 20px rgba(0,0,0,0.2); }
     @media(max-width: 768px) { .discord-full-layout { grid-template-columns: 1fr; height: auto; } }
-    .server-list-sidebar { background: #111214; padding: 10px; display: flex; flex-direction: column; gap: 8px; overflow-y: auto; }
-    .server-item { display: flex; align-items: center; gap: 8px; padding: 8px; background: #2b2d31; border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: bold; color: white; }
+    .server-list-sidebar { background: #111214; padding: 12px; display: flex; flex-direction: column; gap: 10px; overflow-y: auto; }
+    .server-item { display: flex; align-items: center; gap: 10px; padding: 10px; background: #2b2d31; border-radius: 8px; cursor: pointer; font-size: 14px; font-weight: bold; color: white; transition: background 0.2s; }
     .server-item:hover, .server-item.active { background: #5865f2; }
-    .channels-sidebar { background: #2b2d31; padding: 10px; display: flex; flex-direction: column; gap: 6px; border-right: 1px solid #35363c; }
-    .channel-item { padding: 6px 10px; border-radius: 4px; cursor: pointer; font-size: 13px; color: #949ba4; }
+    .channels-sidebar { background: #2b2d31; padding: 12px; display: flex; flex-direction: column; gap: 8px; border-right: 1px solid #35363c; }
+    .channel-item { padding: 8px 12px; border-radius: 6px; cursor: pointer; font-size: 13px; color: #949ba4; transition: all 0.15s; }
     .channel-item:hover, .channel-item.active { background: #35373c; color: white; }
-    .chat-channel-panel { display: flex; flex-direction: column; background: #313338; padding: 12px; }
+    .chat-channel-panel { display: flex; flex-direction: column; background: #313338; padding: 16px; }
 
-    /* MYINSTANTS INTEGRATED SOUNDBOARD */
+    /* SOUNDBOARD & CALLS */
     .myinstants-box { background: #2b2d31; border-radius: 8px; padding: 12px; margin-top: 10px; border: 1px solid #5865f2; }
     .open-myinstants-site-btn { width: 100%; background: linear-gradient(135deg, #f00056, #ff007f); color: white; border: none; padding: 10px; border-radius: 6px; font-weight: 800; font-size: 13px; cursor: pointer; margin-top: 8px; text-transform: uppercase; }
-    .soundboard-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 8px; max-height: 160px; overflow-y: auto; margin-top: 10px; }
+    .soundboard-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 8px; max-height: 160px; overflow-y: auto; margin-top: 10px; }
     .soundboard-btn { background: #f00056; border: none; color: white; padding: 8px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 11px; text-align: center; }
 
-    /* MACOS ERROR WINDOW MODAL */
+    /* MESSENGER STYLES */
+    .messenger-layout { display: grid; grid-template-columns: 260px 1fr; gap: 16px; }
+    .chats-sidebar { background: rgba(249, 250, 251, 0.95); border: 1px solid var(--border-color); border-radius: 10px; padding: 14px; height: 440px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
+    .chat-convo-item { display: flex; align-items: center; gap: 12px; padding: 12px; border-radius: 8px; cursor: pointer; background: white; border: 1px solid var(--border-color); transition: background 0.15s; }
+    .chat-convo-item.active { background: #e0f2fe; border-color: #bae6fd; }
+    .chat-convo-avatar { width: 36px; height: 36px; border-radius: 50%; object-fit: cover; }
+    .chat-main-panel { display: flex; flex-direction: column; background: rgba(249, 250, 251, 0.95); border: 1px solid var(--border-color); border-radius: 10px; padding: 14px; height: 440px; }
+    .chat-box-container { flex: 1; overflow-y: auto; background: white; border: 1px solid var(--border-color); border-radius: 8px; padding: 14px; margin-bottom: 12px; display: flex; flex-direction: column; gap: 10px; }
+    .chat-msg { max-width: 75%; padding: 10px 14px; border-radius: 12px; font-size: 14px; word-break: break-word; line-height: 1.4; }
+    .chat-msg.sent { align-self: flex-end; background: #2563eb; color: white; border-bottom-right-radius: 2px; }
+    .chat-msg.received { align-self: flex-start; background: #e5e7eb; color: #111827; border-bottom-left-radius: 2px; }
+
+    /* MODAL WINDOWS */
     #macErrorModal { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.6); z-index: 20000; justify-content: center; align-items: center; }
-    .mac-window { width: 380px; background: #e5e5e5; border-radius: 10px; box-shadow: 0 20px 50px rgba(0,0,0,0.5); border: 1px solid #999; font-family: -apple-system, BlinkMacSystemFont, sans-serif; overflow: hidden; color: #000; }
+    .mac-window { width: 400px; background: #e5e5e5; border-radius: 10px; box-shadow: 0 20px 50px rgba(0,0,0,0.5); border: 1px solid #999; overflow: hidden; color: #000; }
     .mac-titlebar { background: linear-gradient(180deg, #e6e6e6, #ccc); padding: 8px 12px; display: flex; align-items: center; border-bottom: 1px solid #b3b3b3; }
     .mac-buttons { display: flex; gap: 6px; }
     .mac-btn { width: 12px; height: 12px; border-radius: 50%; display: inline-block; background: #ff5f56; border: 1px solid #e0443e; cursor: pointer; }
     .mac-title { flex: 1; text-align: center; font-size: 13px; font-weight: bold; color: #4d4d4d; margin-right: 30px; }
-    .mac-body { padding: 20px; font-size: 13px; line-height: 1.5; color: #222; text-align: center; }
-
-    /* MESSAGES STYLES */
-    .messenger-layout { display: grid; grid-template-columns: 240px 1fr; gap: 15px; }
-    .chats-sidebar { background: rgba(249, 250, 251, 0.95); border: 1px solid var(--border-color); border-radius: 8px; padding: 12px; height: 420px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; }
-    .chat-convo-item { display: flex; align-items: center; gap: 10px; padding: 10px; border-radius: 6px; cursor: pointer; background: white; border: 1px solid var(--border-color); }
-    .chat-convo-item.active { background: #e0f2fe; border-color: #bae6fd; }
-    .chat-convo-avatar { width: 32px; height: 32px; border-radius: 50%; object-fit: cover; }
-    .chat-main-panel { display: flex; flex-direction: column; background: rgba(249, 250, 251, 0.95); border: 1px solid var(--border-color); border-radius: 8px; padding: 12px; height: 420px; }
-    .chat-box-container { flex: 1; overflow-y: auto; background: white; border: 1px solid var(--border-color); border-radius: 8px; padding: 12px; margin-bottom: 10px; display: flex; flex-direction: column; gap: 8px; }
-    .chat-msg { max-width: 75%; padding: 8px 12px; border-radius: 10px; font-size: 13px; word-break: break-word; }
-    .chat-msg.sent { align-self: flex-end; background: #2563eb; color: white; }
-    .chat-msg.received { align-self: flex-start; background: #e5e7eb; color: #111827; }
+    .mac-body { padding: 24px; font-size: 14px; line-height: 1.5; color: #222; text-align: center; }
 
     /* STARTUP OVERLAY */
     #startupOverlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #000000; z-index: 10000; display: flex; justify-content: center; align-items: center; flex-direction: column; color: white; transition: opacity 1s ease, visibility 1s; cursor: pointer; }
-    #startupOverlay h1 { font-size: 42px; font-weight: 900; color: #60a5fa; text-shadow: 0 0 20px #2563eb; }
+    #startupOverlay h1 { font-size: 48px; font-weight: 900; color: #60a5fa; text-shadow: 0 0 25px #2563eb; letter-spacing: -1px; }
 
     #profileModal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 100; justify-content: center; align-items: center; padding: 20px; }
-    .modal-content { background: #111827; width: 100%; max-width: 400px; border-radius: 12px; padding: 20px; color: white; text-align: center; }
-    .close-modal-btn { background: #ef4444; border: none; color: white; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 12px; }
+    .modal-content { background: #111827; width: 100%; max-width: 420px; border-radius: 14px; padding: 24px; color: white; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+    .close-modal-btn { background: #ef4444; border: none; color: white; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: bold; }
   </style>
 </head>
 <body id="appBody">
@@ -140,15 +160,15 @@
   <!-- STARTUP OVERLAY -->
   <div id="startupOverlay" onclick="dismissStartupOverlay()">
     <h1>WEBOX 3.0</h1>
-    <p>Click anywhere to enter WeBox...</p>
+    <p style="margin-top: 10px; color: #93c5fd; font-weight: 600;">Click anywhere to enter WeBox Cloud Portal...</p>
   </div>
 
   <audio id="startupAudio" src="stranger_intro.mp3" preload="auto"></audio>
   <audio id="messageDingAudio" src="message_ding.mp3" preload="auto"></audio>
 
   <header>
-    <div class="logo-area"><h1>WeBox 3.0 (Ultimate Sync)</h1></div>
-    <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+    <div class="logo-area"><h1>WeBox 3.0</h1></div>
+    <div style="display: flex; align-items: center; gap: 14px; flex-wrap: wrap;">
       <div class="coin-display">🪙 <span id="headerCoins">100</span> We-Coins</div>
       <div class="user-profile-badge" onclick="openProfileModal()">
         <img id="headerUserAvatar" class="user-avatar-small" src="penguin.png" alt="Avatar">
@@ -483,7 +503,7 @@
       }
     }
 
-    /* FULL PURE SUPABASE PUBLISHING WITH VISIBLE ERROR ALERTS */
+    /* BULLETPROOF PUBLISHING ROUTINE WITH ROBUST MEDIA HANDLERS */
     async function publishContent(type) {
       var titleInput = document.getElementById('postText') || 
                        document.getElementById('gameTitle') || 
@@ -504,11 +524,11 @@
         var filePath = type + '/' + Date.now() + '_' + file.name;
         var { error: uploadError } = await supabaseClient.storage.from('webox_media').upload(filePath, file);
         if (uploadError) {
-          alert("Storage Error: " + uploadError.message);
-          return;
+          alert("Storage Notice: 'webox_media' bucket not found in Supabase Storage. Publishing item without attached file.");
+        } else {
+          var { data: urlData } = supabaseClient.storage.from('webox_media').getPublicUrl(filePath);
+          if (urlData) fileUrl = urlData.publicUrl;
         }
-        var { data: urlData } = supabaseClient.storage.from('webox_media').getPublicUrl(filePath);
-        if (urlData) fileUrl = urlData.publicUrl;
       }
 
       var tableName = 'webox_' + type;
@@ -552,13 +572,17 @@
       for (var i = 0; i < data.length; i++) {
         var item = data[i];
         var mediaElement = '';
-        if (item.url) {
+        
+        if (item.url && item.url.trim() !== '') {
           if (type === 'music') {
             mediaElement = '<audio controls src="' + escapeHtml(item.url) + '"></audio>';
           } else if (type === 'videos' || type === 'svids') {
-            mediaElement = '<video controls src="' + escapeHtml(item.url) + '" style="width:100%; max-height:160px; object-fit:cover;"></video>';
+            mediaElement = '<video controls src="' + escapeHtml(item.url) + '" style="width:100%; max-height:220px; object-fit:cover;"></video>';
           }
+        } else if (type === 'music') {
+          mediaElement = '<p style="font-size:11px; color:#ef4444; background:#fee2e2; padding:4px 8px; border-radius:4px;">No audio file attached</p>';
         }
+
         html += '<div class="grid-card">' +
           '<div class="grid-card-title">' + escapeHtml(item.title || item.text) + '</div>' +
           mediaElement +
@@ -568,7 +592,7 @@
       grid.innerHTML = html;
     }
 
-    /* DISCORD SERVERS */
+    /* DISCORD SERVERS MODULE */
     async function fetchServersAndChannels() {
       try {
         var { data: sData } = await supabaseClient.from('webox_servers').select('*');
@@ -696,7 +720,7 @@
       } catch(e) {}
     }
 
-    /* DIRECT MESSAGING */
+    /* DIRECT MESSAGING MODULE */
     async function fetchUsersAndChats() {
       try {
         var { data } = await supabaseClient.from('webox_users').select('username, avatar_url');

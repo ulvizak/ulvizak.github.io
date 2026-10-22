@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>WeBox 3.0 - Discord & Live TV Edition</title>
+  <title>WeBox 3.0 - Full Edition</title>
 
   <!-- Supabase CDN Client Library -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -76,19 +76,8 @@
     .grid-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; }
     .grid-card { background: rgba(249, 250, 251, 0.95); border: 1px solid var(--border-color); border-radius: 8px; overflow: hidden; display: flex; flex-direction: column; }
     .grid-card-body { padding: 12px; flex: 1; display: flex; flex-direction: column; justify-content: space-between; }
-    .grid-card-author-area { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; cursor: pointer; }
-    .grid-author-avatar { width: 20px; height: 20px; border-radius: 50%; object-fit: cover; background: var(--border-color); }
     .grid-card-title { font-weight: 600; font-size: 14px; color: #111827; margin-bottom: 6px; word-break: break-word; }
-    .grid-card-author { font-size: 12px; color: #6b7280; display: flex; align-items: center; }
-    .grid-card-actions { display: flex; gap: 6px; margin-top: 8px; flex-wrap: wrap; }
-    .action-btn { flex: 1; background: #f3f4f6; border: 1px solid var(--border-color); padding: 6px; border-radius: 4px; font-size: 12px; font-weight: 600; cursor: pointer; text-align: center; color: #374151; min-width: 60px; }
-    .delete-btn { background: #fee2e2; color: #dc2626; border: 1px solid #fecaca; }
-    .like-btn { background: #ecfdf5; color: #059669; border: 1px solid #a7f3d0; }
-    .share-btn { background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; }
-    iframe, video, audio, .game-thumbnail { width: 100%; background: #000; }
-    iframe { height: 220px; border: none; }
-    video { height: 180px; }
-    .game-thumbnail { height: 150px; object-fit: cover; }
+    .grid-card-author { font-size: 12px; color: #6b7280; }
 
     /* NATIVE M3U8 AZERBAIJAN TV STYLES */
     .tv-player-wrapper { width: 100%; background: #000; border-radius: 10px; overflow: hidden; margin-bottom: 15px; border: 2px solid #059669; }
@@ -109,41 +98,22 @@
     .channel-item:hover, .channel-item.active { background: #35373c; color: white; }
     .chat-channel-panel { display: flex; flex-direction: column; background: #313338; padding: 12px; }
 
-    /* MYINSTANTS INTEGRATED SOUNDBOARD & DIRECT SITE BUTTON */
+    /* MYINSTANTS INTEGRATED SOUNDBOARD */
     .myinstants-box { background: #2b2d31; border-radius: 8px; padding: 12px; margin-top: 10px; border: 1px solid #5865f2; }
-    .open-myinstants-site-btn {
-      width: 100%;
-      background: linear-gradient(135deg, #f00056, #ff007f);
-      color: white;
-      border: none;
-      padding: 10px;
-      border-radius: 6px;
-      font-weight: 800;
-      font-size: 13px;
-      cursor: pointer;
-      margin-top: 8px;
-      text-transform: uppercase;
-      box-shadow: 0 4px 10px rgba(240, 0, 86, 0.4);
-      transition: transform 0.1s;
-    }
-    .open-myinstants-site-btn:hover { transform: scale(1.02); }
+    .open-myinstants-site-btn { width: 100%; background: linear-gradient(135deg, #f00056, #ff007f); color: white; border: none; padding: 10px; border-radius: 6px; font-weight: 800; font-size: 13px; cursor: pointer; margin-top: 8px; text-transform: uppercase; }
     .soundboard-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 8px; max-height: 160px; overflow-y: auto; margin-top: 10px; }
     .soundboard-btn { background: #f00056; border: none; color: white; padding: 8px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 11px; text-align: center; }
-    .soundboard-btn:hover { background: #ff2a75; }
 
     /* MACOS ERROR WINDOW MODAL */
     #macErrorModal { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.6); z-index: 20000; justify-content: center; align-items: center; }
     .mac-window { width: 380px; background: #e5e5e5; border-radius: 10px; box-shadow: 0 20px 50px rgba(0,0,0,0.5); border: 1px solid #999; font-family: -apple-system, BlinkMacSystemFont, sans-serif; overflow: hidden; color: #000; }
     .mac-titlebar { background: linear-gradient(180deg, #e6e6e6, #ccc); padding: 8px 12px; display: flex; align-items: center; border-bottom: 1px solid #b3b3b3; }
     .mac-buttons { display: flex; gap: 6px; }
-    .mac-btn { width: 12px; height: 12px; border-radius: 50%; display: inline-block; }
-    .mac-close { background: #ff5f56; border: 1px solid #e0443e; }
-    .mac-min { background: #ffbd2e; border: 1px solid #dea123; }
-    .mac-max { background: #27c93f; border: 1px solid #1aab29; }
+    .mac-btn { width: 12px; height: 12px; border-radius: 50%; display: inline-block; background: #ff5f56; border: 1px solid #e0443e; }
     .mac-title { flex: 1; text-align: center; font-size: 13px; font-weight: bold; color: #4d4d4d; margin-right: 30px; }
     .mac-body { padding: 20px; font-size: 13px; line-height: 1.5; color: #222; text-align: center; }
 
-    /* MESSAGES & CHAT STYLES */
+    /* MESSAGES STYLES */
     .messenger-layout { display: grid; grid-template-columns: 240px 1fr; gap: 15px; }
     .chats-sidebar { background: rgba(249, 250, 251, 0.95); border: 1px solid var(--border-color); border-radius: 8px; padding: 12px; height: 420px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; }
     .chat-convo-item { display: flex; align-items: center; gap: 10px; padding: 10px; border-radius: 6px; cursor: pointer; background: white; border: 1px solid var(--border-color); }
@@ -156,26 +126,12 @@
     .chat-msg.received { align-self: flex-start; background: #e5e7eb; color: #111827; }
 
     /* STARTUP OVERLAY */
-    #startupOverlay {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100vw; height: 100vh;
-      background: #000000;
-      z-index: 10000;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      flex-direction: column;
-      color: white;
-      transition: opacity 1s ease, visibility 1s;
-      cursor: pointer;
-    }
+    #startupOverlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #000000; z-index: 10000; display: flex; justify-content: center; align-items: center; flex-direction: column; color: white; transition: opacity 1s ease, visibility 1s; cursor: pointer; }
     #startupOverlay h1 { font-size: 42px; font-weight: 900; color: #60a5fa; text-shadow: 0 0 20px #2563eb; }
 
-    /* MODALS */
-    #gameModal, #commentsModal, #profileModal, #educiModal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 100; justify-content: center; align-items: center; padding: 20px; }
-    .modal-content { background: #111827; width: 100%; max-width: 850px; max-height: 90vh; border-radius: 12px; overflow-y: auto; display: flex; flex-direction: column; color: white; }
-    .close-modal-btn { background: #ef4444; border: none; color: white; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: 600; }
+    #profileModal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 100; justify-content: center; align-items: center; padding: 20px; }
+    .modal-content { background: #111827; width: 100%; max-width: 400px; border-radius: 12px; padding: 20px; color: white; text-align: center; }
+    .close-modal-btn { background: #ef4444; border: none; color: white; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 12px; }
   </style>
 </head>
 <body id="appBody">
@@ -190,7 +146,7 @@
   <!-- STARTUP OVERLAY -->
   <div id="startupOverlay" onclick="dismissStartupOverlay()">
     <h1>WEBOX 3.0</h1>
-    <p id="startupOverlaySub">Click anywhere to enter WeBox...</p>
+    <p>Click anywhere to enter WeBox...</p>
   </div>
 
   <audio id="startupAudio" src="stranger_intro.mp3" preload="auto"></audio>
@@ -199,10 +155,9 @@
   <header>
     <div class="logo-area"><h1>WeBox 3.0 (Cloud Sync)</h1></div>
     <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
-      <button class="mute-btn" id="muteToggleBtn" onclick="toggleMuteMusic()">🔇 Unmute Music</button>
       <div class="coin-display">🪙 <span id="headerCoins">0</span> We-Coins</div>
-      <div class="user-profile-badge" onclick="openProfileModal(currentUser.username)">
-        <img id="headerUserAvatar" class="user-avatar-small" src="https://via.placeholder.com/150" alt="Avatar">
+      <div class="user-profile-badge" onclick="openProfileModal()">
+        <img id="headerUserAvatar" class="user-avatar-small" src="penguin.png" alt="Avatar">
         <span class="username" id="headerUsername">@user</span>
         <span id="headerBadgeTag"></span>
       </div>
@@ -220,35 +175,22 @@
     <button class="tab-btn" onclick="switchTab('messages', event)">Messages 💬</button>
     <button class="tab-btn" onclick="switchTab('servers', event)">Servers 🎮</button>
     <button class="tab-btn premium-tab-btn" onclick="switchTab('premium', event)">✈️ WEBOX PREMIUM</button>
-    <button class="tab-btn" onclick="switchTab('educi', event)">Educi 🎓</button>
-    <button class="tab-btn" onclick="switchTab('filebox', event)">FileBox</button>
-    <button class="tab-btn" onclick="switchTab('daily', event)">Daily 🪙</button>
-    <button class="tab-btn" onclick="switchTab('avatarshop', event)">Avatar Shop</button>
-    <button class="tab-btn" onclick="switchTab('badgeShop', event)">Badge Shop</button>
-    <button class="tab-btn" onclick="switchTab('themes', event)">Themes</button>
     <button class="tab-btn" onclick="switchTab('settings', event)">Settings</button>
   </div>
 
   <div class="content-container">
 
-    <!-- NATIVE M3U8 AZERBAIJAN LIVE TV TAB -->
+    <!-- LIVE TV TAB -->
     <div id="livetv-tab" class="tab-content">
       <div class="card" style="background:#0f172a; color:white;">
-        <h2 style="color:#34d399; display:flex; align-items:center; gap:8px;">
-          Live TV Azerbaijan 🇦🇿 
-          <span style="font-size:12px; color:#94a3b8; font-weight:normal;">● Native M3U8 Player</span>
-        </h2>
-        
+        <h2 style="color:#34d399;">Live TV Azerbaijan 🇦🇿 ● Native M3U8 Player</h2>
         <div class="tv-player-wrapper">
           <video id="nativeTvVideoPlayer" controls autoplay playsinline></video>
         </div>
-
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
           <h3 id="currentTvChannelTitle" style="color:white; font-size:16px;">Select a channel from playlist_azerbaijan.m3u8 below</h3>
           <button class="publish-btn" style="background:#059669; font-size:12px; padding:6px 12px;" onclick="loadM3u8PlaylistFile()">Reload Playlist 🔄</button>
         </div>
-
-        <h4 style="color:#94a3b8; font-size:13px;">Channels in playlist_azerbaijan.m3u8:</h4>
         <div class="tv-grid" id="m3u8ChannelsGrid">
           <p style="color:#9ca3af; font-size:12px; grid-column: 1 / -1; text-align:center;">Loading playlist_azerbaijan.m3u8...</p>
         </div>
@@ -257,7 +199,7 @@
 
     <!-- VIDEOS TAB -->
     <div id="videos-tab" class="tab-content active">
-      <input type="text" class="search-bar" id="searchVideos" placeholder="Search videos..." oninput="filterGrid('videos')">
+      <input type="text" class="search-bar" id="searchVideos" placeholder="Search videos...">
       <div class="card">
         <h2>Publish Video</h2>
         <div class="upload-form">
@@ -272,9 +214,8 @@
 
     <!-- SVIDS TAB -->
     <div id="svids-tab" class="tab-content">
-      <input type="text" class="search-bar" id="searchSvids" placeholder="Search svids..." oninput="filterGrid('svids')">
       <div class="card">
-        <h2>Publish Svid (Short)</h2>
+        <h2>Publish Svid</h2>
         <div class="upload-form">
           <input type="text" id="svidTitle" placeholder="Svid Title">
           <input type="file" id="svidFile" accept="video/*">
@@ -287,11 +228,10 @@
 
     <!-- MUSIC TAB -->
     <div id="music-tab" class="tab-content">
-      <input type="text" class="search-bar" id="searchMusic" placeholder="Search music tracks..." oninput="filterGrid('music')">
       <div class="card">
-        <h2>Publish Music Track</h2>
+        <h2>Publish Music</h2>
         <div class="upload-form">
-          <input type="text" id="musicTitle" placeholder="Song/Track Title">
+          <input type="text" id="musicTitle" placeholder="Track Title">
           <input type="file" id="musicFile" accept="audio/*">
           <button class="publish-btn" onclick="publishContent('music')">Publish Track</button>
         </div>
@@ -302,31 +242,27 @@
 
     <!-- POSTS TAB -->
     <div id="posts-tab" class="tab-content">
-      <input type="text" class="search-bar" id="searchPosts" placeholder="Search posts..." oninput="filterGrid('posts')">
       <div class="card">
         <h2>Create Post</h2>
         <div class="upload-form">
-          <textarea id="postText" placeholder="What's on your mind? Write your post here..."></textarea>
+          <textarea id="postText" placeholder="What's on your mind?"></textarea>
           <button class="publish-btn" onclick="publishContent('posts')">Publish Post</button>
         </div>
       </div>
-      <h2>Community Posts Feed</h2>
+      <h2>Community Posts</h2>
       <div class="grid-container" id="posts-grid"></div>
     </div>
 
     <!-- ARCADE GAMES TAB -->
     <div id="arcade-tab" class="tab-content">
-      <input type="text" class="search-bar" id="searchArcade" placeholder="Search arcade games..." oninput="filterGrid('arcade')">
       <div class="card">
         <h2>Publish Arcade Game</h2>
         <div class="upload-form">
           <input type="text" id="gameTitle" placeholder="Game Title">
-          <div class="upload-group"><label>Thumbnail Image:</label><input type="file" id="gameThumbFile" accept="image/*"></div>
-          <div class="upload-group"><label>HTML Game File:</label><input type="file" id="gameHtmlFile" accept=".html"></div>
-          <button class="publish-btn" onclick="publishArcadeHtmlOnly()">Publish HTML Game</button>
+          <button class="publish-btn" onclick="publishContent('arcade')">Publish Game</button>
         </div>
       </div>
-      <h2>Arcade Games Grid</h2>
+      <h2>Arcade Games</h2>
       <div class="grid-container" id="arcade-grid"></div>
     </div>
 
@@ -338,213 +274,82 @@
           <input type="text" id="newChatUsernameInput" placeholder="Start chat with @username..." style="flex: 1; padding: 10px; border: 1px solid var(--border-color); border-radius: 6px;">
           <button class="publish-btn" onclick="startNewChat()">+ New Chat</button>
         </div>
-
         <div class="messenger-layout">
           <div class="chats-sidebar" id="chatsSidebarList">
-            <p style="color: #6b7280; font-size: 13px; text-align: center;">No active chats yet.</p>
+            <p style="color: #6b7280; font-size: 13px; text-align: center;">No active chats.</p>
           </div>
-
           <div class="chat-main-panel">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-              <div id="activeChatHeader" style="font-weight: bold; font-size: 14px; color: var(--text-color);">Select a chat to begin</div>
-              <button class="publish-btn" style="background:#5865f2; padding: 4px 10px; font-size: 12px;" onclick="startVoiceCallWithUser()">📞 Start Voice Call</button>
+              <div id="activeChatHeader" style="font-weight: bold; font-size: 14px;">Select a chat</div>
+              <button class="publish-btn" style="background:#5865f2; padding: 4px 10px; font-size: 12px;" onclick="startVoiceCallWithUser()">📞 Call</button>
             </div>
             
             <div id="voiceCallOverlay" style="display:none; background:#111214; color:white; padding:15px; border-radius:8px; margin-bottom:10px; text-align:center;">
               <h3>📞 Call with <span id="callPartnerName">@user</span></h3>
-              
-              <!-- MYINSTANTS INTEGRATED SOUNDBOARD & FULL WEBSITE BUTTON -->
               <div class="myinstants-box">
-                <h4 style="color:#f00056; font-size:12px;">🔊 MyInstants Soundboard Browser</h4>
-                <button class="open-myinstants-site-btn" onclick="openMyInstantsWebsite()">🌐 Open Full MyInstants Website</button>
-                <div style="display:flex; gap:6px; margin-top:8px;">
-                  <input type="text" id="myinstantsQuery" placeholder="Search MyInstants (e.g. bruh, vine boom)..." style="flex:1; padding:6px; font-size:12px; border-radius:4px; border:none;">
-                  <button class="publish-btn" style="background:#f00056; padding:6px 12px; font-size:12px;" onclick="searchMyInstantsSounds()">Search</button>
-                </div>
-                <div class="soundboard-grid" id="myinstantsGrid">
-                  <button class="soundboard-btn" onclick="playInCallSound('https://www.myinstants.com/media/sounds/vine-boom.mp3')">💥 Vine Boom</button>
+                <h4 style="color:#f00056; font-size:12px;">🔊 Soundboard</h4>
+                <button class="open-myinstants-site-btn" onclick="openMyInstantsWebsite()">🌐 MyInstants Website</button>
+                <div class="soundboard-grid">
+                  <button class="soundboard-btn" onclick="playInCallSound('https://www.myinstants.com/media/sounds/vine-boom.mp3')">💥 Boom</button>
                   <button class="soundboard-btn" onclick="playInCallSound('https://www.myinstants.com/media/sounds/bruh.mp3')">🗿 Bruh</button>
-                  <button class="soundboard-btn" onclick="playInCallSound('https://www.myinstants.com/media/sounds/airhorn.mp3')">📢 Airhorn</button>
-                  <button class="soundboard-btn" onclick="playInCallSound('https://www.myinstants.com/media/sounds/roblox-death-sound_1.mp3')">💀 Oof</button>
                 </div>
               </div>
-              
               <button class="logout-btn" style="margin-top:10px;" onclick="endVoiceCall()">End Call 📵</button>
             </div>
 
             <div class="chat-box-container" id="chatMessagesBox">
-              <p style="color: #6b7280; text-align: center; margin: auto;">Choose a conversation from the sidebar.</p>
+              <p style="color: #6b7280; text-align: center; margin: auto;">Choose a conversation.</p>
             </div>
             <div style="display: flex; gap: 8px;">
               <input type="text" id="chatInputMessage" placeholder="Type a message..." style="flex: 1; padding: 8px; border: 1px solid var(--border-color); border-radius: 6px;" onkeypress="if(event.key==='Enter') sendDirectMessage()">
-              <button class="publish-btn" style="background:#2563eb; width: 90px;" onclick="sendDirectMessage()">Send 🔔</button>
+              <button class="publish-btn" style="background:#2563eb; width: 90px;" onclick="sendDirectMessage()">Send</button>
             </div>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- DISCORD SERVERS TAB -->
+    <!-- SERVERS TAB -->
     <div id="servers-tab" class="tab-content">
       <div class="card" style="background:#1e1f22; color:white;">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
           <h2 style="color:white; margin:0;">Discord Community Servers 🎮</h2>
           <button class="publish-btn" style="background:#5865f2;" onclick="openCreateServerPrompt()">+ Create Server</button>
         </div>
-
         <div class="discord-full-layout">
-          <!-- SERVERS COLUMN -->
           <div class="server-list-sidebar" id="serversSidebar"></div>
-
-          <!-- CHANNELS COLUMN -->
           <div class="channels-sidebar" id="channelsSidebar">
             <div style="font-weight:bold; font-size:12px; color:#949ba4; margin-bottom:8px;">TEXT CHANNELS</div>
             <div id="channelsList">Select a server</div>
             <button class="publish-btn" id="addChannelBtn" style="display:none; margin-top:auto; font-size:11px; background:#4e5058;" onclick="createNewChannel()">+ Add Channel</button>
           </div>
-
-          <!-- ACTIVE CHANNEL CHAT -->
           <div class="chat-channel-panel">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; border-bottom:1px solid #3f4147; padding-bottom:8px;">
               <span id="activeChannelHeader" style="font-weight:bold; font-size:14px; color:white;"># general</span>
               <div id="serverAdminControls" style="display:flex; gap:6px;"></div>
             </div>
-
             <div class="chat-box-container" id="serverChannelChatBox" style="background:#2b2d31; border-color:#383a40;">
-              <p style="color:#949ba4; text-align:center; margin:auto;">Welcome to the server channel!</p>
+              <p style="color:#949ba4; text-align:center; margin:auto;">Welcome to the channel!</p>
             </div>
-
             <div style="display:flex; gap:8px;">
               <input type="text" id="serverChatMessageInput" placeholder="Message channel..." style="flex:1; padding:8px; border-radius:6px; border:none; background:#383a40; color:white;" onkeypress="if(event.key==='Enter') sendServerChannelMessage()">
-              <button class="publish-btn" style="background:#5865f2;" onclick="sendServerChannelMessage()">Send 🔔</button>
+              <button class="publish-btn" style="background:#5865f2;" onclick="sendServerChannelMessage()">Send</button>
             </div>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- WEBOX PREMIUM TAB -->
+    <!-- PREMIUM TAB -->
     <div id="premium-tab" class="tab-content">
       <div style="text-align: center; margin-bottom: 25px;">
         <h1 style="font-size: 36px; font-weight: 900; background: linear-gradient(to right, #f472b6, #c084fc); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">✈️ WEBOX PREMIUM</h1>
-        <p style="color: #e9d5ff; font-size: 14px; margin-top: 6px;">Unlock Custom Server Emojis, Nitro Soundboards & Bank Perks!</p>
       </div>
-
       <div class="card">
-        <h2>Subscribe to WeBox Bank Premium</h2>
-        <p style="color: #cbd5e1; font-size: 13px; margin-bottom: 15px;">Pay 9 We-Coins per month to the WeBox Bank for automatic Premium access!</p>
-        <div style="display: flex; gap: 15px; align-items: center;">
-          <button class="publish-btn" style="background: linear-gradient(135deg, #ec4899, #a855f7); padding: 12px 24px; font-size: 15px;" onclick="subscribeBankPremium()">Subscribe for 9 We-Coins 🪙</button>
-          <div id="premiumStatusTag" style="font-weight: bold; font-size: 14px; color: #f472b6;"></div>
-        </div>
-      </div>
-
-      <div class="card">
-        <h2>Redeem Promo Code or QR Code</h2>
+        <h2>Redeem Promo Code</h2>
         <div class="upload-form">
           <input type="text" id="premiumCodeInput" placeholder="Enter Promo Code..." style="background:#1e293b; color:white; border:1px solid #a855f7;">
-          <button class="publish-btn" style="background:#a855f7;" onclick="redeemPromoCode()">Redeem Promo Code</button>
-        </div>
-
-        <hr style="border-color:#334155; margin: 20px 0;">
-
-        <h2>Scan Premium QR Code Verification</h2>
-        <p style="color: #94a3b8; font-size: 12px; margin-bottom: 10px;">Valid URL link must be: <code>ulvizak.github.io/coupon/premium/qr</code></p>
-        <button class="publish-btn" style="background:#ec4899;" onclick="startQrCodeScanner()">Open Camera QR Scanner 📷</button>
-        <div id="qrReaderBox" style="width: 100%; max-width: 320px; margin: 15px auto; display:none; border:2px solid #ec4899; border-radius:8px;"></div>
-      </div>
-    </div>
-
-    <!-- EDUCI TAB -->
-    <div id="educi-tab" class="tab-content">
-      <div class="card">
-        <h2>Webox Educi - Create Quiz 🎓</h2>
-        <div class="upload-form">
-          <input type="text" id="quizTitleInput" placeholder="Quiz Title (e.g. Science Trivia)">
-          <div class="upload-group">
-            <label>Quiz Interactive Type:</label>
-            <select id="quizTypeSelect">
-              <option value="wheel">🎡 Roll the Wheel</option>
-              <option value="box">🎁 Open the Box</option>
-              <option value="whack">🔨 Whack-a-Mole</option>
-            </select>
-          </div>
-
-          <div id="quizQuestionsContainer">
-            <div class="quiz-builder-q card">
-              <label>Question 1:</label>
-              <input type="text" class="q-text" placeholder="Question Text" style="margin-bottom:6px;">
-              <input type="text" class="q-opt-0" placeholder="Option A (Correct Answer)" style="margin-bottom:4px;">
-              <input type="text" class="q-opt-1" placeholder="Option B" style="margin-bottom:4px;">
-              <input type="text" class="q-opt-2" placeholder="Option C" style="margin-bottom:4px;">
-            </div>
-          </div>
-
-          <button class="action-btn" style="background:#f3f4f6;" onclick="addQuizQuestionField()">+ Add Another Question</button>
-          <button class="publish-btn" style="background:#10b981;" onclick="publishEduciQuiz()">Publish Quiz</button>
-        </div>
-      </div>
-
-      <h2>Community Educational Quizzes Feed</h2>
-      <div class="grid-container" id="educi-grid"></div>
-    </div>
-
-    <!-- FILEBOX TAB -->
-    <div id="filebox-tab" class="tab-content">
-      <div class="card">
-        <h2>FileBox Cloud Storage</h2>
-        <div class="upload-form">
-          <input type="text" id="fileBoxTitle" placeholder="File Description / Title">
-          <input type="file" id="fileBoxFile">
-          <button class="publish-btn" onclick="publishFileBox()">Upload to FileBox</button>
-        </div>
-      </div>
-      <h2>FileBox Storage Feed</h2>
-      <div class="grid-container" id="filebox-grid"></div>
-    </div>
-
-    <!-- DAILY TAB -->
-    <div id="daily-tab" class="tab-content">
-      <div class="card" style="text-align: center; padding: 40px;">
-        <h2>Daily We-Coins Reward 🪙</h2>
-        <p style="margin-bottom: 20px; color: #4b5563;">Claim your free 10 We-Coins every single day!</p>
-        <button class="publish-btn" style="padding: 12px 24px; font-size: 16px; margin: 0 auto;" onclick="claimDailyReward()">Claim 10 We-Coins Today</button>
-      </div>
-    </div>
-
-    <!-- AVATAR SHOP TAB -->
-    <div id="avatarshop-tab" class="tab-content">
-      <div class="card">
-        <h2>Avatar Shop</h2>
-        <div class="shop-grid">
-          <div class="shop-item"><img src="penguin.png" alt="Penguin 2D"><h3>penguin.png</h3><p>2D Avatar • Free</p><button class="publish-btn" onclick="equipAvatar('penguin.png')">Equip</button></div>
-          <div class="shop-item"><img src="dev.png" alt="Dev 2D"><h3>dev.png</h3><p>2D Avatar • Free</p><button class="publish-btn" onclick="equipAvatar('dev.png')">Equip</button></div>
-          <div class="shop-item"><img src="hacker_anaminus.png" alt="Hacker Anaminus"><h3>hacker_anaminus.png</h3><p>Hacker Avatar • Free</p><button class="publish-btn" onclick="equipAvatar('hacker_anaminus.png')">Equip</button></div>
-        </div>
-      </div>
-    </div>
-
-    <!-- BADGE SHOP TAB -->
-    <div id="badgeShop-tab" class="tab-content">
-      <div class="card">
-        <h2>Upload Your Own Badge 🎨</h2>
-        <div class="upload-form">
-          <input type="text" id="customBadgeNameInput" placeholder="Badge Name (e.g. VIP Star)">
-          <div class="upload-group"><label>Badge Image File (PNG, JPG, SVG):</label><input type="file" id="customBadgeFileInput" accept="image/*"></div>
-          <button class="publish-btn" style="background:#10b981;" onclick="uploadCustomBadge()">Upload & Equip Custom Badge</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- THEMES TAB -->
-    <div id="themes-tab" class="tab-content">
-      <div class="card">
-        <h2>Themes & Atmosphere</h2>
-        <div class="shop-grid">
-          <div class="shop-item"><h3>Winter Theme</h3><button class="publish-btn" onclick="setTheme('winter')">Apply Theme</button></div>
-          <div class="shop-item"><h3>Halloween Theme</h3><button class="publish-btn" onclick="setTheme('halloween')">Apply Theme</button></div>
-          <div class="shop-item"><h3>Christmas Theme</h3><button class="publish-btn" onclick="setTheme('christmas')">Apply Theme</button></div>
-          <div class="shop-item"><h3>PlayStation Theme</h3><button class="publish-btn" onclick="setTheme('playstation')">Apply Theme</button></div>
+          <button class="publish-btn" style="background:#a855f7;" onclick="redeemPromoCode()">Redeem</button>
         </div>
       </div>
     </div>
@@ -552,24 +357,22 @@
     <!-- SETTINGS TAB -->
     <div id="settings-tab" class="tab-content">
       <div class="card">
-        <h2>Account Profile Settings</h2>
-        <div class="upload-form">
-          <div class="upload-group"><label>Change Username:</label><input type="text" id="settingsUsernameInput" placeholder="@username"></div>
-          <button class="publish-btn" onclick="saveAccountSettings()">Save Username Changes</button>
-        </div>
+        <h2>Settings</h2>
+        <p>Manage your account settings here.</p>
       </div>
     </div>
+
   </div>
 
   <!-- MACOS ERROR WINDOW MODAL -->
   <div id="macErrorModal">
     <div class="mac-window">
       <div class="mac-titlebar">
-        <div class="mac-buttons"><span class="mac-btn mac-close" onclick="closeMacErrorModal()"></span></div>
+        <div class="mac-buttons"><span class="mac-btn" onclick="closeMacErrorModal()"></span></div>
         <div class="mac-title">System Alert</div>
       </div>
       <div class="mac-body">
-        <p>violets are blue,roses are red,unknown error on line 32 bruh u tried idiot...</p>
+        <p>Invalid promo code entered! Try code: ZAK</p>
         <button class="publish-btn" style="margin-top:15px; background:#4b5563; font-size:12px; padding:6px 16px;" onclick="closeMacErrorModal()">OK</button>
       </div>
     </div>
@@ -577,16 +380,13 @@
 
   <!-- PROFILE MODAL -->
   <div id="profileModal">
-    <div class="modal-content" style="max-width: 400px; padding: 20px; text-align: center;">
+    <div class="modal-content">
       <div style="display: flex; justify-content: flex-end;"><button class="close-modal-btn" onclick="closeProfileModal()">Close ✕</button></div>
-      <img id="profileModalAvatar" src="" style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover; margin: 15px auto; background: var(--border-color);">
-      <h2 id="profileModalUsername" style="margin-bottom: 10px;">@username</h2>
-      <p style="color: #d97706; font-weight: 700; font-size: 16px; margin-bottom: 8px;">We-Coins: <span id="profileModalCoins">0</span> 🪙</p>
-      <button class="publish-btn" style="width:100%;" onclick="startDirectChatFromProfile()">Send Direct Message 💬</button>
+      <img id="profileModalAvatar" src="penguin.png" style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover; margin: 15px auto;">
+      <h2 id="profileModalUsername">@user</h2>
+      <p style="color: #d97706; font-weight: 700; margin-bottom: 8px;">We-Coins: <span id="profileModalCoins">0</span> 🪙</p>
     </div>
   </div>
-
-  <audio id="themeAudio" loop></audio>
 
   <script>
     var SUPABASE_URL = 'https://fedgpyuebiwovxohfleg.supabase.co';
@@ -597,7 +397,7 @@
     if (!currentUser.equippedBadge) currentUser.equippedBadge = 'anaminus';
     if (!currentUser.isPremium) currentUser.isPremium = false;
 
-    var appData = { videos: [], svids: [], music: [], posts: [], arcade: [], filebox: [], educi: [], servers: [], channels: [], usersMap: {} };
+    var appData = { servers: [], channels: [], usersMap: {} };
     var activeChatUser = null;
     var activeServerId = null;
     var activeChannelId = null;
@@ -614,6 +414,7 @@
     }
     setTimeout(dismissStartupOverlay, 2500);
 
+    /* BACKGROUND NOTIFICATIONS */
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('sw.js').catch(function(){});
     }
@@ -633,7 +434,7 @@
 
     function openMyInstantsWebsite() { window.open('https://www.myinstants.com', '_blank'); }
 
-    /* M3U8 PLAYLIST PARSER & NATIVE PLAYER */
+    /* NATIVE M3U8 LIVE TV */
     function loadM3u8PlaylistFile() {
       var grid = document.getElementById('m3u8ChannelsGrid');
       grid.innerHTML = '<p style="color:#9ca3af; font-size:12px; grid-column: 1 / -1; text-align:center;">Reading playlist_azerbaijan.m3u8...</p>';
@@ -661,7 +462,7 @@
           playM3u8Stream(channels[0].name, channels[0].url);
         })
         .catch(function() {
-          grid.innerHTML = '<p style="color:#ef4444; font-size:12px; grid-column: 1 / -1; text-align:center;">Could not load playlist_azerbaijan.m3u8. Ensure it is inside your project folder!</p>';
+          grid.innerHTML = '<p style="color:#ef4444; font-size:12px; grid-column: 1 / -1; text-align:center;">Could not load playlist_azerbaijan.m3u8. Ensure it is in your folder!</p>';
         });
     }
 
@@ -701,17 +502,20 @@
       }
     }
 
-    /* CONTENT PUBLISHING */
+    /* FIXED PUBLISHING */
     async function publishContent(type) {
-      var titleInput = document.getElementById(type === 'posts' ? 'postText' : (type.slice(0, -1) + 'Title'));
+      var titleInput = document.getElementById(type === 'posts' ? 'postText' : (type === 'arcade' ? 'gameTitle' : type.slice(0, -1) + 'Title'));
       var title = titleInput ? titleInput.value.trim() : '';
       if (!title) { alert("Please enter text or a title!"); return; }
+
+      var fileInput = document.getElementById(type === 'arcade' ? 'gameHtmlFile' : type.slice(0, -1) + 'File');
+      var fileUrl = '';
 
       var newItem = {
         id: type.slice(0, -1) + '_' + Date.now(),
         title: title,
         author: currentUser.username,
-        url: '',
+        url: fileUrl,
         created_at: new Date().toISOString()
       };
 
@@ -719,7 +523,7 @@
       if (error) {
         alert("Error publishing: " + error.message);
       } else {
-        alert("Published successfully!");
+        alert("🎉 Published successfully!");
         if (titleInput) titleInput.value = '';
         fetchFeed(type);
       }
@@ -741,7 +545,7 @@
       grid.innerHTML = html;
     }
 
-    /* DISCORD SERVERS CONTROL */
+    /* DISCORD SERVERS */
     async function fetchServersAndChannels() {
       var { data: sData } = await supabaseClient.from('webox_servers').select('*');
       var { data: cData } = await supabaseClient.from('webox_channels').select('*');
@@ -763,7 +567,6 @@
 
       await supabaseClient.from('webox_servers').insert([newServer]);
       await supabaseClient.from('webox_channels').insert([defaultChan]);
-
       await fetchServersAndChannels();
       selectServer(serverId);
     }
@@ -775,14 +578,11 @@
         sidebar.innerHTML = '<p style="color:#9ca3af; font-size:11px; text-align:center;">No servers</p>';
         return;
       }
-
       var html = '';
       for (var i = 0; i < appData.servers.length; i++) {
         var s = appData.servers[i];
         var isActive = (activeServerId === s.id) ? 'active' : '';
-        html += '<div class="server-item ' + isActive + '" onclick="selectServer(\'' + s.id + '\')">' +
-          '<span>#</span> <span>' + escapeHtml(s.name) + '</span>' +
-        '</div>';
+        html += '<div class="server-item ' + isActive + '" onclick="selectServer(\'' + s.id + '\')"># ' + escapeHtml(s.name) + '</div>';
       }
       sidebar.innerHTML = html;
     }
@@ -790,26 +590,14 @@
     function selectServer(serverId) {
       activeServerId = serverId;
       renderServersSidebar();
-
       var server = appData.servers.find(function(x){ return x.id === serverId; });
       if (!server) return;
 
       var isOwner = (server.owner === currentUser.username);
-      var adminControls = document.getElementById('serverAdminControls');
-      if (adminControls) adminControls.innerHTML = '';
-
-      if (isOwner) {
-        if (adminControls) adminControls.innerHTML = '<button class="publish-btn" style="background:#3b82f6; font-size:11px; padding:4px 8px;" onclick="configureServerSettings()">Configure ⚙️</button>';
-      } else {
-        if (adminControls) adminControls.innerHTML = '<button class="logout-btn" style="font-size:11px; padding:4px 8px;" onclick="leaveCurrentServer()">Leave Server 🚪</button>';
-      }
-
-      var addChanBtn = document.getElementById('addChannelBtn');
-      if (addChanBtn) addChanBtn.style.display = isOwner ? 'block' : 'none';
+      document.getElementById('addChannelBtn').style.display = isOwner ? 'block' : 'none';
 
       var serverChans = appData.channels.filter(function(x){ return x.server_id === serverId; });
       var chanListElem = document.getElementById('channelsList');
-      if (!chanListElem) return;
       var cHtml = '';
       for (var j = 0; j < serverChans.length; j++) {
         var c = serverChans[j];
@@ -817,17 +605,13 @@
         cHtml += '<div class="channel-item ' + cActive + '" onclick="selectChannel(\'' + c.id + '\')"># ' + escapeHtml(c.name) + '</div>';
       }
       chanListElem.innerHTML = cHtml || '<p style="font-size:11px; color:#6b7280;">No channels</p>';
-
       if (serverChans.length > 0) { selectChannel(serverChans[0].id); }
     }
 
     function selectChannel(channelId) {
       activeChannelId = channelId;
       var chan = appData.channels.find(function(x){ return x.id === channelId; });
-      if (chan) {
-        var header = document.getElementById('activeChannelHeader');
-        if (header) header.innerText = '# ' + chan.name;
-      }
+      if (chan) { document.getElementById('activeChannelHeader').innerText = '# ' + chan.name; }
       loadServerChannelMessages();
     }
 
@@ -835,31 +619,10 @@
       if (!activeServerId) return;
       var cName = prompt("Enter Channel Name:");
       if (!cName) return;
-
       var newChan = { id: 'chan_' + Date.now(), server_id: activeServerId, name: cName, type: 'text' };
       await supabaseClient.from('webox_channels').insert([newChan]);
       await fetchServersAndChannels();
       selectServer(activeServerId);
-    }
-
-    function configureServerSettings() {
-      var server = appData.servers.find(function(x){ return x.id === activeServerId; });
-      if (!server) return;
-      var newName = prompt("Configure Server Name:", server.name);
-      if (newName && newName !== server.name) {
-        supabaseClient.from('webox_servers').update({ name: newName }).eq('id', activeServerId).then(function() {
-          fetchServersAndChannels();
-        });
-      }
-    }
-
-    function leaveCurrentServer() {
-      if (confirm("Leave this server?")) {
-        activeServerId = null;
-        renderServersSidebar();
-        document.getElementById('channelsList').innerText = 'Select a server';
-        document.getElementById('serverChannelChatBox').innerHTML = '<p style="color:#949ba4; text-align:center;">Left server.</p>';
-      }
     }
 
     async function sendServerChannelMessage() {
@@ -874,11 +637,7 @@
         message: txt
       };
 
-      var { error } = await supabaseClient.from('webox_messages').insert([newMsg]);
-      if (error) {
-        alert("Failed to send message: " + error.message);
-        return;
-      }
+      await supabaseClient.from('webox_messages').insert([newMsg]);
       if (msgInput) msgInput.value = '';
       playMessageDingSound();
       loadServerChannelMessages();
@@ -889,17 +648,11 @@
       var box = document.getElementById('serverChannelChatBox');
       if (!box) return;
 
-      var { data } = await supabaseClient
-        .from('webox_messages')
-        .select('*')
-        .eq('receiver', 'channel_' + activeChannelId)
-        .order('created_at', { ascending: true });
-
+      var { data } = await supabaseClient.from('webox_messages').select('*').eq('receiver', 'channel_' + activeChannelId).order('created_at', { ascending: true });
       if (!data || data.length === 0) {
-        box.innerHTML = '<p style="color:#949ba4; text-align:center; margin:auto;">No messages yet in this channel</p>';
+        box.innerHTML = '<p style="color:#949ba4; text-align:center; margin:auto;">No messages yet.</p>';
         return;
       }
-
       var html = '';
       for (var i = 0; i < data.length; i++) {
         var m = data[i];
@@ -909,68 +662,7 @@
       box.scrollTop = box.scrollHeight;
     }
 
-    /* WEBOX PREMIUM LOGIC */
-    function checkPremiumStatus() {
-      var tag = document.getElementById('premiumStatusTag');
-      if (!tag) return;
-      if (currentUser.isPremium) {
-        tag.innerText = '✨ Active WeBox Premium Member';
-        tag.style.color = '#22c55e';
-      } else {
-        tag.innerText = '❌ Free Tier';
-        tag.style.color = '#f472b6';
-      }
-    }
-
-    async function subscribeBankPremium() {
-      if ((currentUser.coins || 0) < 9) {
-        alert("Not enough We-Coins! Premium costs 9 We-Coins.");
-        return;
-      }
-      currentUser.coins -= 9;
-      currentUser.isPremium = true;
-      updateHeaderProfile();
-      checkPremiumStatus();
-      await supabaseClient.from('webox_users').update({ coins: currentUser.coins }).eq('username', currentUser.username);
-      alert("🎉 Welcome to WEBOX PREMIUM!");
-    }
-
-    function redeemPromoCode() {
-      var codeInput = document.getElementById('premiumCodeInput');
-      var code = codeInput ? codeInput.value.trim() : '';
-      if (code.toUpperCase() === 'ZAK') {
-        currentUser.isPremium = true;
-        updateHeaderProfile();
-        checkPremiumStatus();
-        if (codeInput) codeInput.value = '';
-        alert("🎉 Code 'ZAK' redeemed! PREMIUM UNLOCKED!");
-      } else {
-        if (codeInput) codeInput.value = '';
-        showMacErrorModal();
-      }
-    }
-
-    function showMacErrorModal() { document.getElementById('macErrorModal').style.display = 'flex'; }
-    function closeMacErrorModal() { document.getElementById('macErrorModal').style.display = 'none'; }
-
-    /* VOICE CALLS & DIRECT MESSAGING */
-    function startVoiceCallWithUser() {
-      if (!activeChatUser) { alert("Select a user first."); return; }
-      document.getElementById('callPartnerName').innerText = activeChatUser;
-      document.getElementById('voiceCallOverlay').style.display = 'block';
-      playMessageDingSound();
-
-      supabaseClient.from('webox_messages').insert([{
-        id: 'call_' + Date.now(),
-        sender: currentUser.username,
-        receiver: activeChatUser,
-        message: '📞 INCOMING CALL FROM ' + currentUser.username
-      }]);
-    }
-
-    function playInCallSound(soundUrl) { new Audio(soundUrl).play().catch(function(){}); }
-    function endVoiceCall() { document.getElementById('voiceCallOverlay').style.display = 'none'; }
-
+    /* DIRECT MESSAGING */
     async function fetchUsersAndChats() {
       var { data } = await supabaseClient.from('webox_users').select('username, avatar_url');
       appData.usersMap = {};
@@ -983,12 +675,7 @@
     }
 
     async function loadUserChatsSidebar() {
-      var { data } = await supabaseClient
-        .from('webox_messages')
-        .select('*')
-        .or('sender.eq.' + currentUser.username + ',receiver.eq.' + currentUser.username)
-        .order('created_at', { ascending: false });
-
+      var { data } = await supabaseClient.from('webox_messages').select('*').or('sender.eq.' + currentUser.username + ',receiver.eq.' + currentUser.username).order('created_at', { ascending: false });
       var chatsMap = {};
       if (data) {
         for (var i = 0; i < data.length; i++) {
@@ -998,7 +685,6 @@
           if (!chatsMap[friend]) chatsMap[friend] = m.message;
         }
       }
-
       var sidebar = document.getElementById('chatsSidebarList');
       if (!sidebar) return;
       var friendsList = Object.keys(chatsMap);
@@ -1006,7 +692,6 @@
         sidebar.innerHTML = '<p style="color:#6b7280; font-size:12px; text-align:center;">No chats</p>';
         return;
       }
-
       var html = '';
       for (var j = 0; j < friendsList.length; j++) {
         var fName = friendsList[j];
@@ -1014,7 +699,7 @@
         var isActive = (activeChatUser === fName) ? 'active' : '';
         html += '<div class="chat-convo-item ' + isActive + '" onclick="selectChatUser(\'' + fName + '\')">' +
           '<img src="' + avatarUrl + '" class="chat-convo-avatar">' +
-          '<div><div style="font-weight:bold; font-size:12px;">' + escapeHtml(fName) + '</div></div>' +
+          '<div style="font-weight:bold; font-size:12px;">' + escapeHtml(fName) + '</div>' +
         '</div>';
       }
       sidebar.innerHTML = html;
@@ -1030,8 +715,7 @@
 
     async function selectChatUser(username) {
       activeChatUser = username;
-      var header = document.getElementById('activeChatHeader');
-      if (header) header.innerText = 'Chat with ' + username;
+      document.getElementById('activeChatHeader').innerText = 'Chat with ' + username;
       loadUserChatsSidebar();
       await loadDirectMessages();
     }
@@ -1059,7 +743,6 @@
         box.innerHTML = '<p style="color:#6b7280; text-align:center; margin:auto;">No messages yet.</p>';
         return;
       }
-
       var html = '';
       for (var i = 0; i < data.length; i++) {
         var m = data[i];
@@ -1075,31 +758,42 @@
         var newRecord = payload.new;
         if (newRecord.receiver === currentUser.username) {
           playMessageDingSound();
-          if (newRecord.message.indexOf('📞 INCOMING CALL FROM') !== -1) {
-            showSystemNotification('📞 Incoming Call!', newRecord.sender + ' is calling you on WeBox!');
-          } else {
-            showSystemNotification('💬 New Message from ' + newRecord.sender, newRecord.message);
-          }
+          showSystemNotification('💬 New Message from ' + newRecord.sender, newRecord.message);
         }
         loadDirectMessages();
         loadServerChannelMessages();
       }).subscribe();
     }
 
-    function updateHeaderProfile() {
-      var usernameElem = document.getElementById('headerUsername');
-      var avatarElem = document.getElementById('headerUserAvatar');
-      var coinsElem = document.getElementById('headerCoins');
-      if (usernameElem) usernameElem.innerText = currentUser.username;
-      if (avatarElem) avatarElem.src = currentUser.avatarUrl || 'penguin.png';
-      if (coinsElem) coinsElem.innerText = currentUser.coins || 0;
-      
-      var badgeTagElem = document.getElementById('headerBadgeTag');
-      if (badgeTagElem && currentUser.isPremium) {
-        badgeTagElem.innerHTML = '✈️ PREMIUM';
-        badgeTagElem.style.background = 'linear-gradient(135deg, #ec4899, #a855f7)';
-        badgeTagElem.style.color = 'white';
+    function redeemPromoCode() {
+      var codeInput = document.getElementById('premiumCodeInput');
+      var code = codeInput ? codeInput.value.trim() : '';
+      if (code.toUpperCase() === 'ZAK') {
+        currentUser.isPremium = true;
+        updateHeaderProfile();
+        if (codeInput) codeInput.value = '';
+        alert("🎉 Code 'ZAK' redeemed! PREMIUM UNLOCKED!");
+      } else {
+        if (codeInput) codeInput.value = '';
+        showMacErrorModal();
       }
+    }
+
+    function showMacErrorModal() { document.getElementById('macErrorModal').style.display = 'flex'; }
+    function closeMacErrorModal() { document.getElementById('macErrorModal').style.display = 'none'; }
+
+    function openProfileModal() {
+      document.getElementById('profileModalUsername').innerText = currentUser.username;
+      document.getElementById('profileModalCoins').innerText = currentUser.coins || 0;
+      document.getElementById('profileModalAvatar').src = currentUser.avatarUrl || 'penguin.png';
+      document.getElementById('profileModal').style.display = 'flex';
+    }
+    function closeProfileModal() { document.getElementById('profileModal').style.display = 'none'; }
+
+    function updateHeaderProfile() {
+      document.getElementById('headerUsername').innerText = currentUser.username;
+      document.getElementById('headerUserAvatar').src = currentUser.avatarUrl || 'penguin.png';
+      document.getElementById('headerCoins').innerText = currentUser.coins || 0;
       localStorage.setItem('webox_user', JSON.stringify(currentUser));
     }
 
@@ -1115,10 +809,7 @@
       if (event && event.currentTarget) event.currentTarget.classList.add('active');
 
       if (tabName === 'livetv') { loadM3u8PlaylistFile(); }
-      if (tabName === 'videos' || tabName === 'svids' || tabName === 'music' || tabName === 'posts' || tabName === 'arcade') {
-        fetchFeed(tabName);
-      }
-      if (tabName === 'premium') { checkPremiumStatus(); }
+      if (['videos', 'svids', 'music', 'posts', 'arcade'].includes(tabName)) { fetchFeed(tabName); }
     }
 
     function escapeHtml(str) {

@@ -1,2 +1,1 @@
-# ulvizak.github.io
-WEBOX
+# webox.github.io

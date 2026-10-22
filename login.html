@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WeBox 3.0 - Login / Register</title>
+  <!-- Supabase CDN Client Library -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+    body { background-color: #f4f6f9; color: #1f2937; display: flex; justify-content: center; align-items: center; height: 100vh; }
+    .auth-card { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); width: 100%; max-width: 400px; border: 1px solid #e5e7eb; }
+    h1 { font-size: 24px; font-weight: 800; color: #2563eb; margin-bottom: 6px; text-align: center; }
+    p { font-size: 13px; color: #6b7280; text-align: center; margin-bottom: 24px; }
+    .tabs { display: flex; margin-bottom: 20px; background: #f3f4f6; border-radius: 8px; padding: 4px; }
+    .tab-btn { flex: 1; background: transparent; border: none; padding: 8px; font-weight: 600; font-size: 14px; color: #4b5563; cursor: pointer; border-radius: 6px; }
+    .tab-btn.active { background: white; color: #2563eb; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+    .form-group { margin-bottom: 15px; display: flex; flex-direction: column; gap: 6px; }
+    label { font-size: 13px; font-weight: 600; color: #374151; }
+    input { padding: 10px 12px; border: 1px solid #e5e7eb; border-radius: 6px; font-size: 14px; outline: none; }
+    input:focus { border-color: #2563eb; }
+    .submit-btn { width: 100%; background: #2563eb; color: white; border: none; padding: 12px; border-radius: 6px; font-weight: 600; font-size: 15px; cursor: pointer; margin-top: 10px; }
+    .submit-btn:hover { background: #1d4ed8; }
+  </style>
+</head>
+<body>
+
+  <div class="auth-card">
+    <h1>WeBox 3.0</h1>
+    <p>Cloud Sync Gaming & Media Platform</p>
+
+    <div class="tabs">
+      <button class="tab-btn active" id="loginTabBtn" onclick="switchAuthMode('login')">Log In</button>
+      <button class="tab-btn" id="registerTabBtn" onclick="switchAuthMode('register')">Create Account</button>
+    </div>
+
+    <div class="form-group">
+      <label>Username</label>
+      <input type="text" id="usernameInput" placeholder="e.g. gamer99">
+    </div>
+    
+    <div class="form-group">
+      <label>Password</label>
+      <input type="password" id="passwordInput" placeholder="Enter password">
+    </div>
+
+    <button class="submit-btn" id="submitAuthBtn" onclick="handleAuth()">Log In</button>
+  </div>
+
+  <script>
+    var SUPABASE_URL = 'https://fedgpyuebiwovxohfleg.supabase.co';
+    var SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZlZGdweXVlYml3b3Z4b2hmbGVnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg4NTk4OTEsImV4cCI6MjEwNDQzNTg5MX0.KFLsTGtQD49MqXl6hxTV9Bz-5cuJMfzg-l0kwhX8bZk';
+    var supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    var isRegisterMode = false;
+
+    var BAD_WORDS = [
+      'admin', 'mod', 'moderator', 'staff', 'system',
+      'fuck', 'shit', 'ass', 'bitch', 'cunt', 'dick', 'pussy', 'whore', 'slut', 'bastard', 'nigger', 'nigga', 'faggot', 'cock', 'sex', 'porn', 'hitler', 'nazi'
+    ];
+
+    function containsBadWord(input) {
+      var lower = input.toLowerCase();
+      for (var i = 0; i < BAD_WORDS.length; i++) {
+        if (lower.indexOf(BAD_WORDS[i]) !== -1) {
+          return true;
+        }
+      }
+      return false;
+    }
+
+    function switchAuthMode(mode) {
+      isRegisterMode = (mode === 'register');
+      var loginBtn = document.getElementById('loginTabBtn');
+      var regBtn = document.getElementById('registerTabBtn');
+      var submitBtn = document.getElementById('submitAuthBtn');
+
+      if (isRegisterMode) {
+        regBtn.classList.add('active');
+        loginBtn.classList.remove('active');
+        submitBtn.innerText = "Create Account";
+      } else {
+        loginBtn.classList.add('active');
+        regBtn.classList.remove('active');
+        submitBtn.innerText = "Log In";
+      }
+    }
+
+    async function handleAuth() {
+      var username = document.getElementById('usernameInput').value.trim();
+      var password = document.getElementById('passwordInput').value.trim();
+
+      if (!username || !password) {
+        alert("Please enter both username and password.");
+        return;
+      }
+
+      if (containsBadWord(username)) {
+        alert("⚠️ Inappropriate or reserved username! Please choose a respectful username.");
+        return;
+      }
+
+      if (username.charAt(0) !== '@') {
+        username = '@' + username;
+      }
+
+      try {
+        var { data, error } = await supabaseClient
+          .from('webox_users')
+          .select('*')
+          .ilike('username', username);
+
+        var existingUser = (data && data.length > 0) ? data[0] : null;
+
+        if (isRegisterMode) {
+          if (existingUser) {
+            alert("❌ Username already taken! Please choose a different username.");
+            return;
+          }
+
+          var newUser = {
+            username: username,
+            password: password,
+            avatar_url: 'hacker_anaminus.png',
+            coins: 50,
+            last_claim_date: '',
+            equipped_badge: 'anaminus',
+            custom_badge_url: '',
+            custom_badge_name: '',
+            owned_avatars: ['penguin.png', 'dev.png', 'hacker_anaminus.png'],
+            liked_items: []
+          };
+
+          var { error: insertErr } = await supabaseClient.from('webox_users').insert([newUser]);
+          if (insertErr) {
+            alert("Error creating account: " + insertErr.message);
+            return;
+          }
+
+          alert("✅ Account created successfully! Welcome to WeBox.");
+          localStorage.setItem('webox_user', JSON.stringify({
+            username: username,
+            avatarUrl: 'hacker_anaminus.png',
+            coins: 50,
+            lastClaimDate: '',
+            equippedBadge: 'anaminus',
+            customBadgeUrl: '',
+            customBadgeName: '',
+            ownedAvatars: ['penguin.png', 'dev.png', 'hacker_anaminus.png'],
+            likedItems: []
+          }));
+          window.location.href = 'index.html';
+        } else {
+          if (!existingUser) {
+            alert("❌ Account not found! Please create an account first.");
+            return;
+          }
+          if (existingUser.password !== password) {
+            alert("❌ Incorrect password!");
+            return;
+          }
+
+          localStorage.setItem('webox_user', JSON.stringify({
+            username: existingUser.username,
+            avatarUrl: existingUser.avatar_url || 'penguin.png',
+            coins: existingUser.coins || 0,
+            lastClaimDate: existingUser.last_claim_date || '',
+            equippedBadge: existingUser.equipped_badge || 'anaminus',
+            customBadgeUrl: existingUser.custom_badge_url || '',
+            customBadgeName: existingUser.custom_badge_name || '',
+            ownedAvatars: existingUser.owned_avatars || ['penguin.png', 'dev.png'],
+            likedItems: existingUser.liked_items || []
+          }));
+          window.location.href = 'index.html';
+        }
+      } catch (err) {
+        console.error('Auth error:', err);
+        alert("An error occurred during authentication.");
+      }
+    }
+  </script>
+</body>
+</html>

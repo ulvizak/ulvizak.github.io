@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>WeBox 3.0 - Full Edition</title>
+  <title>WeBox 3.0 - Full 1900+ Line Production Edition</title>
 
   <!-- Supabase CDN Client Library -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -38,7 +38,11 @@
     .user-avatar-small { width: 28px; height: 28px; border-radius: 50%; object-fit: cover; background: var(--border-color); }
     .username { font-size: 14px; font-weight: 600; color: var(--text-color); }
     .coin-display { font-size: 13px; font-weight: 700; color: #d97706; display: flex; align-items: center; gap: 4px; background: #fef3c7; padding: 3px 8px; border-radius: 12px; border: 1px solid #fde68a; }
+    .badge-tag { display: inline-flex; align-items: center; gap: 4px; padding: 2px 6px; font-size: 11px; border-radius: 4px; background: #e0e0e0; color: #333; margin-left: 4px; font-weight: bold; }
+    .badge-tag img { width: 14px; height: 14px; object-fit: contain; border-radius: 2px; }
+    body.matrix-theme .badge-tag { background: #003b15; color: #00ff66; border: 1px solid #00ff66; }
     .logout-btn { background: #ef4444; color: white; border: none; padding: 6px 14px; border-radius: 6px; font-weight: 600; font-size: 13px; cursor: pointer; }
+    .mute-btn { background: #4b5563; color: white; border: none; padding: 6px 14px; border-radius: 6px; font-weight: 600; font-size: 13px; cursor: pointer; }
     .nav-tabs-container { background: var(--card-bg); backdrop-filter: blur(5px); border-bottom: 1px solid var(--border-color); padding: 12px 24px; display: flex; gap: 8px; overflow-x: auto; }
     .tab-btn { background: #f3f4f6; color: #4b5563; border: none; padding: 8px 16px; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 14px; white-space: nowrap; }
     .tab-btn.active { background: var(--accent-color); color: white; }
@@ -50,6 +54,11 @@
       color: white !important;
       font-weight: 800 !important;
       box-shadow: 0 0 12px rgba(236, 72, 153, 0.8), 0 0 20px rgba(168, 85, 247, 0.6);
+      animation: nitroGlow 1.8s infinite alternate;
+    }
+    @keyframes nitroGlow {
+      0% { box-shadow: 0 0 8px rgba(236, 72, 153, 0.6); transform: scale(1); }
+      100% { box-shadow: 0 0 18px rgba(236, 72, 153, 1), 0 0 28px rgba(168, 85, 247, 0.9); transform: scale(1.03); }
     }
 
     .content-container { flex: 1; max-width: 1000px; width: 100%; margin: 20px auto; padding: 0 20px; }
@@ -61,6 +70,8 @@
     .upload-form { display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px; }
     .upload-form input[type="text"], .upload-form textarea, .upload-form select, .upload-form input[type="file"] { padding: 10px; border: 1px solid var(--border-color); border-radius: 6px; font-size: 14px; background: rgba(255, 255, 255, 0.9); }
     .upload-form textarea { resize: vertical; height: 80px; }
+    .upload-group { display: flex; flex-direction: column; gap: 4px; }
+    .upload-group label { font-size: 12px; font-weight: 600; color: #4b5563; }
     .publish-btn { background: var(--accent-color); color: white; border: none; padding: 10px; border-radius: 6px; font-weight: 600; cursor: pointer; }
     .grid-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; }
     .grid-card { background: rgba(249, 250, 251, 0.95); border: 1px solid var(--border-color); border-radius: 8px; overflow: hidden; display: flex; flex-direction: column; }
@@ -143,7 +154,7 @@
   <audio id="messageDingAudio" src="message_ding.mp3" preload="auto"></audio>
 
   <header>
-    <div class="logo-area"><h1>WeBox 3.0 (Cloud Sync)</h1></div>
+    <div class="logo-area"><h1>WeBox 3.0 (Supabase Full Sync)</h1></div>
     <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
       <div class="coin-display">🪙 <span id="headerCoins">100</span> We-Coins</div>
       <div class="user-profile-badge" onclick="openProfileModal()">
@@ -378,7 +389,7 @@
 
   <script>
     var SUPABASE_URL = 'https://fedgpyuebiwovxohfleg.supabase.co';
-    var SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZlZGdweXVlYml3b3Z4b2hmbGVnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg4NTk4OTEtLCJleHAiOjIxMDQ0MzU4OTF9.KFLsTGtQD49MqXl6hxTV9Bz-5cuJMfzg-l0kwhX8bZk';
+    var SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZlZGdweXVlYml3b3Z4b2hmbGVnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg4NTk4OTEsImV4cCI6MjEwNDQzNTg5MX0.KFLsTGtQD49MqXl6hxTV9Bz-5cuJMfzg-l0kwhX8bZk';
     var supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
     if (!currentUser.likedItems) currentUser.likedItems = [];
@@ -479,7 +490,7 @@
       }
     }
 
-    /* BULLETPROOF PUBLISHING WITHOUT STRICT ALERTS */
+    /* FULL PURE SUPABASE PUBLISHING WITH VISIBLE ERROR ALERTS */
     async function publishContent(type) {
       var titleInput = document.getElementById('postText') || 
                        document.getElementById('gameTitle') || 
@@ -498,16 +509,16 @@
       if (fileInput && fileInput.files && fileInput.files[0]) {
         var file = fileInput.files[0];
         var filePath = type + '/' + Date.now() + '_' + file.name;
-        try {
-          var { error: uploadError } = await supabaseClient.storage.from('webox_media').upload(filePath, file);
-          if (!uploadError) {
-            var { data: urlData } = supabaseClient.storage.from('webox_media').getPublicUrl(filePath);
-            if (urlData) fileUrl = urlData.publicUrl;
-          }
-        } catch(e) {}
+        var { error: uploadError } = await supabaseClient.storage.from('webox_media').upload(filePath, file);
+        if (uploadError) {
+          alert("Storage Error: " + uploadError.message);
+          return;
+        }
+        var { data: urlData } = supabaseClient.storage.from('webox_media').getPublicUrl(filePath);
+        if (urlData) fileUrl = urlData.publicUrl;
       }
 
-      var tableName = type.startsWith('webox_') ? type : ('webox_' + type);
+      var tableName = 'webox_' + type;
       var newItem = {
         id: 'item_' + Date.now(),
         title: title,
@@ -516,10 +527,13 @@
         created_at: new Date().toISOString()
       };
 
-      try {
-        await supabaseClient.from(tableName).insert([newItem]);
-      } catch(e) {}
+      var { error: insertError } = await supabaseClient.from(tableName).insert([newItem]);
+      if (insertError) {
+        alert("Supabase Insert Error: " + insertError.message);
+        return;
+      }
 
+      alert("🎉 Published to Supabase successfully!");
       if (titleInput) titleInput.value = '';
       if (fileInput) fileInput.value = '';
       fetchFeed(type);
@@ -528,23 +542,25 @@
     async function fetchFeed(type) {
       var grid = document.getElementById(type + '-grid');
       if (!grid) return;
-      var tableName = type.startsWith('webox_') ? type : ('webox_' + type);
+      var tableName = 'webox_' + type;
 
-      try {
-        var { data } = await supabaseClient.from(tableName).select('*').order('created_at', { ascending: false });
-        if (!data || data.length === 0) {
-          grid.innerHTML = '<p style="color:#6b7280; font-size:13px; text-align:center;">No items yet.</p>';
-          return;
-        }
-        var html = '';
-        for (var i = 0; i < data.length; i++) {
-          var item = data[i];
-          html += '<div class="grid-card"><div class="grid-card-body"><div class="grid-card-title">' + escapeHtml(item.title || item.text) + '</div><div class="grid-card-author">By ' + escapeHtml(item.author) + '</div></div></div>';
-        }
-        grid.innerHTML = html;
-      } catch(e) {
-        grid.innerHTML = '<p style="color:#6b7280; font-size:13px; text-align:center;">Feed ready.</p>';
+      var { data, error } = await supabaseClient.from(tableName).select('*').order('created_at', { ascending: false });
+      if (error) {
+        grid.innerHTML = '<p style="color:#ef4444; font-size:13px; text-align:center;">Error loading feed: ' + escapeHtml(error.message) + '</p>';
+        return;
       }
+
+      if (!data || data.length === 0) {
+        grid.innerHTML = '<p style="color:#6b7280; font-size:13px; text-align:center;">No items published in Supabase yet.</p>';
+        return;
+      }
+
+      var html = '';
+      for (var i = 0; i < data.length; i++) {
+        var item = data[i];
+        html += '<div class="grid-card"><div class="grid-card-body"><div class="grid-card-title">' + escapeHtml(item.title || item.text) + '</div><div class="grid-card-author">By ' + escapeHtml(item.author) + '</div></div></div>';
+      }
+      grid.innerHTML = html;
     }
 
     /* DISCORD SERVERS */

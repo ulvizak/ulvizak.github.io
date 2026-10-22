@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>WeBox 3.0 - Ultimate Expanded Edition</title>
+  <title>WeBox 3.0 - Full Production Edition</title>
 
   <!-- Supabase CDN Client Library -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -37,7 +37,7 @@
     body { background-color: var(--bg-color); color: var(--text-color); display: flex; flex-direction: column; min-height: 100vh; transition: background 0.3s, color 0.3s; background-size: cover; background-repeat: no-repeat; background-position: center center; background-attachment: fixed; }
     
     /* HEADER & NAVBAR STYLES */
-    header { background: var(--card-bg); backdrop-filter: blur(8px); border-bottom: 1px solid var(--border-color); padding: 16px 24px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 4px rgba(0,0,0,0.05); sticky: top; top: 0; z-index: 1000; }
+    header { background: var(--card-bg); backdrop-filter: blur(8px); border-bottom: 1px solid var(--border-color); padding: 16px 24px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 4px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 1000; }
     .logo-area { display: flex; align-items: center; gap: 15px; }
     h1 { font-size: 22px; font-weight: 800; color: var(--accent-color); letter-spacing: -0.5px; }
     .user-profile-badge { display: flex; align-items: center; gap: 10px; background: rgba(249, 250, 251, 0.9); border: 1px solid var(--border-color); padding: 6px 14px; border-radius: 30px; cursor: pointer; transition: all 0.2s ease; }
@@ -85,12 +85,26 @@
     .publish-btn { background: var(--accent-color); color: white; border: none; padding: 12px 20px; border-radius: 8px; font-weight: 700; font-size: 14px; cursor: pointer; transition: background 0.2s; }
     .publish-btn:hover { opacity: 0.9; }
 
-    /* GRID & MEDIA FEED CARDS */
-    .grid-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 18px; }
-    .grid-card { background: rgba(255, 255, 255, 0.98); border: 1px solid var(--border-color); border-radius: 10px; overflow: hidden; display: flex; flex-direction: column; gap: 10px; padding: 16px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
-    .grid-card-title { font-weight: 700; font-size: 15px; color: #111827; word-break: break-word; }
+    /* GRID & MEDIA FEED CARDS WITH LIKES & COMMENTS */
+    .grid-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
+    .grid-card { background: rgba(255, 255, 255, 0.98); border: 1px solid var(--border-color); border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; gap: 12px; padding: 18px; box-shadow: 0 2px 6px rgba(0,0,0,0.04); }
+    .grid-card-title { font-weight: 700; font-size: 16px; color: #111827; word-break: break-word; }
     .grid-card-author { font-size: 12px; color: #6b7280; font-weight: 500; }
-    .grid-card audio, .grid-card video { width: 100%; border-radius: 6px; margin-top: 4px; }
+    .grid-card audio, .grid-card video { width: 100%; border-radius: 8px; margin-top: 6px; background: #000; }
+    
+    /* INTERACTION BUTTONS (LIKES & COMMENTS PANEL) */
+    .card-actions { display: flex; align-items: center; gap: 12px; margin-top: 6px; padding-top: 8px; border-top: 1px solid #f3f4f6; }
+    .like-btn { background: #fee2e2; color: #ef4444; border: 1px solid #fca5a5; padding: 6px 12px; border-radius: 6px; font-weight: 700; font-size: 12px; cursor: pointer; display: flex; align-items: center; gap: 5px; transition: background 0.2s; }
+    .like-btn:hover { background: #fecaca; }
+    .like-btn.liked { background: #ef4444; color: white; border-color: #dc2626; }
+    
+    .comments-section { margin-top: 10px; display: flex; flex-direction: column; gap: 8px; }
+    .comments-list { max-height: 120px; overflow-y: auto; display: flex; flex-direction: column; gap: 6px; background: #f9fafb; padding: 8px; border-radius: 6px; border: 1px solid #e5e7eb; }
+    .comment-item { font-size: 12px; color: #374151; word-break: break-word; }
+    .comment-item span { font-weight: 700; color: #2563eb; margin-right: 4px; }
+    .comment-input-box { display: flex; gap: 6px; }
+    .comment-input-box input { flex: 1; padding: 6px 10px; border: 1px solid var(--border-color); border-radius: 6px; font-size: 12px; outline: none; }
+    .comment-submit-btn { background: var(--accent-color); color: white; border: none; padding: 6px 12px; border-radius: 6px; font-weight: 600; font-size: 11px; cursor: pointer; }
 
     /* NATIVE M3U8 AZERBAIJAN TV STYLES */
     .tv-player-wrapper { width: 100%; background: #000; border-radius: 12px; overflow: hidden; margin-bottom: 18px; border: 2px solid #059669; box-shadow: 0 4px 15px rgba(5, 150, 105, 0.2); }
@@ -129,16 +143,7 @@
     .chat-msg.sent { align-self: flex-end; background: #2563eb; color: white; border-bottom-right-radius: 2px; }
     .chat-msg.received { align-self: flex-start; background: #e5e7eb; color: #111827; border-bottom-left-radius: 2px; }
 
-    /* MODAL WINDOWS */
-    #macErrorModal { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.6); z-index: 20000; justify-content: center; align-items: center; }
-    .mac-window { width: 400px; background: #e5e5e5; border-radius: 10px; box-shadow: 0 20px 50px rgba(0,0,0,0.5); border: 1px solid #999; overflow: hidden; color: #000; }
-    .mac-titlebar { background: linear-gradient(180deg, #e6e6e6, #ccc); padding: 8px 12px; display: flex; align-items: center; border-bottom: 1px solid #b3b3b3; }
-    .mac-buttons { display: flex; gap: 6px; }
-    .mac-btn { width: 12px; height: 12px; border-radius: 50%; display: inline-block; background: #ff5f56; border: 1px solid #e0443e; cursor: pointer; }
-    .mac-title { flex: 1; text-align: center; font-size: 13px; font-weight: bold; color: #4d4d4d; margin-right: 30px; }
-    .mac-body { padding: 24px; font-size: 14px; line-height: 1.5; color: #222; text-align: center; }
-
-    /* STARTUP OVERLAY */
+    /* STARTUP OVERLAY & MODALS */
     #startupOverlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #000000; z-index: 10000; display: flex; justify-content: center; align-items: center; flex-direction: column; color: white; transition: opacity 1s ease, visibility 1s; cursor: pointer; }
     #startupOverlay h1 { font-size: 48px; font-weight: 900; color: #60a5fa; text-shadow: 0 0 25px #2563eb; letter-spacing: -1px; }
 
@@ -376,20 +381,6 @@
 
   </div>
 
-  <!-- MACOS ERROR WINDOW MODAL -->
-  <div id="macErrorModal">
-    <div class="mac-window">
-      <div class="mac-titlebar">
-        <div class="mac-buttons"><span class="mac-btn" onclick="closeMacErrorModal()"></span></div>
-        <div class="mac-title">System Alert</div>
-      </div>
-      <div class="mac-body">
-        <p>Invalid promo code entered! Try code: ZAK</p>
-        <button class="publish-btn" style="margin-top:15px; background:#4b5563; font-size:12px; padding:6px 16px;" onclick="closeMacErrorModal()">OK</button>
-      </div>
-    </div>
-  </div>
-
   <!-- PROFILE MODAL -->
   <div id="profileModal">
     <div class="modal-content">
@@ -401,17 +392,18 @@
   </div>
 
   <script>
+    /* ========================================================================
+       SUPABASE CONFIGURATION - PASTE YOUR VALID PUBLIC ANON KEY BELOW
+       ======================================================================== */
     var SUPABASE_URL = 'https://fedgpyuebiwovxohfleg.supabase.co';
-var SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZlZGdweXVlYml3b3Z4b2hmbGVnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg4NTk4OTEsImV4cCI6MjEwNDQzNTg5MX0.KFLsTGtQD49MqXl6hxTV9Bz-5cuJMfzg-l0kwhX8bZk';
-    if (!currentUser.likedItems) currentUser.likedItems = [];
-    if (!currentUser.equippedBadge) currentUser.equippedBadge = 'anaminus';
-    if (!currentUser.isPremium) currentUser.isPremium = true;
+    var SUPABASE_ANON_KEY = 'PASTE_YOUR_VALID_ANON_PUBLIC_KEY_HERE';
 
-    var appData = { servers: [], channels: [], usersMap: {} };
+    var supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    var hlsPlayerInstance = null;
     var activeChatUser = null;
     var activeServerId = null;
     var activeChannelId = null;
-    var hlsPlayerInstance = null;
+    var appData = { servers: [], channels: [], usersMap: {} };
 
     function dismissStartupOverlay() {
       var overlay = document.getElementById('startupOverlay');
@@ -431,7 +423,7 @@ var SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYm
 
     function openMyInstantsWebsite() { window.open('https://www.myinstants.com', '_blank'); }
 
-    /* NATIVE M3U8 LIVE TV */
+    /* NATIVE M3U8 LIVE TV STREAM PARSER */
     function loadM3u8PlaylistFile() {
       var grid = document.getElementById('m3u8ChannelsGrid');
       if (!grid) return;
@@ -448,19 +440,16 @@ var SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYm
             grid.innerHTML = '<p style="color:#ef4444; font-size:12px; grid-column: 1 / -1; text-align:center;">No channels found inside playlist_azerbaijan.m3u8</p>';
             return;
           }
-
           var html = '';
           for (var i = 0; i < channels.length; i++) {
             var ch = channels[i];
-            html += '<div class="tv-card" onclick="playM3u8Stream(\'' + escapeJsString(ch.name) + '\', \'' + escapeJsString(ch.url) + '\')">' +
-              '<div class="tv-card-title">' + escapeHtml(ch.name) + '</div>' +
-            '</div>';
+            html += '<div class="tv-card" onclick="playM3u8Stream(\'' + escapeJsString(ch.name) + '\', \'' + escapeJsString(ch.url) + '\')"><div class="tv-card-title">' + escapeHtml(ch.name) + '</div></div>';
           }
           grid.innerHTML = html;
           playM3u8Stream(channels[0].name, channels[0].url);
         })
         .catch(function() {
-          grid.innerHTML = '<p style="color:#ef4444; font-size:12px; grid-column: 1 / -1; text-align:center;">Could not load playlist_azerbaijan.m3u8. Ensure it is in your folder!</p>';
+          grid.innerHTML = '<p style="color:#ef4444; font-size:12px; grid-column: 1 / -1; text-align:center;">Could not load playlist_azerbaijan.m3u8.</p>';
         });
     }
 
@@ -468,7 +457,6 @@ var SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYm
       var lines = m3u8Text.split('\n');
       var channels = [];
       var currentTitle = 'Live Channel';
-
       for (var i = 0; i < lines.length; i++) {
         var line = lines[i].trim();
         if (line.startsWith('#EXTINF:')) {
@@ -501,7 +489,7 @@ var SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYm
       }
     }
 
-    /* BULLETPROOF PUBLISHING ROUTINE WITH ROBUST MEDIA HANDLERS */
+    /* CONTENT PUBLISHING WITH SUPABASE */
     async function publishContent(type) {
       var titleInput = document.getElementById('postText') || 
                        document.getElementById('gameTitle') || 
@@ -522,7 +510,7 @@ var SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYm
         var filePath = type + '/' + Date.now() + '_' + file.name;
         var { error: uploadError } = await supabaseClient.storage.from('webox_media').upload(filePath, file);
         if (uploadError) {
-          alert("Storage Notice: 'webox_media' bucket not found in Supabase Storage. Publishing item without attached file.");
+          alert("Storage Notice: 'webox_media' bucket missing or restricted. Publishing item without file.");
         } else {
           var { data: urlData } = supabaseClient.storage.from('webox_media').getPublicUrl(filePath);
           if (urlData) fileUrl = urlData.publicUrl;
@@ -535,6 +523,7 @@ var SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYm
         title: title,
         author: currentUser.username,
         url: fileUrl,
+        likes: 0,
         created_at: new Date().toISOString()
       };
 
@@ -544,12 +533,13 @@ var SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYm
         return;
       }
 
-      alert("🎉 Published to Supabase successfully!");
+      alert("🎉 Published successfully!");
       if (titleInput) titleInput.value = '';
       if (fileInput) fileInput.value = '';
       fetchFeed(type);
     }
 
+    /* FETCH FEED WITH LIKES & COMMENTS */
     async function fetchFeed(type) {
       var grid = document.getElementById(type + '-grid');
       if (!grid) return;
@@ -562,7 +552,7 @@ var SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYm
       }
 
       if (!data || data.length === 0) {
-        grid.innerHTML = '<p style="color:#6b7280; font-size:13px; text-align:center;">No items published in Supabase yet.</p>';
+        grid.innerHTML = '<p style="color:#6b7280; font-size:13px; text-align:center;">No items published yet.</p>';
         return;
       }
 
@@ -570,27 +560,90 @@ var SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYm
       for (var i = 0; i < data.length; i++) {
         var item = data[i];
         var mediaElement = '';
-        
         if (item.url && item.url.trim() !== '') {
           if (type === 'music') {
             mediaElement = '<audio controls src="' + escapeHtml(item.url) + '"></audio>';
           } else if (type === 'videos' || type === 'svids') {
             mediaElement = '<video controls src="' + escapeHtml(item.url) + '" style="width:100%; max-height:220px; object-fit:cover;"></video>';
           }
-        } else if (type === 'music') {
-          mediaElement = '<p style="font-size:11px; color:#ef4444; background:#fee2e2; padding:4px 8px; border-radius:4px;">No audio file attached</p>';
         }
 
-        html += '<div class="grid-card">' +
+        html += '<div class="grid-card" id="card-' + item.id + '">' +
           '<div class="grid-card-title">' + escapeHtml(item.title || item.text) + '</div>' +
           mediaElement +
           '<div class="grid-card-author">By ' + escapeHtml(item.author) + '</div>' +
+          '<div class="card-actions">' +
+            '<button class="like-btn" onclick="toggleLike(\'' + tableName + '\', \'' + item.id + '\', ' + (item.likes || 0) + ')">❤️ <span id="likes-count-' + item.id + '">' + (item.likes || 0) + '</span> Likes</button>' +
+          '</div>' +
+          '<div class="comments-section">' +
+            '<div class="comments-list" id="comments-list-' + item.id + '">Loading comments...</div>' +
+            '<div class="comment-input-box">' +
+              '<input type="text" id="comment-input-' + item.id + '" placeholder="Write a comment..." onkeypress="if(event.key===\'Enter\') submitComment(\'' + tableName + '\', \'' + item.id + '\')">' +
+              '<button class="comment-submit-btn" onclick="submitComment(\'' + tableName + '\', \'' + item.id + '\')">Post</button>' +
+            '</div>' +
+          '</div>' +
         '</div>';
       }
       grid.innerHTML = html;
+
+      // Fetch comments for each item
+      for (var j = 0; j < data.length; j++) {
+        fetchComments(tableName, data[j].id);
+      }
     }
 
-    /* DISCORD SERVERS MODULE */
+    async function toggleLike(tableName, itemId, currentLikes) {
+      var newLikes = currentLikes + 1;
+      var { error } = await supabaseClient.from(tableName).update({ likes: newLikes }).eq('id', itemId);
+      if (!error) {
+        var span = document.getElementById('likes-count-' + itemId);
+        if (span) span.innerText = newLikes;
+      }
+    }
+
+    async function fetchComments(tableName, itemId) {
+      var listElem = document.getElementById('comments-list-' + itemId);
+      if (!listElem) return;
+
+      var { data, error } = await supabaseClient.from('webox_comments').select('*').eq('item_id', itemId).order('created_at', { ascending: true });
+      if (error || !data || data.length === 0) {
+        listElem.innerHTML = '<div style="font-size:11px; color:#9ca3af; text-align:center;">No comments yet.</div>';
+        return;
+      }
+
+      var html = '';
+      for (var i = 0; i < data.length; i++) {
+        var c = data[i];
+        html += '<div class="comment-item"><span>' + escapeHtml(c.author) + ':</span> ' + escapeHtml(c.text) + '</div>';
+      }
+      listElem.innerHTML = html;
+    }
+
+    async function submitComment(tableName, itemId) {
+      var inputElem = document.getElementById('comment-input-' + itemId);
+      if (!inputElem) return;
+      var txt = inputElem.value.trim();
+      if (!txt) return;
+
+      var newComment = {
+        id: 'comm_' + Date.now(),
+        item_id: itemId,
+        table_name: tableName,
+        author: currentUser.username,
+        text: txt,
+        created_at: new Date().toISOString()
+      };
+
+      var { error } = await supabaseClient.from('webox_comments').insert([newComment]);
+      if (!error) {
+        inputElem.value = '';
+        fetchComments(tableName, itemId);
+      } else {
+        alert("Error posting comment: " + error.message);
+      }
+    }
+
+    /* DISCORD SERVERS & CHANNELS MODULE */
     async function fetchServersAndChannels() {
       try {
         var { data: sData } = await supabaseClient.from('webox_servers').select('*');
@@ -817,19 +870,6 @@ var SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYm
       } catch(e) {}
     }
 
-    function setupRealtimeSubscriptions() {
-      try {
-        supabaseClient.channel('public:webox_messages').on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'webox_messages' }, function(payload) {
-          var newRecord = payload.new;
-          if (newRecord.receiver === currentUser.username) {
-            playMessageDingSound();
-          }
-          loadDirectMessages();
-          loadServerChannelMessages();
-        }).subscribe();
-      } catch(e) {}
-    }
-
     function startVoiceCallWithUser() {
       if (!activeChatUser) { alert("Select a chat first!"); return; }
       document.getElementById('callPartnerName').innerText = activeChatUser;
@@ -855,12 +895,9 @@ var SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYm
         alert("🎉 Code 'ZAK' redeemed! PREMIUM UNLOCKED!");
       } else {
         if (codeInput) codeInput.value = '';
-        showMacErrorModal();
+        alert("Invalid Promo Code!");
       }
     }
-
-    function showMacErrorModal() { document.getElementById('macErrorModal').style.display = 'flex'; }
-    function closeMacErrorModal() { document.getElementById('macErrorModal').style.display = 'none'; }
 
     function openProfileModal() {
       document.getElementById('profileModalUsername').innerText = currentUser.username;
@@ -868,6 +905,7 @@ var SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYm
       document.getElementById('profileModalAvatar').src = currentUser.avatarUrl || 'penguin.png';
       document.getElementById('profileModal').style.display = 'flex';
     }
+
     function closeProfileModal() { document.getElementById('profileModal').style.display = 'none'; }
 
     function updateHeaderProfile() {
@@ -877,7 +915,10 @@ var SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYm
       localStorage.setItem('webox_user', JSON.stringify(currentUser));
     }
 
-    function logoutUser() { localStorage.removeItem('webox_user'); window.location.href = 'login.html'; }
+    function logoutUser() {
+      localStorage.removeItem('webox_user');
+      window.location.reload();
+    }
 
     function switchTab(tabName, event) {
       var tabs = document.querySelectorAll('.tab-content');
@@ -906,7 +947,6 @@ var SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYm
     fetchUsersAndChats();
     fetchServersAndChannels();
     fetchFeed('videos');
-    setupRealtimeSubscriptions();
   </script>
 </body>
 </html>

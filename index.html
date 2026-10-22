@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>WeBox 3.0 - Full 1900+ Line Production Edition</title>
+  <title>WeBox 3.0 - Ultimate Production Edition</title>
 
   <!-- Supabase CDN Client Library -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -38,17 +38,12 @@
     .user-avatar-small { width: 28px; height: 28px; border-radius: 50%; object-fit: cover; background: var(--border-color); }
     .username { font-size: 14px; font-weight: 600; color: var(--text-color); }
     .coin-display { font-size: 13px; font-weight: 700; color: #d97706; display: flex; align-items: center; gap: 4px; background: #fef3c7; padding: 3px 8px; border-radius: 12px; border: 1px solid #fde68a; }
-    .badge-tag { display: inline-flex; align-items: center; gap: 4px; padding: 2px 6px; font-size: 11px; border-radius: 4px; background: #e0e0e0; color: #333; margin-left: 4px; font-weight: bold; }
-    .badge-tag img { width: 14px; height: 14px; object-fit: contain; border-radius: 2px; }
-    body.matrix-theme .badge-tag { background: #003b15; color: #00ff66; border: 1px solid #00ff66; }
     .logout-btn { background: #ef4444; color: white; border: none; padding: 6px 14px; border-radius: 6px; font-weight: 600; font-size: 13px; cursor: pointer; }
-    .mute-btn { background: #4b5563; color: white; border: none; padding: 6px 14px; border-radius: 6px; font-weight: 600; font-size: 13px; cursor: pointer; }
     .nav-tabs-container { background: var(--card-bg); backdrop-filter: blur(5px); border-bottom: 1px solid var(--border-color); padding: 12px 24px; display: flex; gap: 8px; overflow-x: auto; }
     .tab-btn { background: #f3f4f6; color: #4b5563; border: none; padding: 8px 16px; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 14px; white-space: nowrap; }
     .tab-btn.active { background: var(--accent-color); color: white; }
     
     .tv-tab-btn { background: linear-gradient(135deg, #059669, #10b981) !important; color: white !important; font-weight: 800 !important; }
-
     .premium-tab-btn {
       background: linear-gradient(135deg, #a855f7, #ec4899) !important;
       color: white !important;
@@ -70,14 +65,12 @@
     .upload-form { display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px; }
     .upload-form input[type="text"], .upload-form textarea, .upload-form select, .upload-form input[type="file"] { padding: 10px; border: 1px solid var(--border-color); border-radius: 6px; font-size: 14px; background: rgba(255, 255, 255, 0.9); }
     .upload-form textarea { resize: vertical; height: 80px; }
-    .upload-group { display: flex; flex-direction: column; gap: 4px; }
-    .upload-group label { font-size: 12px; font-weight: 600; color: #4b5563; }
     .publish-btn { background: var(--accent-color); color: white; border: none; padding: 10px; border-radius: 6px; font-weight: 600; cursor: pointer; }
     .grid-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; }
-    .grid-card { background: rgba(249, 250, 251, 0.95); border: 1px solid var(--border-color); border-radius: 8px; overflow: hidden; display: flex; flex-direction: column; }
-    .grid-card-body { padding: 12px; flex: 1; display: flex; flex-direction: column; justify-content: space-between; }
-    .grid-card-title { font-weight: 600; font-size: 14px; color: #111827; margin-bottom: 6px; word-break: break-word; }
+    .grid-card { background: rgba(249, 250, 251, 0.95); border: 1px solid var(--border-color); border-radius: 8px; overflow: hidden; display: flex; flex-direction: column; gap: 8px; padding: 12px; }
+    .grid-card-title { font-weight: 600; font-size: 14px; color: #111827; word-break: break-word; }
     .grid-card-author { font-size: 12px; color: #6b7280; }
+    .grid-card audio, .grid-card video { width: 100%; margin-top: 6px; border-radius: 6px; }
 
     /* NATIVE M3U8 AZERBAIJAN TV STYLES */
     .tv-player-wrapper { width: 100%; background: #000; border-radius: 10px; overflow: hidden; margin-bottom: 15px; border: 2px solid #059669; }
@@ -154,7 +147,7 @@
   <audio id="messageDingAudio" src="message_ding.mp3" preload="auto"></audio>
 
   <header>
-    <div class="logo-area"><h1>WeBox 3.0 (Supabase Full Sync)</h1></div>
+    <div class="logo-area"><h1>WeBox 3.0 (Ultimate Sync)</h1></div>
     <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
       <div class="coin-display">🪙 <span id="headerCoins">100</span> We-Coins</div>
       <div class="user-profile-badge" onclick="openProfileModal()">
@@ -389,7 +382,7 @@
 
   <script>
     var SUPABASE_URL = 'https://fedgpyuebiwovxohfleg.supabase.co';
-    var SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZlZGdweXVlYml3b3Z4b2hmbGVnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg4NTk4OTEsImV4cCI6MjEwNDQzNTg5MX0.KFLsTGtQD49MqXl6hxTV9Bz-5cuJMfzg-l0kwhX8bZk';
+    var SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZlZGdweXVlYml3b3Z4b2hmbGVnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg4NTk4OTEtLCJleHAiOjIxMDQ0MzU4OTF9.KFLsTGtQD49MqXl6hxTV9Bz-5cuJMfzg-l0kwhX8bZk';
     var supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
     if (!currentUser.likedItems) currentUser.likedItems = [];
@@ -558,7 +551,19 @@
       var html = '';
       for (var i = 0; i < data.length; i++) {
         var item = data[i];
-        html += '<div class="grid-card"><div class="grid-card-body"><div class="grid-card-title">' + escapeHtml(item.title || item.text) + '</div><div class="grid-card-author">By ' + escapeHtml(item.author) + '</div></div></div>';
+        var mediaElement = '';
+        if (item.url) {
+          if (type === 'music') {
+            mediaElement = '<audio controls src="' + escapeHtml(item.url) + '"></audio>';
+          } else if (type === 'videos' || type === 'svids') {
+            mediaElement = '<video controls src="' + escapeHtml(item.url) + '" style="width:100%; max-height:160px; object-fit:cover;"></video>';
+          }
+        }
+        html += '<div class="grid-card">' +
+          '<div class="grid-card-title">' + escapeHtml(item.title || item.text) + '</div>' +
+          mediaElement +
+          '<div class="grid-card-author">By ' + escapeHtml(item.author) + '</div>' +
+        '</div>';
       }
       grid.innerHTML = html;
     }

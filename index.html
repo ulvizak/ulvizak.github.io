@@ -603,7 +603,6 @@
     var activeChannelId = null;
     var hlsPlayerInstance = null;
 
-    /* STARTUP OVERLAY DISMISS FIX */
     function dismissStartupOverlay() {
       var overlay = document.getElementById('startupOverlay');
       if (overlay) {
@@ -615,7 +614,6 @@
     }
     setTimeout(dismissStartupOverlay, 2500);
 
-    /* BACKGROUND NOTIFICATIONS & SERVICE WORKER */
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('sw.js').catch(function(){});
     }
@@ -703,6 +701,46 @@
       }
     }
 
+    /* CONTENT PUBLISHING */
+    async function publishContent(type) {
+      var titleInput = document.getElementById(type === 'posts' ? 'postText' : (type.slice(0, -1) + 'Title'));
+      var title = titleInput ? titleInput.value.trim() : '';
+      if (!title) { alert("Please enter text or a title!"); return; }
+
+      var newItem = {
+        id: type.slice(0, -1) + '_' + Date.now(),
+        title: title,
+        author: currentUser.username,
+        url: '',
+        created_at: new Date().toISOString()
+      };
+
+      var { error } = await supabaseClient.from('webox_' + type).insert([newItem]);
+      if (error) {
+        alert("Error publishing: " + error.message);
+      } else {
+        alert("Published successfully!");
+        if (titleInput) titleInput.value = '';
+        fetchFeed(type);
+      }
+    }
+
+    async function fetchFeed(type) {
+      var grid = document.getElementById(type + '-grid');
+      if (!grid) return;
+      var { data } = await supabaseClient.from('webox_' + type).select('*').order('created_at', { ascending: false });
+      if (!data || data.length === 0) {
+        grid.innerHTML = '<p style="color:#6b7280; font-size:13px; text-align:center;">No items yet.</p>';
+        return;
+      }
+      var html = '';
+      for (var i = 0; i < data.length; i++) {
+        var item = data[i];
+        html += '<div class="grid-card"><div class="grid-card-body"><div class="grid-card-title">' + escapeHtml(item.title || item.text) + '</div><div class="grid-card-author">By ' + escapeHtml(item.author) + '</div></div></div>';
+      }
+      grid.innerHTML = html;
+    }
+
     /* DISCORD SERVERS CONTROL */
     async function fetchServersAndChannels() {
       var { data: sData } = await supabaseClient.from('webox_servers').select('*');
@@ -732,6 +770,7 @@
 
     function renderServersSidebar() {
       var sidebar = document.getElementById('serversSidebar');
+      if (!sidebar) return;
       if (appData.servers.length === 0) {
         sidebar.innerHTML = '<p style="color:#9ca3af; font-size:11px; text-align:center;">No servers</p>';
         return;
@@ -757,18 +796,20 @@
 
       var isOwner = (server.owner === currentUser.username);
       var adminControls = document.getElementById('serverAdminControls');
-      adminControls.innerHTML = '';
+      if (adminControls) adminControls.innerHTML = '';
 
       if (isOwner) {
-        adminControls.innerHTML = '<button class="publish-btn" style="background:#3b82f6; font-size:11px; padding:4px 8px;" onclick="configureServerSettings()">Configure ⚙️</button>';
+        if (adminControls) adminControls.innerHTML = '<button class="publish-btn" style="background:#3b82f6; font-size:11px; padding:4px 8px;" onclick="configureServerSettings()">Configure ⚙️</button>';
       } else {
-        adminControls.innerHTML = '<button class="logout-btn" style="font-size:11px; padding:4px 8px;" onclick="leaveCurrentServer()">Leave Server 🚪</button>';
+        if (adminControls) adminControls.innerHTML = '<button class="logout-btn" style="font-size:11px; padding:4px 8px;" onclick="leaveCurrentServer()">Leave Server 🚪</button>';
       }
 
-      document.getElementById('addChannelBtn').style.display = isOwner ? 'block' : 'none';
+      var addChanBtn = document.getElementById('addChannelBtn');
+      if (addChanBtn) addChanBtn.style.display = isOwner ? 'block' : 'none';
 
       var serverChans = appData.channels.filter(function(x){ return x.server_id === serverId; });
       var chanListElem = document.getElementById('channelsList');
+      if (!chanListElem) return;
       var cHtml = '';
       for (var j = 0; j < serverChans.length; j++) {
         var c = serverChans[j];
@@ -783,7 +824,10 @@
     function selectChannel(channelId) {
       activeChannelId = channelId;
       var chan = appData.channels.find(function(x){ return x.id === channelId; });
-      if (chan) { document.getElementById('activeChannelHeader').innerText = '# ' + chan.name; }
+      if (chan) {
+        var header = document.getElementById('activeChannelHeader');
+        if (header) header.innerText = '# ' + chan.name;
+      }
       loadServerChannelMessages();
     }
 
@@ -820,7 +864,7 @@
 
     async function sendServerChannelMessage() {
       var msgInput = document.getElementById('serverChatMessageInput');
-      var txt = msgInput.value.trim();
+      var txt = msgInput ? msgInput.value.trim() : '';
       if (!txt || !activeChannelId) return;
 
       var newMsg = {
@@ -830,8 +874,12 @@
         message: txt
       };
 
-      await supabaseClient.from('webox_messages').insert([newMsg]);
-      msgInput.value = '';
+      var { error } = await supabaseClient.from('webox_messages').insert([newMsg]);
+      if (error) {
+        alert("Failed to send message: " + error.message);
+        return;
+      }
+      if (msgInput) msgInput.value = '';
       playMessageDingSound();
       loadServerChannelMessages();
     }
@@ -839,6 +887,7 @@
     async function loadServerChannelMessages() {
       if (!activeChannelId) return;
       var box = document.getElementById('serverChannelChatBox');
+      if (!box) return;
 
       var { data } = await supabaseClient
         .from('webox_messages')
@@ -847,7 +896,7 @@
         .order('created_at', { ascending: true });
 
       if (!data || data.length === 0) {
-        box.innerHTML = '<p style="color:#949ba4; text-align:center; margin:auto;">No messages yet in #' + activeChannelId + '</p>';
+        box.innerHTML = '<p style="color:#949ba4; text-align:center; margin:auto;">No messages yet in this channel</p>';
         return;
       }
 
@@ -863,6 +912,7 @@
     /* WEBOX PREMIUM LOGIC */
     function checkPremiumStatus() {
       var tag = document.getElementById('premiumStatusTag');
+      if (!tag) return;
       if (currentUser.isPremium) {
         tag.innerText = '✨ Active WeBox Premium Member';
         tag.style.color = '#22c55e';
@@ -886,15 +936,16 @@
     }
 
     function redeemPromoCode() {
-      var code = document.getElementById('premiumCodeInput').value.trim();
+      var codeInput = document.getElementById('premiumCodeInput');
+      var code = codeInput ? codeInput.value.trim() : '';
       if (code.toUpperCase() === 'ZAK') {
         currentUser.isPremium = true;
         updateHeaderProfile();
         checkPremiumStatus();
-        document.getElementById('premiumCodeInput').value = '';
+        if (codeInput) codeInput.value = '';
         alert("🎉 Code 'ZAK' redeemed! PREMIUM UNLOCKED!");
       } else {
-        document.getElementById('premiumCodeInput').value = '';
+        if (codeInput) codeInput.value = '';
         showMacErrorModal();
       }
     }
@@ -949,6 +1000,7 @@
       }
 
       var sidebar = document.getElementById('chatsSidebarList');
+      if (!sidebar) return;
       var friendsList = Object.keys(chatsMap);
       if (friendsList.length === 0) {
         sidebar.innerHTML = '<p style="color:#6b7280; font-size:12px; text-align:center;">No chats</p>';
@@ -969,7 +1021,8 @@
     }
 
     function startNewChat() {
-      var target = document.getElementById('newChatUsernameInput').value.trim();
+      var targetInput = document.getElementById('newChatUsernameInput');
+      var target = targetInput ? targetInput.value.trim() : '';
       if (!target) return;
       if (target.charAt(0) !== '@') target = '@' + target;
       selectChatUser(target);
@@ -977,19 +1030,21 @@
 
     async function selectChatUser(username) {
       activeChatUser = username;
-      document.getElementById('activeChatHeader').innerText = 'Chat with ' + username;
+      var header = document.getElementById('activeChatHeader');
+      if (header) header.innerText = 'Chat with ' + username;
       loadUserChatsSidebar();
       await loadDirectMessages();
     }
 
     async function sendDirectMessage() {
       if (!activeChatUser) return;
-      var txt = document.getElementById('chatInputMessage').value.trim();
+      var msgInput = document.getElementById('chatInputMessage');
+      var txt = msgInput ? msgInput.value.trim() : '';
       if (!txt) return;
 
       var newMsg = { id: 'msg_' + Date.now(), sender: currentUser.username, receiver: activeChatUser, message: txt };
       await supabaseClient.from('webox_messages').insert([newMsg]);
-      document.getElementById('chatInputMessage').value = '';
+      if (msgInput) msgInput.value = '';
       playMessageDingSound();
       await loadDirectMessages();
     }
@@ -997,6 +1052,7 @@
     async function loadDirectMessages() {
       if (!activeChatUser) return;
       var box = document.getElementById('chatMessagesBox');
+      if (!box) return;
       var { data } = await supabaseClient.from('webox_messages').select('*').or('and(sender.eq.' + currentUser.username + ',receiver.eq.' + activeChatUser + '),and(sender.eq.' + activeChatUser + ',receiver.eq.' + currentUser.username + ')').order('created_at', { ascending: true });
 
       if (!data || data.length === 0) {
@@ -1031,12 +1087,15 @@
     }
 
     function updateHeaderProfile() {
-      document.getElementById('headerUsername').innerText = currentUser.username;
-      document.getElementById('headerUserAvatar').src = currentUser.avatarUrl || 'penguin.png';
-      document.getElementById('headerCoins').innerText = currentUser.coins || 0;
+      var usernameElem = document.getElementById('headerUsername');
+      var avatarElem = document.getElementById('headerUserAvatar');
+      var coinsElem = document.getElementById('headerCoins');
+      if (usernameElem) usernameElem.innerText = currentUser.username;
+      if (avatarElem) avatarElem.src = currentUser.avatarUrl || 'penguin.png';
+      if (coinsElem) coinsElem.innerText = currentUser.coins || 0;
       
       var badgeTagElem = document.getElementById('headerBadgeTag');
-      if (currentUser.isPremium) {
+      if (badgeTagElem && currentUser.isPremium) {
         badgeTagElem.innerHTML = '✈️ PREMIUM';
         badgeTagElem.style.background = 'linear-gradient(135deg, #ec4899, #a855f7)';
         badgeTagElem.style.color = 'white';
@@ -1056,6 +1115,9 @@
       if (event && event.currentTarget) event.currentTarget.classList.add('active');
 
       if (tabName === 'livetv') { loadM3u8PlaylistFile(); }
+      if (tabName === 'videos' || tabName === 'svids' || tabName === 'music' || tabName === 'posts' || tabName === 'arcade') {
+        fetchFeed(tabName);
+      }
       if (tabName === 'premium') { checkPremiumStatus(); }
     }
 
@@ -1072,6 +1134,7 @@
     updateHeaderProfile();
     fetchUsersAndChats();
     fetchServersAndChannels();
+    fetchFeed('videos');
     setupRealtimeSubscriptions();
   </script>
 </body>

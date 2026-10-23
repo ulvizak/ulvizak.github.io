@@ -31,6 +31,7 @@
       border-radius: 12px;
       padding: 40px 36px;
       box-shadow: 0 10px 25px rgba(37, 99, 235, 0.08);
+      position: relative;
     }
 
     .brand-header {
@@ -96,7 +97,7 @@
       border-top: 1px solid #e2e8f0;
       display: flex;
       flex-direction: column;
-      gap: 4px;
+      gap: 6px;
     }
 
     .signature-name {
@@ -111,25 +112,40 @@
       font-weight: 600;
     }
 
-    .action-area {
-      margin-top: 28px;
+    .audio-controls {
+      margin-top: 24px;
+      background: #f1f5f9;
+      border: 1px solid #cbd5e1;
+      padding: 12px 16px;
+      border-radius: 8px;
       display: flex;
+      align-items: center;
+      justify-content: space-between;
       gap: 12px;
     }
 
-    button {
+    .audio-controls span {
+      font-size: 13px;
+      font-weight: 600;
+      color: #334155;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .music-btn {
       background: #2563eb;
       color: #ffffff;
       border: none;
-      padding: 12px 24px;
-      border-radius: 8px;
+      padding: 8px 16px;
+      border-radius: 6px;
       font-weight: 600;
-      font-size: 14px;
+      font-size: 13px;
       cursor: pointer;
       transition: background 0.15s ease;
     }
 
-    button:hover {
+    .music-btn:hover {
       background: #1d4ed8;
     }
 
@@ -143,6 +159,9 @@
 </head>
 <body>
 
+  <!-- Background Melancholic Orchestral Audio from Internet Archive -->
+  <audio id="bgMusic" loop src="https://archive.org/download/memories-ashamaluevmusic/Sad%20Piano%20and%20Strings.mp3" preload="auto"></audio>
+
   <div class="container">
     <div class="brand-header">
       <span class="brand-title">WeBox 3.0</span>
@@ -153,7 +172,7 @@
 
     <div class="letter-body">
       <p>
-        I honestly never wanted to write this message, but we have officially hit the end of the line. WeBox is officially <strong>discontinued</strong>. 
+        I honestly never wanted to write this message, but we have officially hit the end of the line. WeBox is officially <strong>discontinued</strong>.
       </p>
 
       <p>
@@ -169,21 +188,22 @@
       </div>
 
       <p>
-        Please don't be too sad though—this might not be the complete end forever. I am taking a step back to breathe and rethink everything. There is a real chance that I will bring WeBox back in the future with a massive, ground-up rebuild (WeBox 4.0). If and when that happens, it will be cleaner, faster, completely bug-free, and built on a rock-solid system that won't fall apart.
+        Looking at this empty screen knowing the server is going quiet feels unreal. Turning off the platform after all the time, energy, and memories poured into it is one of the hardest things I've had to do. It truly tears me apart inside to close the door on something that held so much of my heart.
       </p>
 
       <p>
-        Thank you from the bottom of my heart to everyone who supported WeBox, posted content, played games, and stayed with me through every update. Your support kept me going.
+        Please don't lose hope entirely, though. I am taking a step back to breathe and reset. If I ever manage to rebuild WeBox from the ground up, I promise it will return stronger, cleaner, and better than ever before. But until that day comes, goodbye for now... and thank you for being a part of this journey.
       </p>
     </div>
 
     <div class="signature-block">
-      <span class="signature-name">Ulvi Zakirov</span>
+      <span class="signature-name">- Ulvi Zakirov Written With Love</span>
       <span class="signature-role">Creator & Developer of WeBox</span>
     </div>
 
-    <div class="action-area">
-      <button onclick="window.location.reload()">Check Connection</button>
+    <div class="audio-controls">
+      <span>🎵 Background Music: <i>Sad Piano & Strings</i></span>
+      <button class="music-btn" id="audioToggleBtn" onclick="toggleAudio()">Play Music 🔊</button>
     </div>
   </div>
 
@@ -191,5 +211,29 @@
     WeBox Platform • Created by Ulvi Zakirov
   </footer>
 
+  <script>
+    var audio = document.getElementById('bgMusic');
+    var btn = document.getElementById('audioToggleBtn');
+
+    // Attempt auto-play on user interaction
+    document.addEventListener('click', function autoPlayOnce() {
+      if (audio.paused) {
+        audio.play().then(function() {
+          btn.innerText = 'Pause Music ⏸️';
+        }).catch(function() {});
+      }
+      document.removeEventListener('click', autoPlayOnce);
+    }, { once: true });
+
+    function toggleAudio() {
+      if (audio.paused) {
+        audio.play();
+        btn.innerText = 'Pause Music ⏸️';
+      } else {
+        audio.pause();
+        btn.innerText = 'Play Music 🔊';
+      }
+    }
+  </script>
 </body>
 </html>

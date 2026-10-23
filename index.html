@@ -298,10 +298,14 @@
         <div class="upload-form">
           <input type="text" id="gameTitle" placeholder="Game Title">
           <input type="text" id="gameIframeUrl" placeholder="Playable Game Embed URL (e.g. https://html5.gamedistribution.com/...)">
-          <button class="publish-btn" onclick="publishContent('arcade')">Publish Game</button>
+          <label style="font-size:12px; font-weight:bold; margin-top:4px;">OR Upload HTML Game File (.html):</label>
+          <input type="file" id="gameHtmlFile" accept=".html">
+          <label style="font-size:12px; font-weight:bold; margin-top:4px;">Background Game Track (Optional .mp3):</label>
+          <input type="file" id="gameMusicFile" accept="audio/*">
+          <button class="publish-btn" onclick="publishArcadeGame()">Publish Game</button>
         </div>
       </div>
-      <h2>Arcade Games</h2>
+      <h2>Arcade Games Library & Reviews</h2>
       <div class="grid-container" id="arcade-grid"></div>
     </div>
 
@@ -470,8 +474,17 @@
     <!-- SETTINGS TAB -->
     <div id="settings-tab" class="tab-content">
       <div class="card">
-        <h2>Settings ⚙️</h2>
-        <p style="margin-bottom:15px; color:#6b7280;">Manage your WeBox preferences.</p>
+        <h2>Account Settings 👤</h2>
+        <div class="upload-form" style="max-width:480px;">
+          <label style="font-weight:bold; font-size:13px;">Change Username:</label>
+          <input type="text" id="settingsUsernameInput" placeholder="@newusername">
+          
+          <label style="font-weight:bold; font-size:13px; margin-top:8px;">Upload Custom Profile Picture:</label>
+          <input type="file" id="settingsAvatarFile" accept="image/*">
+          
+          <button class="publish-btn" style="margin-top:10px;" onclick="saveAccountSettings()">Save Account Details</button>
+        </div>
+        <hr style="margin:20px 0; border:0; border-top:1px solid var(--border-color);">
         <button class="logout-btn" onclick="logoutUser()">Log Out of Account</button>
       </div>
     </div>
@@ -546,6 +559,81 @@
 
     function openMyInstantsWebsite() { window.open('https://www.myinstants.com', '_blank'); }
 
+    /* ACCOUNT SETTINGS MANAGER */
+    async function saveAccountSettings() {
+      var nameInput = document.getElementById('settingsUsernameInput');
+      var avatarInput = document.getElementById('settingsAvatarFile');
+
+      if (nameInput && nameInput.value.trim() !== '') {
+        var newUsername = nameInput.value.trim();
+        if (newUsername.charAt(0) !== '@') newUsername = '@' + newUsername;
+        currentUser.username = newUsername;
+      }
+
+      if (avatarInput && avatarInput.files && avatarInput.files[0]) {
+        var file = avatarInput.files[0];
+        var reader = new FileReader();
+        reader.onload = function(e) {
+          currentUser.avatarUrl = e.target.result;
+          updateHeaderProfile();
+          alert('Profile settings saved cleanly!');
+        };
+        reader.readAsDataURL(file);
+      } else {
+        updateHeaderProfile();
+        alert('Profile settings saved cleanly!');
+      }
+    }
+
+    /* ARCADE GAME UPLOADER WITH MUSIC & HTML FILES */
+    async function publishArcadeGame() {
+      var titleInput = document.getElementById('gameTitle');
+      var iframeUrlInput = document.getElementById('gameIframeUrl');
+      var htmlFileInput = document.getElementById('gameHtmlFile');
+      var musicFileInput = document.getElementById('gameMusicFile');
+
+      var title = titleInput ? titleInput.value.trim() : 'Arcade Game';
+      var gameUrl = iframeUrlInput ? iframeUrlInput.value.trim() : '';
+      var musicUrl = '';
+
+      if (htmlFileInput && htmlFileInput.files && htmlFileInput.files[0]) {
+        var file = htmlFileInput.files[0];
+        var reader = new FileReader();
+        reader.onload = async function(e) {
+          gameUrl = e.target.result;
+          saveArcadeToSupabase(title, gameUrl, musicUrl);
+        };
+        reader.readAsDataURL(file);
+        return;
+      }
+
+      if (musicFileInput && musicFileInput.files && musicFileInput.files[0]) {
+        var mFile = musicFileInput.files[0];
+        var filePath = 'arcade_music/' + Date.now() + '_' + mFile.name;
+        var { error: uploadError } = await supabaseClient.storage.from('webox_media').upload(filePath, mFile);
+        if (!uploadError) {
+          var { data: urlData } = supabaseClient.storage.from('webox_media').getPublicUrl(filePath);
+          if (urlData) musicUrl = urlData.publicUrl;
+        }
+      }
+
+      saveArcadeToSupabase(title, gameUrl, musicUrl);
+    }
+
+    async function saveArcadeToSupabase(title, gameUrl, musicUrl) {
+      var newItem = {
+        id: 'arcade_' + Date.now(),
+        title: title,
+        author: currentUser.username,
+        url: gameUrl,
+        music_url: musicUrl,
+        likes: 0
+      };
+
+      await supabaseClient.from('webox_arcade').insert([newItem]);
+      fetchFeed('arcade');
+    }
+
     /* NATIVE M3U8 LIVE TV STREAM PARSER */
     function loadM3u8PlaylistFile() {
       var grid = document.getElementById('m3u8ChannelsGrid');
@@ -615,7 +703,6 @@
     /* CLEAN & ROBUST CONTENT PUBLISHING */
     async function publishContent(type) {
       var titleInput = document.getElementById('postText') || 
-                       document.getElementById('gameTitle') || 
                        document.getElementById('videoTitle') || 
                        document.getElementById('svidTitle') || 
                        document.getElementById('musicTitle');
@@ -628,12 +715,7 @@
       var fileInput = document.getElementById(type.slice(0, -1) + 'File');
       var fileUrl = '';
 
-      if (type === 'arcade') {
-        var gameUrlInput = document.getElementById('gameIframeUrl');
-        if (gameUrlInput && gameUrlInput.value.trim() !== '') {
-          fileUrl = gameUrlInput.value.trim();
-        }
-      } else if (fileInput && fileInput.files && fileInput.files[0]) {
+      if (fileInput && fileInput.files && fileInput.files[0]) {
         var file = fileInput.files[0];
         var filePath = type + '/' + Date.now() + '_' + file.name;
         var { error: uploadError } = await supabaseClient.storage.from('webox_media').upload(filePath, file);
@@ -681,7 +763,8 @@
           } else if (type === 'videos' || type === 'svids') {
             mediaElement = '<video controls src="' + escapeHtml(item.url) + '" style="width:100%; max-height:220px; object-fit:cover;"></video>';
           } else if (type === 'arcade') {
-            mediaElement = '<button class="publish-btn" onclick="openGameModal(\'' + escapeJsString(item.title) + '\', \'' + escapeJsString(item.url) + '\')">Play Game 🎮</button>';
+            var musicAddon = item.music_url ? '<audio controls src="' + escapeHtml(item.music_url) + '" style="margin-bottom:8px;"></audio>' : '';
+            mediaElement = musicAddon + '<button class="publish-btn" onclick="openGameModal(\'' + escapeJsString(item.title) + '\', \'' + escapeJsString(item.url) + '\')">Play Game 🎮</button>';
           }
         }
 
@@ -693,9 +776,9 @@
             '<button class="like-btn" onclick="toggleLike(\'' + tableName + '\', \'' + item.id + '\', ' + (item.likes || 0) + ')">❤️ <span id="likes-count-' + item.id + '">' + (item.likes || 0) + '</span> Likes</button>' +
           '</div>' +
           '<div class="comments-section">' +
-            '<div class="comments-list" id="comments-list-' + item.id + '">Loading comments...</div>' +
+            '<div class="comments-list" id="comments-list-' + item.id + '">Loading reviews...</div>' +
             '<div class="comment-input-box">' +
-              '<input type="text" id="comment-input-' + item.id + '" placeholder="Write a comment..." onkeypress="if(event.key===\'Enter\') submitComment(\'' + tableName + '\', \'' + item.id + '\')">' +
+              '<input type="text" id="comment-input-' + item.id + '" placeholder="Write a review..." onkeypress="if(event.key===\'Enter\') submitComment(\'' + tableName + '\', \'' + item.id + '\')">' +
               '<button class="comment-submit-btn" onclick="submitComment(\'' + tableName + '\', \'' + item.id + '\')">Post</button>' +
             '</div>' +
           '</div>' +
@@ -723,7 +806,7 @@
 
       var { data, error } = await supabaseClient.from('webox_comments').select('*').eq('item_id', itemId).order('created_at', { ascending: true });
       if (error || !data || data.length === 0) {
-        listElem.innerHTML = '<div style="font-size:11px; color:#9ca3af; text-align:center;">No comments yet.</div>';
+        listElem.innerHTML = '<div style="font-size:11px; color:#9ca3af; text-align:center;">No reviews yet.</div>';
         return;
       }
 
@@ -1069,6 +1152,10 @@
       document.getElementById('headerUserAvatar').src = currentUser.avatarUrl || 'hacker_anaminus.png';
       document.getElementById('headerCoins').innerText = currentUser.coins || 100;
       document.getElementById('headerBadgeTag').innerText = currentUser.badge || '💻 Anaminus';
+      
+      var settingsNameInput = document.getElementById('settingsUsernameInput');
+      if (settingsNameInput) settingsNameInput.placeholder = currentUser.username;
+
       localStorage.setItem('webox_user', JSON.stringify(currentUser));
     }
 

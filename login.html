@@ -149,7 +149,7 @@
             ownedAvatars: ['penguin.png', 'dev.png', 'hacker_anaminus.png'],
             likedItems: []
           }));
-          window.location.href = 'index.html';
+          window.location.href = 'oldwebox.html';
         } else {
           if (!existingUser) {
             alert("❌ Account not found! Please create an account first.");
@@ -171,7 +171,7 @@
             ownedAvatars: existingUser.owned_avatars || ['penguin.png', 'dev.png'],
             likedItems: existingUser.liked_items || []
           }));
-          window.location.href = 'index.html';
+          window.location.href = 'oldwebox.html';
         }
       } catch (err) {
         console.error('Auth error:', err);
